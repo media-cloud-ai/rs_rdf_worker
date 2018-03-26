@@ -24,3 +24,7 @@ pub fn get_hostname() -> String {
 pub fn get_port() -> String {
   get_env_value!("PORT", "1501")
 }
+
+pub fn get_mapping_file() -> String {
+  get_env_value!("MAPPING_FILE", "")
+}
