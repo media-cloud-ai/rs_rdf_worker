@@ -12,7 +12,7 @@ pub fn process(body: &Vec<u8>) -> String {
 
   let mut converter = Converter::new();
   let mapper = Mapper::load(&get_mapping_file());
-  mapper.process(doc, &mut converter);
+  mapper.process(&doc, &mut converter);
   let content = converter.to_turtle_string();
   content
 }
