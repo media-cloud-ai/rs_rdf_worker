@@ -1,6 +1,6 @@
 [package]
 name = "rdf_worker"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Marc-Antoine Arnaud <arnaud.marcantoine@gmail.com>"]
 
 [dependencies]
