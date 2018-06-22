@@ -7,6 +7,8 @@ use config::get_mapping_file;
 
 pub fn process(body: &Vec<u8>) -> String {
   let doc : serde_json::Value = serde_json::from_slice(body).unwrap();
+  println!("PROCESS");
+  println!("{}", doc);
 
   let mut converter = Converter::new();
   let mapper = Mapper::load(&get_mapping_file());
