@@ -45,6 +45,8 @@ impl Service for RdfConverter {
             acc.extend_from_slice(chunk.as_ref());
             Ok::<_, hyper::Error>(acc)
           }).and_then(move |value| {
+            println!("PROCESS");
+            println!("{}", value);
             let response_body = convert::process(&value);
 
             println!("CONVERSION COMPLETED");
