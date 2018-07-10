@@ -88,7 +88,7 @@ impl Service for RdfConverter {
 }
 
 fn main() {
-  pretty_env_logger::init().unwrap();
+  pretty_env_logger::init();
 
   let server_address = config::get_hostname() + ":" + config::get_port().as_str();
   let addr = server_address.parse().unwrap();
