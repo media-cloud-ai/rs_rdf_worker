@@ -105,7 +105,7 @@ impl Metadata {
     let p_has_related_image = EBUCORE_NAMESPACE.to_owned() + "hasRelatedImage";
     let p_has_related_audio_programme = EBUCORE_NAMESPACE.to_owned() + "hasRelatedAudioProgramme";
     let p_has_related_text_line = EBUCORE_NAMESPACE.to_owned() + "hasRelatedTextLine";
-    let p_has_part = EBUCORE_NAMESPACE.to_owned() + "hasPart";
+    // let p_has_part = EBUCORE_NAMESPACE.to_owned() + "hasPart";
     let p_has_target_audience = EBUCORE_NAMESPACE.to_owned() + "hasTargetAudience";
     let p_first_showing = EBUCORE_NAMESPACE.to_owned() + "firstShowing";
     let p_first_showing_this_service = EBUCORE_NAMESPACE.to_owned() + "firstShowingThisService";
@@ -146,7 +146,7 @@ impl Metadata {
     let o_group = EBUCORE_NAMESPACE.to_owned() + "Group";
     let o_season = EBUCORE_NAMESPACE.to_owned() + "Season";
     let o_image = EBUCORE_NAMESPACE.to_owned() + "Image";
-    let o_part = EBUCORE_NAMESPACE.to_owned() + "Part";
+    // let o_part = EBUCORE_NAMESPACE.to_owned() + "Part";
 
     let subject = self.add_triple(graph, &s_root, &p_type, &o_editorial_object);
 
