@@ -90,14 +90,14 @@ impl Metadata {
     let p_alternative_title = EBUCORE_NAMESPACE.to_owned() + "alternativeTitle";
     let p_abstract = EBUCORE_NAMESPACE.to_owned() + "abstract";
     let p_synopsis = EBUCORE_NAMESPACE.to_owned() + "synopsis";
-    let p_label = RDF_NAMESPACE.to_owned() + "label";
+    let p_label = RDFS_NAMESPACE.to_owned() + "label";
     let p_id = RDF_NAMESPACE.to_owned() + "id";
     let p_type = RDF_NAMESPACE.to_owned() + "type";
-    let p_duration = RDF_NAMESPACE.to_owned() + "durationNormalPlayTime";
+    let p_duration = EBUCORE_NAMESPACE.to_owned() + "durationNormalPlayTime";
     let p_date_created = EBUCORE_NAMESPACE.to_owned() + "dateCreated";
     let p_date_modified = EBUCORE_NAMESPACE.to_owned() + "dateModified";
     let p_date_broadcast = EBUCORE_NAMESPACE.to_owned() + "dateBroadcast";
-    let p_references = EBUCORE_NAMESPACE.to_owned() + "References";
+    let p_references = EBUCORE_NAMESPACE.to_owned() + "references";
     let p_resource_id = EBUCORE_NAMESPACE.to_owned() + "resourceId";
     let p_has_contributor = EBUCORE_NAMESPACE.to_owned() + "hasContributor";
     let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
@@ -112,7 +112,7 @@ impl Metadata {
     let p_first_showing = EBUCORE_NAMESPACE.to_owned() + "firstShowing";
     let p_first_showing_this_service = EBUCORE_NAMESPACE.to_owned() + "firstShowingThisService";
     let p_audio_programme = EBUCORE_NAMESPACE.to_owned() + "audioProgramme";
-    let p_text_line = EBUCORE_NAMESPACE.to_owned() + "TextLine";
+    let p_text_line = EBUCORE_NAMESPACE.to_owned() + "textLine";
     let p_original_title = EBUCORE_NAMESPACE.to_owned() + "originalTitle";
     let p_publication_channel = EBUCORE_NAMESPACE.to_owned() + "publicationChannel";
     let p_publication_channel_id = EBUCORE_NAMESPACE.to_owned() + "publicationChannelId";
@@ -155,7 +155,7 @@ impl Metadata {
 
     if let Some(ref parent_id) = self.parent_id {
       let s_references = self.add_related_node(graph, &subject, &p_references);
-      self.add_link(graph, &s_references, &p_type, &o_editorial_object, None, None, false);
+      self.add_link(graph, &s_references, &p_type, &o_editorial_object, None, None, true);
       self.add_link(graph, &s_references, &p_resource_id, &("http://ressources.idfrancetv.fr/medias/".to_string() + &parent_id), None, None, true);
     }
 
@@ -251,7 +251,7 @@ impl Metadata {
 
     // publication event
     let s_publication_event = self.add_related_node(graph, &subject, &p_has_publication_event);
-    self.add_link(graph, &s_publication_event, &p_type, &o_publication_event, None, None, false);
+    self.add_link(graph, &s_publication_event, &p_type, &o_publication_event, None, None, true);
     self.add_link(graph, &s_publication_event, &p_mid_roll_ad_allowed, &format!("{}", self.midrollable), None, Some(XML_NAMESPACE.to_owned() + "boolean"), false);
     self.add_link(graph, &s_publication_event, &p_first_showing, &format!("{}", self.previously_broadcasted), None, Some(XML_NAMESPACE.to_owned() + "boolean"), false);
     self.add_link(graph, &s_publication_event, &p_first_showing_this_service, &format!("{}", self.previously_broadcasted_on_this_channel), None, Some(XML_NAMESPACE.to_owned() + "boolean"), false);
@@ -346,7 +346,7 @@ impl Metadata {
     let o_identifier = EBUCORE_NAMESPACE.to_owned() + "Identifier";
 
     let s_identifier = self.add_related_node(graph, &subject_node, &p_has_idenfitier);
-    self.add_link(graph, &s_identifier, &p_type, &o_identifier, None, None, false);
+    self.add_link(graph, &s_identifier, &p_type, &o_identifier, None, None, true);
     self.add_link(graph, &s_identifier, &p_label, identifier_type, None, None, false);
     self.add_link(graph, &s_identifier, &p_idenfitier_value, value, None, None, false);
     self.add_link(graph, &s_identifier, &p_has_identifier_type, identifier_type, None, None, false);
