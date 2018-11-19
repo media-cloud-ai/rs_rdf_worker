@@ -94,7 +94,7 @@ fn get_value(client: &reqwest::Client, job_id: u64, key: &str) -> Result<String,
       MessageError::ProcessingError(job_id, e.to_string())
     )?;
 
-  let r : SessionResponseBody = response.json().unwrap();
+  let r : SessionResponseBody = response.json().map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))?;
   let token = r.access_token;
 
   let mut response =
@@ -107,7 +107,7 @@ fn get_value(client: &reqwest::Client, job_id: u64, key: &str) -> Result<String,
       MessageError::ProcessingError(job_id, e.to_string())
     )?;
 
-  let resp_value : ValueResponseBody = response.json().unwrap();
+  let resp_value : ValueResponseBody = response.json().map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))?;
   Ok(resp_value.data.value)
 }
 
