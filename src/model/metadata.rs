@@ -22,7 +22,7 @@ use rdf::uri::Uri;
 #[derive(Debug, Deserialize)]
 pub struct Metadata {
   created_at: String,
-  created_by: Option<String>, // MISSING
+  created_by: Option<String>,
   created_via: Option<String>, // MISSING
   id: String,
   updated_at: String,
@@ -96,9 +96,11 @@ impl Metadata {
     let p_duration = RDF_NAMESPACE.to_owned() + "durationNormalPlayTime";
     let p_date_created = EBUCORE_NAMESPACE.to_owned() + "dateCreated";
     let p_date_modified = EBUCORE_NAMESPACE.to_owned() + "dateModified";
+    let p_date_broadcast = EBUCORE_NAMESPACE.to_owned() + "dateBroadcast";
     let p_references = EBUCORE_NAMESPACE.to_owned() + "References";
     let p_resource_id = EBUCORE_NAMESPACE.to_owned() + "resourceId";
     let p_has_contributor = EBUCORE_NAMESPACE.to_owned() + "hasContributor";
+    let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
     let p_has_topic = EBUCORE_NAMESPACE.to_owned() + "hasTopic";
     let p_has_genre = EBUCORE_NAMESPACE.to_owned() + "hasGenre";
     let p_has_publication_event = EBUCORE_NAMESPACE.to_owned() + "hasPublicationEvent";
@@ -115,7 +117,6 @@ impl Metadata {
     let p_publication_channel = EBUCORE_NAMESPACE.to_owned() + "publicationChannel";
     let p_publication_channel_id = EBUCORE_NAMESPACE.to_owned() + "publicationChannelId";
     let p_publication_channel_name = EBUCORE_NAMESPACE.to_owned() + "publicationChannelName";
-    let p_date_broadcast = EBUCORE_NAMESPACE.to_owned() + "dateBroadcast";
     let p_publication_start_date_time = EBUCORE_NAMESPACE.to_owned() + "publicationStartDateTime";
     let p_duration_normal_play_time = EBUCORE_NAMESPACE.to_owned() + "durationNormalPlayTime";
     let p_live = EBUCORE_NAMESPACE.to_owned() + "live";
@@ -181,7 +182,17 @@ impl Metadata {
     self.add_link(graph, &subject, &p_date_created, &self.created_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
     self.add_link(graph, &subject, &p_date_modified, &self.updated_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
 
-    //live
+    // broadcasted at
+    if let Some(ref broadcasted_at) = self.broadcasted_at {
+      self.add_link(graph, &subject, &p_date_broadcast, &broadcasted_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
+    }
+
+    // created by
+    if let Some(ref created_by) = self.created_by {
+      self.add_link(graph, &subject, &p_has_creator, &created_by, None, None, false);
+    }
+
+    // live
     if let Some(broadcasted_live) = self.broadcasted_live {
       self.add_link(graph, &subject, &p_live, &broadcasted_live.to_string(), None, Some(XML_NAMESPACE.to_owned() + "boolean"), false);
     }
@@ -327,6 +338,7 @@ impl Metadata {
 
   fn insert_identifier(&self, graph: &mut Graph, subject_node: &Node, identifier_type: &str, value: &str) {
     let p_has_idenfitier = EBUCORE_NAMESPACE.to_owned() + "hasIdentifier";
+    let p_has_identifier_type = EBUCORE_NAMESPACE.to_owned() + "hasIdentifierType";
     let p_idenfitier_value = EBUCORE_NAMESPACE.to_owned() + "identifierValue";
     let p_label = RDFS_NAMESPACE.to_owned() + "label";
     let p_type = RDF_NAMESPACE.to_owned() + "type";
@@ -337,6 +349,7 @@ impl Metadata {
     self.add_link(graph, &s_identifier, &p_type, &o_identifier, None, None, false);
     self.add_link(graph, &s_identifier, &p_label, identifier_type, None, None, false);
     self.add_link(graph, &s_identifier, &p_idenfitier_value, value, None, None, false);
+    self.add_link(graph, &s_identifier, &p_has_identifier_type, identifier_type, None, None, false);
   }
 
   fn add_triple(&self, graph: &mut Graph, subject: &str, predicate: &str, object: &str) -> Node {
