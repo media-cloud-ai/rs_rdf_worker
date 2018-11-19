@@ -17,14 +17,14 @@ macro_rules! get_env_value {
   })
 }
 
-pub fn get_hostname() -> String {
-  get_env_value!("HOSTNAME", "127.0.0.1")
+pub fn get_backend_hostname() -> String {
+  get_env_value!("BACKEND_HOSTNAME", "127.0.0.1")
 }
 
-pub fn get_port() -> String {
-  get_env_value!("PORT", "1501")
+pub fn get_backend_username() -> String {
+  get_env_value!("BACKEND_USERNAME", "")
 }
 
-pub fn get_mapping_file() -> String {
-  get_env_value!("MAPPING_FILE", "")
+pub fn get_backend_password() -> String {
+  get_env_value!("BACKEND_PASSWORD", "")
 }
