@@ -87,7 +87,7 @@ fn get_value(client: &reqwest::Client, job_id: u64, key: &str) -> Result<String,
 
   let mut response =
     client
-    .post(&(backend_endpoint.clone() + "sessions"))
+    .post(&(backend_endpoint.clone() + "/sessions"))
     .json(&session_body)
     .send()
     .map_err(|e|
@@ -99,7 +99,7 @@ fn get_value(client: &reqwest::Client, job_id: u64, key: &str) -> Result<String,
 
   let mut response =
     client
-    .get(&(backend_endpoint + "credentials/" + key))
+    .get(&(backend_endpoint + "/credentials/" + key))
     // .bearer_auth(token)
     .header("Authorization", token)
     .send()

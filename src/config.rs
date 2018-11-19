@@ -18,7 +18,7 @@ macro_rules! get_env_value {
 }
 
 pub fn get_backend_hostname() -> String {
-  get_env_value!("BACKEND_HOSTNAME", "127.0.0.1")
+  get_env_value!("BACKEND_HOSTNAME", "http://127.0.0.1:4000/api")
 }
 
 pub fn get_backend_username() -> String {
