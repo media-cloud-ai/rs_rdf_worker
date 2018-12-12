@@ -16,6 +16,10 @@ use std::{thread, time};
 use model::metadata::Metadata;
 use namespaces::*;
 
+pub trait ToRdf {
+  fn to_rdf(&self, graph: &mut Graph);
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct Parameter {
   #[serde(rename="type")]
@@ -145,8 +149,20 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
     Ok(content) => {
       println!("{:?}", content);
       let reference = get_parameter(&content.parameters, "reference").unwrap();
-      let video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
-      let rdf_triples = convert_into_rdf(content.job_id.clone(), &video_metadata, false)?;
+
+      let rdf_triples = 
+        match get_parameter(&content.parameters, "order").unwrap_or("".to_string()).as_str() {
+          "publish_ttml" => {
+            let video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
+            convert_into_rdf(content.job_id.clone(), &video_metadata, false)?;
+
+            return Err(MessageError::ProcessingError(content.job_id, "LOLLLL".to_string()));
+          }
+          _ => {
+            let video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
+            convert_into_rdf(content.job_id.clone(), &video_metadata, false)?
+          }
+        };
 
       info!("{}", rdf_triples);
       let config = get_perfect_memory_config(content.job_id.clone(), &content.parameters)?;
@@ -189,7 +205,7 @@ pub fn get_video_metadata(job_id: u64, reference: &str) -> Result<Metadata, Mess
   )
 }
 
-pub fn convert_into_rdf(job_id: u64, metadata: &Metadata, ntriples: bool) -> Result<String, MessageError> {
+pub fn convert_into_rdf<T: ToRdf>(job_id: u64, item: &T, ntriples: bool) -> Result<String, MessageError> {
   let mut graph = Graph::new(None);
   graph.add_namespace(&Namespace::new("rdf".to_string(), Uri::new(RDF_NAMESPACE.to_owned())));
   graph.add_namespace(&Namespace::new("rdfs".to_string(), Uri::new(RDFS_NAMESPACE.to_owned())));
@@ -199,7 +215,7 @@ pub fn convert_into_rdf(job_id: u64, metadata: &Metadata, ntriples: bool) -> Res
   graph.add_namespace(&Namespace::new("xsi".to_string(), Uri::new(XSI_NAMESPACE.to_owned())));
   graph.add_namespace(&Namespace::new("default".to_string(), Uri::new(DEFAULT_NAMESPACE.to_owned())));
 
-  metadata.to_rdf(&mut graph);
+  item.to_rdf(&mut graph);
   if ntriples {
     let writer = NTriplesWriter::new();
     writer.write_to_string(&graph).map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))
@@ -321,21 +337,46 @@ pub fn publish_to_perfect_memory(job_id: u64, pm_client_id: &str, pm_api_key: &s
 
 
 #[test]
-fn test_mapping() {
+fn test_mapping_video() {
   use std::fs::File;
   use std::io::Read;
   use serde_json;
+  use model::metadata::Metadata;
 
   let mut video_struct = String::new();
   let mut video_file = File::open("tests/video.json").unwrap();
   let _ = video_file.read_to_string(&mut video_struct).unwrap();
 
-  let video_metadata = serde_json::from_str(&video_struct).unwrap();
+  let video_metadata : Metadata = serde_json::from_str(&video_struct).unwrap();
   let rdf_triples = convert_into_rdf(666, &video_metadata, true).unwrap();
 
   let mut ntriple_struct = String::new();
   let mut ntriple_file = File::open("tests/triples.nt").unwrap();
   let _ = ntriple_file.read_to_string(&mut ntriple_struct).unwrap();
+  println!("{}", rdf_triples);
+  assert!(rdf_triples == ntriple_struct);
+}
+
+#[test]
+fn test_mapping_resource() {
+  use std::fs::File;
+  use std::io::Read;
+  use resource_model::Resource;
+
+  let resource = Resource {
+    id: "000000-1111-2222-3333-44444444".to_string(),
+    mime_type: "application/xml+ttml".to_string(),
+    locators: vec![
+      "some/path/to/file.ttml".to_string()
+    ]
+  };
+  
+  let rdf_triples = convert_into_rdf(666, &resource, true).unwrap();
+
+  let mut ntriple_struct = String::new();
+  let mut ntriple_file = File::open("tests/triples_resource.nt").unwrap();
+  let _ = ntriple_file.read_to_string(&mut ntriple_struct).unwrap();
+  println!("{}", rdf_triples);
   assert!(rdf_triples == ntriple_struct);
 }
 
@@ -353,5 +394,3 @@ fn test_publish() {
   let pm_endpoint = "https://exchange-manager-api.platform.labs.pm";
   publish_to_perfect_memory(666, pm_client_id, pm_api_key, pm_endpoint, &ntriple_struct).unwrap();
 }
-
-

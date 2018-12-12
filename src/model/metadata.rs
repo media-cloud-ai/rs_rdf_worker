@@ -1,4 +1,5 @@
 
+use message::ToRdf;
 use model::audio_track::AudioTrack;
 use model::kind::Kind;
 use model::tag::Tag;
@@ -80,8 +81,9 @@ pub struct Metadata {
   kind: Kind // MISSING
 }
 
-impl Metadata {
-  pub fn to_rdf(&self, graph: &mut Graph) {
+
+impl ToRdf for Metadata {
+  fn to_rdf(&self, graph: &mut Graph) {
     let s_root = "http://ressources.idfrancetv.fr/medias/".to_string() + &self.id;
     let p_ftv_audio = "http://ressources.idfrancetv.fr/ontologies/audio#";
     let p_ftv_sous_titre = "http://ressources.idfrancetv.fr/ontologies/sous-titre#";
@@ -335,7 +337,9 @@ impl Metadata {
       }
     }
   }
+}
 
+impl Metadata {
   fn insert_identifier(&self, graph: &mut Graph, subject_node: &Node, identifier_type: &str, value: &str) {
     let p_has_idenfitier = EBUCORE_NAMESPACE.to_owned() + "hasIdentifier";
     let p_has_identifier_type = EBUCORE_NAMESPACE.to_owned() + "hasIdentifierType";

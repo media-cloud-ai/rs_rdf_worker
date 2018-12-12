@@ -17,6 +17,7 @@ mod config;
 mod message;
 mod model;
 mod namespaces;
+mod resource_model;
 
 #[derive(Debug)]
 struct HttpEvent {

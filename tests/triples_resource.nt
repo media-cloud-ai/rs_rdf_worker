@@ -1,0 +1,5 @@
+<http://ressources.idfrancetv.fr/medias/000000-1111-2222-3333-44444444> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto0 .
+_:auto0 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Essence> .
+_:auto0 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasFormat> _:auto1 .
+_:auto1 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasMimeType> "application/xml+ttml" .
+_:auto0 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "some/path/to/file.ttml" .
