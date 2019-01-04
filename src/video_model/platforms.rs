@@ -1,5 +1,5 @@
 
-use model::platform::Platform;
+use video_model::platform::Platform;
 
 #[derive(Debug, Deserialize)]
 pub struct Platforms {

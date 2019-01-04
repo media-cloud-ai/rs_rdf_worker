@@ -1,24 +1,23 @@
 
 use message::ToRdf;
-use model::audio_track::AudioTrack;
-use model::kind::Kind;
-use model::tag::Tag;
-use model::text_track::TextTrack;
-use model::rating::Rating;
-use model::country::Country;
-use model::platforms::Platforms;
-use model::part::Part;
-use model::image::Image;
-use model::group::Group;
-use model::people::People;
-use model::channel::Channel;
-use model::category::Category;
 use namespaces::*;
-
 use rdf::graph::Graph;
 use rdf::node::Node;
 use rdf::triple::Triple;
 use rdf::uri::Uri;
+use video_model::audio_track::AudioTrack;
+use video_model::kind::Kind;
+use video_model::tag::Tag;
+use video_model::text_track::TextTrack;
+use video_model::rating::Rating;
+use video_model::country::Country;
+use video_model::platforms::Platforms;
+use video_model::part::Part;
+use video_model::image::Image;
+use video_model::group::Group;
+use video_model::people::People;
+use video_model::channel::Channel;
+use video_model::category::Category;
 
 #[derive(Debug, Deserialize)]
 pub struct Metadata {

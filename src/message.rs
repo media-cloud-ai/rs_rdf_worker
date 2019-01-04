@@ -13,8 +13,8 @@ use reqwest::header::*;
 use serde_json;
 use std::{thread, time};
 
-use model::metadata::Metadata;
 use namespaces::*;
+use video_model::metadata::Metadata;
 
 pub trait ToRdf {
   fn to_rdf(&self, graph: &mut Graph);
@@ -341,7 +341,7 @@ fn test_mapping_video() {
   use std::fs::File;
   use std::io::Read;
   use serde_json;
-  use model::metadata::Metadata;
+  use video_model::metadata::Metadata;
 
   let mut video_struct = String::new();
   let mut video_file = File::open("tests/video.json").unwrap();

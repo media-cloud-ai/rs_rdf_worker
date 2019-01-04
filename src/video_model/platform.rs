@@ -1,5 +1,5 @@
 
-use model::window::Window;
+use video_model::window::Window;
 
 #[derive(Debug, Deserialize)]
 pub struct Platform {

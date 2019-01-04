@@ -1,5 +1,5 @@
 
-use model::role::Role;
+use video_model::role::Role;
 
 #[derive(Debug, Deserialize)]
 pub struct People {

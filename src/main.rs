@@ -15,9 +15,9 @@ use log::Level;
 
 mod config;
 mod message;
-mod model;
 mod namespaces;
 mod resource_model;
+mod video_model;
 
 #[derive(Debug)]
 struct HttpEvent {
