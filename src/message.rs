@@ -151,20 +151,19 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
   match parsed {
     Ok(content) => {
       println!("{:?}", content);
+      let ntriples = false;
       let reference = get_parameter(&content.parameters, "reference").unwrap();
 
       let rdf_triples = 
         match get_parameter(&content.parameters, "order").unwrap_or("".to_string()).as_str() {
           "publish_ttml" => {
-            let video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
-            convert_into_rdf(content.job_id.clone(), &video_metadata, false)?;
-
-            return Err(MessageError::ProcessingError(content.job_id, "LOLLLL".to_string()));
+            println!("{:?}", content.parameters);
+            return Err(MessageError::ProcessingError(content.job_id, "Unimplemented".to_string()));
           }
           _ => {
             let mut video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
             video_metadata.si_files = get_files(content.job_id.clone(), &reference)?;
-            convert_into_rdf(content.job_id.clone(), &video_metadata, false)?
+            convert_into_rdf(content.job_id.clone(), &video_metadata, ntriples)?
           }
         };
 
@@ -408,7 +407,11 @@ fn test_mapping_resource() {
     creator: Some("Media-IO".to_string()),
     locators: vec![
       "some/path/to/file.ttml".to_string()
-    ]
+    ],
+    filename: Some("file.ttml".to_string()),
+    path: Some("/serveur/path/".to_string()),
+    created_at: Some("2018-07-31T20:56:31+02:00".to_string()),
+    updated_at: Some("2018-07-31T20:56:31+02:00".to_string()),
   };
   
   let rdf_triples = convert_into_rdf(666, &resource, true).unwrap();

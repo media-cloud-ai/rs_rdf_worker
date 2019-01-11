@@ -11,6 +11,10 @@ pub struct Resource {
   pub id: String,
   pub creator: Option<String>,
   pub mime_type: String,
+  pub filename: Option<String>,
+  pub path: Option<String>,
+  pub created_at: Option<String>,
+  pub updated_at: Option<String>,
   pub locators: Vec<String>
 }
 
@@ -18,6 +22,9 @@ impl ToRdf for Resource {
   fn to_rdf(&self, graph: &mut Graph) {
     let root = "http://ressources.idfrancetv.fr/medias/".to_string() + &self.id;
     let p_type = RDF_NAMESPACE.to_owned() + "type";
+    let p_date_created = EBUCORE_NAMESPACE.to_owned() + "dateCreated";
+    let p_date_modified = EBUCORE_NAMESPACE.to_owned() + "dateModified";
+    let p_filename = EBUCORE_NAMESPACE.to_owned() + "filename";
     let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
     let p_has_related_resource = EBUCORE_NAMESPACE.to_owned() + "hasRelatedResource";
     let p_has_format = EBUCORE_NAMESPACE.to_owned() + "hasFormat";
@@ -39,9 +46,19 @@ impl ToRdf for Resource {
     for locator in &self.locators {
       self.add_link(graph, &s_has_related_resource, &p_locator, &locator, None, None, false);
     }
+
+    if self.path.is_some() && self.filename.is_some() {
+      self.add_link(graph, &s_has_related_resource, &p_filename, &format!("{}{}", self.path.clone().unwrap(), self.filename.clone().unwrap()), None, None, false);
+    }
+
+    if let Some(ref created_at) = self.created_at {
+      self.add_link(graph, &s_has_related_resource, &p_date_created, &created_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
+    }
+    if let Some(ref updated_at) = self.updated_at {
+      self.add_link(graph, &s_has_related_resource, &p_date_modified, &updated_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
+    }
   }
 }
-
 
 impl Resource {
   fn add_link(&self, graph: &mut Graph, subject_node: &Node, predicate: &str, object: &str, language: Option<&str>, datatype: Option<String>, uri: bool) {
