@@ -1,6 +1,6 @@
 
 #[derive(Debug, Deserialize)]
 pub struct Kind {
-  id: String,
+  pub id: String,
   label: String,
 }

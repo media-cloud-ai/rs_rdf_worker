@@ -1,0 +1,691 @@
+[
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 192,
+                "codec_rfc6381": "mp2",
+                "lang": "FRA",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 3550,
+        "created_at": "2018-08-02T08:13:16+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": null,
+        "filesize_bytes": null,
+        "format": {
+            "id": "video-ts",
+            "label": "video/ts",
+            "mime_type": "video/mp2t",
+            "type": "video"
+        },
+        "id": "a1c0a58d-bf72-490d-a2d0-06445e8053de",
+        "md5_checksum": null,
+        "path": null,
+        "storage": "numericable-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-08-02T08:13:16+02:00",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 3370,
+                "codec_rfc6381": "mpeg2video",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 720
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 64,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "FRA",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 1900,
+        "created_at": "2018-08-01T06:26:50+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": null,
+        "filesize_bytes": null,
+        "format": {
+            "id": "video-ts",
+            "label": "video/ts",
+            "mime_type": "video/mp2t",
+            "type": "video"
+        },
+        "id": "e6fa5e7d-354f-4821-bd70-3fde5b5a5a66",
+        "md5_checksum": null,
+        "path": null,
+        "storage": "sfr-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-08-01T06:26:50+02:00",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 1720,
+                "codec_rfc6381": "avc1.640028",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 720
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 128,
+                "codec_rfc6381": "mp2",
+                "lang": "FRA",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 2200,
+        "created_at": "2018-07-31T23:00:28+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": null,
+        "filesize_bytes": null,
+        "format": {
+            "id": "video-ts",
+            "label": "video/ts",
+            "mime_type": "video/mp2t",
+            "type": "video"
+        },
+        "id": "40067a8c-fb27-4c9c-b455-894f2dbc60ca",
+        "md5_checksum": null,
+        "path": null,
+        "storage": "orange-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T23:00:28+02:00",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 1750,
+                "codec_rfc6381": "avc1.4d001e",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 720
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 64,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "FRA",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 1900,
+        "created_at": "2018-07-31T21:01:41+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": null,
+        "filesize_bytes": null,
+        "format": {
+            "id": "video-ts",
+            "label": "video/ts",
+            "mime_type": "video/mp2t",
+            "type": "video"
+        },
+        "id": "1748f784-8664-446c-99d5-ae57aef4be4c",
+        "md5_checksum": null,
+        "path": null,
+        "storage": "molotov-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T21:01:41+02:00",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 1720,
+                "codec_rfc6381": "avc1.640028",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 720
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 192,
+                "codec_rfc6381": "mp2",
+                "lang": "FRA",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 3550,
+        "created_at": "2018-07-31T21:01:35+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": null,
+        "filesize_bytes": null,
+        "format": {
+            "id": "video-ts",
+            "label": "video/ts",
+            "mime_type": "video/mp2t",
+            "type": "video"
+        },
+        "id": "b17e70a2-55d0-4aac-ba28-e21b3213c982",
+        "md5_checksum": null,
+        "path": null,
+        "storage": "canalsat-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T21:01:35+02:00",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 3370,
+                "codec_rfc6381": "mpeg2video",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 720
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 64,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "FRA",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 1900,
+        "created_at": "2018-07-31T21:01:33+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": null,
+        "filesize_bytes": null,
+        "format": {
+            "id": "video-ts",
+            "label": "video/ts",
+            "mime_type": "video/mp2t",
+            "type": "video"
+        },
+        "id": "407cde36-32c3-4ee0-b2a4-5d4a6202dfd1",
+        "md5_checksum": null,
+        "path": null,
+        "storage": "bouygues-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T21:01:33+02:00",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 1720,
+                "codec_rfc6381": "avc1.640028",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 720
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 75,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "fra",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 1447,
+        "created_at": "2018-07-31T20:57:06+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-standard5.mp4",
+        "filesize_bytes": 20198711,
+        "format": {
+            "id": "video-mp4",
+            "label": "video/mp4",
+            "mime_type": "video/mp4",
+            "type": "video"
+        },
+        "id": "be058fc8-c4ce-416a-863f-712230fb43ef",
+        "md5_checksum": null,
+        "path": "/streaming-adaptatif_france-dom-tom/2018/S31/J2/",
+        "storage": "akamai-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T20:57:06+02:00",
+        "url": "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard5.mp4",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 1372,
+                "codec_rfc6381": "avc1.4d001f",
+                "frame_rate_fps": 25,
+                "height": 576,
+                "width": 1024
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 75,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "fra",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 824,
+        "created_at": "2018-07-31T20:57:06+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-standard4.mp4",
+        "filesize_bytes": 11594374,
+        "format": {
+            "id": "video-mp4",
+            "label": "video/mp4",
+            "mime_type": "video/mp4",
+            "type": "video"
+        },
+        "id": "9bc8b715-033d-449f-b3af-e86a4d155c57",
+        "md5_checksum": null,
+        "path": "/streaming-adaptatif_france-dom-tom/2018/S31/J2/",
+        "storage": "akamai-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T20:57:06+02:00",
+        "url": "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard4.mp4",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 749,
+                "codec_rfc6381": "avc1.4d001f",
+                "frame_rate_fps": 25,
+                "height": 396,
+                "width": 704
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 75,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "fra",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 576,
+        "created_at": "2018-07-31T20:57:06+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-standard3.mp4",
+        "filesize_bytes": 8169032,
+        "format": {
+            "id": "video-mp4",
+            "label": "video/mp4",
+            "mime_type": "video/mp4",
+            "type": "video"
+        },
+        "id": "d60c8b81-1ac3-4f73-a875-2d765cc0cb9d",
+        "md5_checksum": null,
+        "path": "/streaming-adaptatif_france-dom-tom/2018/S31/J2/",
+        "storage": "akamai-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T20:57:06+02:00",
+        "url": "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard3.mp4",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 501,
+                "codec_rfc6381": "avc1.42001e",
+                "frame_rate_fps": 25,
+                "height": 288,
+                "width": 512
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 75,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "fra",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 189,
+        "created_at": "2018-07-31T20:57:06+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-standard1.mp4",
+        "filesize_bytes": 2822144,
+        "format": {
+            "id": "video-mp4",
+            "label": "video/mp4",
+            "mime_type": "video/mp4",
+            "type": "video"
+        },
+        "id": "aeb463f8-ffbd-498a-ad67-04035f973506",
+        "md5_checksum": null,
+        "path": "/streaming-adaptatif_france-dom-tom/2018/S31/J2/",
+        "storage": "akamai-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T20:57:06+02:00",
+        "url": "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard1.mp4",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 114,
+                "codec_rfc6381": "avc1.42001e",
+                "frame_rate_fps": 25,
+                "height": 144,
+                "width": 256
+            }
+        ]
+    },
+    {
+        "audio_tracks": [
+            {
+                "bitrate_kbps": 75,
+                "codec_rfc6381": "mp4a.40.2",
+                "lang": "fra",
+                "sample_rate_hz": 48000
+            }
+        ],
+        "bitrate_kbps": 309,
+        "created_at": "2018-07-31T20:57:06+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-standard2.mp4",
+        "filesize_bytes": 4462135,
+        "format": {
+            "id": "video-mp4",
+            "label": "video/mp4",
+            "mime_type": "video/mp4",
+            "type": "video"
+        },
+        "id": "dd02c054-38e2-44c7-9d81-092c683f9859",
+        "md5_checksum": null,
+        "path": "/streaming-adaptatif_france-dom-tom/2018/S31/J2/",
+        "storage": "akamai-replay-prod",
+        "tags": [],
+        "text_tracks": [],
+        "updated_at": "2018-07-31T20:57:06+02:00",
+        "url": "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard2.mp4",
+        "version": "1533063341000000",
+        "video_tracks": [
+            {
+                "bitrate_kbps": 234,
+                "codec_rfc6381": "avc1.42001e",
+                "frame_rate_fps": 25,
+                "height": 180,
+                "width": 320
+            }
+        ]
+    },
+    {
+        "bitrates_kbps": [],
+        "created_at": "2018-07-31T20:56:31+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-1533063388.m3u8",
+        "filesize_bytes": null,
+        "format": {
+            "id": "playlist-hls",
+            "label": "playlist/hls",
+            "mime_type": "application/x-mpegURL",
+            "type": "playlist"
+        },
+        "id": "547f12b0-e6d0-4101-81da-8cef6ddf9aff",
+        "md5_checksum": null,
+        "path": "/2018/31/",
+        "storage": "akamai-caption-prod",
+        "streams": [
+            {
+                "audio_tracks": [],
+                "text_tracks": [
+                    {
+                        "lang": "FRA"
+                    }
+                ],
+                "video_tracks": []
+            }
+        ],
+        "tags": [],
+        "updated_at": "2018-07-31T20:56:31+02:00",
+        "url": "http://replayftv-pmd.francetv.fr/subtitles/2018/31/181575789-1533063388.m3u8",
+        "version": "1533063341000000"
+    },
+    {
+        "created_at": "2018-07-31T20:56:31+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-1533063388.vtt",
+        "filesize_bytes": null,
+        "format": {
+            "id": "caption-vtt",
+            "label": "caption/vtt",
+            "mime_type": "text/vtt",
+            "type": "caption"
+        },
+        "id": "21ea4029-a73b-41c5-9ab1-d24cba751d60",
+        "lang": "fra",
+        "md5_checksum": null,
+        "path": "/2018/31/",
+        "storage": "akamai-caption-prod",
+        "tags": [],
+        "updated_at": "2018-07-31T20:56:31+02:00",
+        "url": "http://replayftv-pmd.francetv.fr/subtitles/2018/31/181575789-1533063388.vtt",
+        "version": "1533063341000000"
+    },
+    {
+        "created_at": "2018-07-31T20:56:31+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-1533063388.vtt",
+        "filesize_bytes": null,
+        "format": {
+            "id": "caption-vtt",
+            "label": "caption/vtt",
+            "mime_type": "text/vtt",
+            "type": "caption"
+        },
+        "id": "956386ee-e3df-4324-bce7-49fbc286533d",
+        "lang": "fra",
+        "md5_checksum": null,
+        "path": "/france2/20180731/",
+        "storage": "jaguar-caption-prod",
+        "tags": [],
+        "updated_at": "2018-07-31T20:56:31+02:00",
+        "url": "https://staticftv-a.akamaihd.net/sous-titres/france2/20180731/181575789-5b60b0ada5853-1533063388.vtt",
+        "version": "1533063341000000"
+    },
+    {
+        "created_at": "2018-07-31T20:56:31+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada5853-1533063388.ttml",
+        "filesize_bytes": null,
+        "format": {
+            "id": "caption-ttml",
+            "label": "caption/ttml",
+            "mime_type": "application/xml+ttml",
+            "type": "caption"
+        },
+        "id": "2a684b84-d0a8-424a-9cf7-b086658413d2",
+        "lang": "fra",
+        "md5_checksum": null,
+        "path": "/france2/20180731/",
+        "storage": "jaguar-caption-prod",
+        "tags": [],
+        "updated_at": "2018-07-31T20:56:31+02:00",
+        "url": "https://staticftv-a.akamaihd.net/sous-titres/france2/20180731/181575789-5b60b0ada5853-1533063388.ttml",
+        "version": "1533063341000000"
+    },
+    {
+        "copyright": null,
+        "created_at": "2018-07-31T20:55:49+02:00",
+        "created_via": "factory",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "2870249",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "181575789-5b60b0ada58530.jpeg",
+        "filesize_bytes": null,
+        "format": {
+            "id": "image-jpeg",
+            "label": "image/jpeg",
+            "mime_type": "image/jpeg",
+            "type": "image"
+        },
+        "height": 720,
+        "id": "d4b24eb4-53ff-4dcc-8c2f-0e6b1e110b1d",
+        "index": 0,
+        "md5_checksum": null,
+        "path": "/201831/5b60b0ada5853/",
+        "ratio": "16:9",
+        "storage": "jaguar-sprite-prod",
+        "tags": [
+            "thumbnail-sprite"
+        ],
+        "updated_at": "2018-07-31T20:55:49+02:00",
+        "url": "https://staticftv-a.akamaihd.net/videospritesheets/201831/5b60b0ada5853/181575789-5b60b0ada58530.jpeg",
+        "version": "1533063341000000",
+        "width": 1280
+    },
+    {
+        "copyright": null,
+        "created_at": "2018-07-17T05:28:35+02:00",
+        "created_via": "import-plurimedia-epg",
+        "external_ids": {
+            "group_id": null,
+            "job_id": "953963ff-8adc-4ef3-9260-449c717030e2",
+            "legacy_id": "181575789",
+            "remote_id": null,
+            "video_id": "99787afd-ba2d-410f-b03e-66cf2efb3ed5"
+        },
+        "filename": "6655ae6e-8f18-4187-a867-c44c7ac11982.jpeg",
+        "filesize_bytes": 190583,
+        "format": {
+            "id": "image-jpeg",
+            "label": "image/jpeg",
+            "mime_type": "image/jpeg",
+            "type": "image"
+        },
+        "height": 1080,
+        "id": "ec87c960-f52c-4208-8921-7d536d66e9ab",
+        "index": null,
+        "md5_checksum": "dd62644e30b20e2b63de5bea885a8ce3",
+        "path": "/dd/62/64/",
+        "ratio": "16:9",
+        "storage": "jaguar-image-prod",
+        "tags": [],
+        "updated_at": "2018-07-17T05:28:35+02:00",
+        "url": "https://assets.webservices.francetelevisions.fr/v1/assets/images/dd/62/64/6655ae6e-8f18-4187-a867-c44c7ac11982.jpeg",
+        "version": null,
+        "width": 1920
+    }
+]

@@ -14,6 +14,7 @@ use std::env;
 use log::Level;
 
 mod config;
+mod files_model;
 mod message;
 mod namespaces;
 mod resource_model;

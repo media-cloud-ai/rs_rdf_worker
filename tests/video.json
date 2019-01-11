@@ -1,1 +1,341 @@
-{"created_at":"2018-10-26T14:23:36+02:00","updated_at":"2018-11-16T09:50:05+01:00","id":"a570fa6f-d2c9-455d-bacf-f21b4957809f","title":"La chouette & Cie","additional_title":"Chouette invisible","original_title":null,"expected_at":"2018-10-29T06:30:00+01:00","produced_at":2013,"duration":"PT6M57S","expected_duration":"PT5M","description":"Le Mouton, la Grenouille et le Phasme d\u00e9cident de venir en aide \u00e0 la Chouette qui chasse une chenille. Au moment o\u00f9 ils vont l'attraper, la proie dispara\u00eet brutalement\u00a0: elle est devenue invisible. La curiosit\u00e9 scientifique du Phasme le pousse \u00e0 mener des tests pour comprendre ce ph\u00e9nom\u00e8ne. Pendant l'exp\u00e9rience, la chenille-cobaye mord la Chouette qui devient \u00e0 son tour invisible...","short_description":null,"tags":[{"id":"c1dd3bdb-da6a-4138-81d0-5355e5c4d6aa","label":"s\u00e9rie d'animation","description":null},{"id":"a653c7dc-997a-4ae0-86db-d57a431e6322","label":"6\/11 ans","description":null},{"id":"4f04820b-ffb6-4a4a-8dad-8952fd28bbc7","label":"dessins anim\u00e9s","description":null}],"groups":[{"id":"eb75e25e-18cb-4d64-9412-4818b4d11af0","label":"La chouette & Cie - Saison 1","season_number":1,"number_of_episodes":null,"description":null,"created_by":"import.pgep@francetv.fr","created_via":"import-plurimedia-epg","images":[]},{"id":"ea732b79-0528-41e0-a455-997692325358","label":"La chouette & Cie","season_number":null,"number_of_episodes":null,"description":null,"created_by":"import.pgep@francetv.fr","created_via":"import-plurimedia-epg","images":[]}],"season_number":1,"episode_number":76,"copyright":null,"created_by":"workers.user.prod@francetv.fr","created_via":"import-plurimedia-epg","broadcasted_at":"2018-10-29T06:27:35+01:00","type":{"id":"integrale","label":"Int\u00e9grale"},"rating":null,"parts":[],"credits":[{"role":{"id":"realisateur","label":"R\u00e9alisateur"},"first_name":"Victor","last_name":"Moulin","character":null}],"category":{"id":"enfants","label":"enfants"},"channel":{"id":"france-3","label":"france 3","region":null,"tags":["premium"]},"audio_tracks":[{"id":"francais","label":"Fran\u00e7ais","code":"FRA"}],"text_tracks":[{"id":"francais","label":"Fran\u00e7ais","code":"FRA"}],"production_countries":[{"id":"france","label":"France","code":"FRA"}],"previously_broadcasted":true,"previously_broadcasted_on_this_channel":true,"broadcasted_live":false,"parent_id":"671eff3d-6ebd-4aea-9340-b2dc77ffce39","allocine_press_stars":null,"allocine_users_stars":null,"licensing":"hertzien","restricted_countries":[{"id":"france","code":"FRA","label":"France"},{"id":"andorre","code":"AND","label":"Andorre"},{"id":"monaco","code":"MCO","label":"Monaco"},{"id":"guadeloupe","code":"GLP","label":"Guadeloupe"},{"id":"guyane-francaise","code":"GUF","label":"Guyane fran\u00e7aise"},{"id":"martinique","code":"MTQ","label":"Martinique"},{"id":"mayotte","code":"MYT","label":"Mayotte"},{"id":"nouvelle-caledonie","code":"NCL","label":"Nouvelle-Cal\u00e9donie"},{"id":"polynesie-francaise","code":"PYF","label":"Polyn\u00e9sie fran\u00e7aise"},{"id":"reunion-la","code":"REU","label":"R\u00e9union (La)"},{"id":"saint-pierre-et-miquelon","code":"SPM","label":"Saint-Pierre-et-Miquelon"},{"id":"wallis-et-futuna","code":"WLF","label":"Wallis-et-Futuna"},{"id":"saint-barthelemy","code":"BLM","label":"Saint-Barth\u00e9lemy"},{"id":"saint-martin-partie-francaise","code":"MAF","label":"Saint-Martin (partie fran\u00e7aise)"}],"embeddable":false,"midrollable":false,"token":true,"drm":false,"downloadable":true,"images":[{"id":"ccc674a5-f477-47c6-a124-3ac9012dcc4a","format":{"id":"image-jpeg","label":"image\/jpeg","type":"image","mime_type":"image\/jpeg"},"storage":"jaguar-image-prod","path":"\/7a\/7a\/c9\/","filename":"5fd0d8d7-3076-4cfc-8f95-79012c3cf0a4.jpeg","md5_checksum":"7a7ac960e8dfee2d6f85f7370d26124c","filesize_bytes":168012,"external_ids":{"video_id":"a570fa6f-d2c9-455d-bacf-f21b4957809f","legacy_id":"192664631","group_id":null,"job_id":"29c24559-48b2-40ec-8ec3-2774084c1648","remote_id":null},"tags":[],"created_via":"import-plurimedia-epg","version":null,"width":1920,"height":1080,"index":null,"url":"https:\/\/assets.webservices.francetelevisions.fr\/v1\/assets\/images\/7a\/7a\/c9\/5fd0d8d7-3076-4cfc-8f95-79012c3cf0a4.jpeg","copyright":null,"ratio":"16:9"}],"platforms":{"ftv":{"status":"available","exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null},"free":{"status":null,"exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null},"orange":{"status":"available","exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":"FR3CU065026S"},"bouygues":{"status":"available","exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null},"sfr":{"status":null,"exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null},"canalsat":{"status":"available","exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null},"numericable":{"status":"available","exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null},"molotov":{"status":"available","exploitation_windows":[{"start":"2018-10-29T06:35:00+01:00","end":"2018-11-05T06:35:00+01:00","type":null,"price_sd":null,"price_hd":null}],"remote_id":null}},"legacy_id":"192664631","oscar_id":"F33032106715341020182910","tvod_id":null,"plurimedia_broadcast_id":192664631,"plurimedia_collection_ids":[12733378,16155586],"plurimedia_program_id":92736732,"ftvcut_id":null}
+{
+    "additional_title": "Chouette invisible",
+    "allocine_press_stars": null,
+    "allocine_users_stars": null,
+    "audio_tracks": [
+        {
+            "code": "FRA",
+            "id": "francais",
+            "label": "Français"
+        }
+    ],
+    "broadcasted_at": "2018-10-29T06:27:35+01:00",
+    "broadcasted_live": false,
+    "category": {
+        "id": "enfants",
+        "label": "enfants"
+    },
+    "channel": {
+        "id": "france-3",
+        "label": "france 3",
+        "region": null,
+        "tags": [
+            "premium"
+        ]
+    },
+    "copyright": null,
+    "created_at": "2018-10-26T14:23:36+02:00",
+    "created_by": "workers.user.prod@francetv.fr",
+    "created_via": "import-plurimedia-epg",
+    "credits": [
+        {
+            "character": null,
+            "first_name": "Victor",
+            "last_name": "Moulin",
+            "role": {
+                "id": "realisateur",
+                "label": "Réalisateur"
+            }
+        }
+    ],
+    "description": "Le Mouton, la Grenouille et le Phasme décident de venir en aide à la Chouette qui chasse une chenille. Au moment où ils vont l'attraper, la proie disparaît brutalement : elle est devenue invisible. La curiosité scientifique du Phasme le pousse à mener des tests pour comprendre ce phénomène. Pendant l'expérience, la chenille-cobaye mord la Chouette qui devient à son tour invisible...",
+    "downloadable": true,
+    "drm": false,
+    "duration": "PT6M57S",
+    "embeddable": false,
+    "episode_number": 76,
+    "expected_at": "2018-10-29T06:30:00+01:00",
+    "expected_duration": "PT5M",
+    "ftvcut_id": null,
+    "groups": [
+        {
+            "created_by": "import.pgep@francetv.fr",
+            "created_via": "import-plurimedia-epg",
+            "description": null,
+            "id": "eb75e25e-18cb-4d64-9412-4818b4d11af0",
+            "images": [],
+            "label": "La chouette & Cie - Saison 1",
+            "number_of_episodes": null,
+            "season_number": 1
+        },
+        {
+            "created_by": "import.pgep@francetv.fr",
+            "created_via": "import-plurimedia-epg",
+            "description": null,
+            "id": "ea732b79-0528-41e0-a455-997692325358",
+            "images": [],
+            "label": "La chouette & Cie",
+            "number_of_episodes": null,
+            "season_number": null
+        }
+    ],
+    "id": "a570fa6f-d2c9-455d-bacf-f21b4957809f",
+    "images": [
+        {
+            "copyright": null,
+            "created_via": "import-plurimedia-epg",
+            "external_ids": {
+                "group_id": null,
+                "job_id": "29c24559-48b2-40ec-8ec3-2774084c1648",
+                "legacy_id": "192664631",
+                "remote_id": null,
+                "video_id": "a570fa6f-d2c9-455d-bacf-f21b4957809f"
+            },
+            "filename": "5fd0d8d7-3076-4cfc-8f95-79012c3cf0a4.jpeg",
+            "filesize_bytes": 168012,
+            "format": {
+                "id": "image-jpeg",
+                "label": "image/jpeg",
+                "mime_type": "image/jpeg",
+                "type": "image"
+            },
+            "height": 1080,
+            "id": "ccc674a5-f477-47c6-a124-3ac9012dcc4a",
+            "index": null,
+            "md5_checksum": "7a7ac960e8dfee2d6f85f7370d26124c",
+            "path": "/7a/7a/c9/",
+            "ratio": "16:9",
+            "storage": "jaguar-image-prod",
+            "tags": [],
+            "url": "https://assets.webservices.francetelevisions.fr/v1/assets/images/7a/7a/c9/5fd0d8d7-3076-4cfc-8f95-79012c3cf0a4.jpeg",
+            "version": null,
+            "width": 1920
+        }
+    ],
+    "legacy_id": "192664631",
+    "licensing": "hertzien",
+    "midrollable": false,
+    "original_title": null,
+    "oscar_id": "F33032106715341020182910",
+    "parent_id": "671eff3d-6ebd-4aea-9340-b2dc77ffce39",
+    "parts": [],
+    "platforms": {
+        "bouygues": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": "available"
+        },
+        "canalsat": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": "available"
+        },
+        "free": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": null
+        },
+        "ftv": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": "available"
+        },
+        "molotov": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": "available"
+        },
+        "numericable": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": "available"
+        },
+        "orange": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": "FR3CU065026S",
+            "status": "available"
+        },
+        "sfr": {
+            "exploitation_windows": [
+                {
+                    "end": "2018-11-05T06:35:00+01:00",
+                    "price_hd": null,
+                    "price_sd": null,
+                    "start": "2018-10-29T06:35:00+01:00",
+                    "type": null
+                }
+            ],
+            "remote_id": null,
+            "status": null
+        }
+    },
+    "plurimedia_broadcast_id": 192664631,
+    "plurimedia_collection_ids": [
+        12733378,
+        16155586
+    ],
+    "plurimedia_program_id": 92736732,
+    "previously_broadcasted": true,
+    "previously_broadcasted_on_this_channel": true,
+    "produced_at": 2013,
+    "production_countries": [
+        {
+            "code": "FRA",
+            "id": "france",
+            "label": "France"
+        }
+    ],
+    "rating": null,
+    "restricted_countries": [
+        {
+            "code": "FRA",
+            "id": "france",
+            "label": "France"
+        },
+        {
+            "code": "AND",
+            "id": "andorre",
+            "label": "Andorre"
+        },
+        {
+            "code": "MCO",
+            "id": "monaco",
+            "label": "Monaco"
+        },
+        {
+            "code": "GLP",
+            "id": "guadeloupe",
+            "label": "Guadeloupe"
+        },
+        {
+            "code": "GUF",
+            "id": "guyane-francaise",
+            "label": "Guyane française"
+        },
+        {
+            "code": "MTQ",
+            "id": "martinique",
+            "label": "Martinique"
+        },
+        {
+            "code": "MYT",
+            "id": "mayotte",
+            "label": "Mayotte"
+        },
+        {
+            "code": "NCL",
+            "id": "nouvelle-caledonie",
+            "label": "Nouvelle-Calédonie"
+        },
+        {
+            "code": "PYF",
+            "id": "polynesie-francaise",
+            "label": "Polynésie française"
+        },
+        {
+            "code": "REU",
+            "id": "reunion-la",
+            "label": "Réunion (La)"
+        },
+        {
+            "code": "SPM",
+            "id": "saint-pierre-et-miquelon",
+            "label": "Saint-Pierre-et-Miquelon"
+        },
+        {
+            "code": "WLF",
+            "id": "wallis-et-futuna",
+            "label": "Wallis-et-Futuna"
+        },
+        {
+            "code": "BLM",
+            "id": "saint-barthelemy",
+            "label": "Saint-Barthélemy"
+        },
+        {
+            "code": "MAF",
+            "id": "saint-martin-partie-francaise",
+            "label": "Saint-Martin (partie française)"
+        }
+    ],
+    "season_number": 1,
+    "short_description": null,
+    "tags": [
+        {
+            "description": null,
+            "id": "c1dd3bdb-da6a-4138-81d0-5355e5c4d6aa",
+            "label": "série d'animation"
+        },
+        {
+            "description": null,
+            "id": "a653c7dc-997a-4ae0-86db-d57a431e6322",
+            "label": "6/11 ans"
+        },
+        {
+            "description": null,
+            "id": "4f04820b-ffb6-4a4a-8dad-8952fd28bbc7",
+            "label": "dessins animés"
+        }
+    ],
+    "text_tracks": [
+        {
+            "code": "FRA",
+            "id": "francais",
+            "label": "Français"
+        }
+    ],
+    "title": "La chouette & Cie",
+    "token": true,
+    "tvod_id": null,
+    "type": {
+        "id": "integrale",
+        "label": "Intégrale"
+    },
+    "updated_at": "2018-11-16T09:50:05+01:00"
+}

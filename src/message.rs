@@ -14,6 +14,9 @@ use serde_json;
 use std::{thread, time};
 
 use namespaces::*;
+
+
+use files_model::FtvSiFile;
 use video_model::metadata::Metadata;
 
 pub trait ToRdf {
@@ -159,7 +162,8 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
             return Err(MessageError::ProcessingError(content.job_id, "LOLLLL".to_string()));
           }
           _ => {
-            let video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
+            let mut video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
+            video_metadata.si_files = get_files(content.job_id.clone(), &reference)?;
             convert_into_rdf(content.job_id.clone(), &video_metadata, false)?
           }
         };
@@ -179,6 +183,34 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
 
 pub fn get_video_metadata(job_id: u64, reference: &str) -> Result<Metadata, MessageError> {
   let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/videos/".to_owned() + reference;
+
+  let client = reqwest::Client::builder()
+    .build()
+    .unwrap();
+
+  let mut response =
+    client
+    .get(url.as_str())
+    .send()
+    .map_err(|e|
+      MessageError::ProcessingError(job_id, e.to_string())
+    )?;
+
+  let status = response.status();
+
+  if !(status == StatusCode::OK) {
+    error!("{:?}", response);
+    return Err(MessageError::ProcessingError(job_id, "bad response status".to_string()));
+  }
+
+  response.json()
+  .map_err(|e|
+    MessageError::ProcessingError(job_id, e.to_string())
+  )
+}
+
+pub fn get_files(job_id: u64, reference: &str) -> Result<Vec<FtvSiFile>, MessageError> {
+  let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/files?external_ids.video_id=".to_owned() + reference;
 
   let client = reqwest::Client::builder()
     .build()
@@ -335,19 +367,26 @@ pub fn publish_to_perfect_memory(job_id: u64, pm_client_id: &str, pm_api_key: &s
   }
 }
 
-
 #[test]
 fn test_mapping_video() {
   use std::fs::File;
   use std::io::Read;
   use serde_json;
   use video_model::metadata::Metadata;
+  use files_model::FtvSiFile;
 
   let mut video_struct = String::new();
   let mut video_file = File::open("tests/video.json").unwrap();
   let _ = video_file.read_to_string(&mut video_struct).unwrap();
 
-  let video_metadata : Metadata = serde_json::from_str(&video_struct).unwrap();
+  let mut sifiles_struct = String::new();
+  let mut sifiles_file = File::open("tests/files.json").unwrap();
+  let _ = sifiles_file.read_to_string(&mut sifiles_struct).unwrap();
+
+  let mut video_metadata : Metadata = serde_json::from_str(&video_struct).unwrap();
+  let ftv_sifiles : Vec<FtvSiFile> = serde_json::from_str(&sifiles_struct).unwrap();
+  video_metadata.si_files = ftv_sifiles;
+
   let rdf_triples = convert_into_rdf(666, &video_metadata, true).unwrap();
 
   let mut ntriple_struct = String::new();
@@ -366,6 +405,7 @@ fn test_mapping_resource() {
   let resource = Resource {
     id: "000000-1111-2222-3333-44444444".to_string(),
     mime_type: "application/xml+ttml".to_string(),
+    creator: Some("Media-IO".to_string()),
     locators: vec![
       "some/path/to/file.ttml".to_string()
     ]
@@ -380,17 +420,17 @@ fn test_mapping_resource() {
   assert!(rdf_triples == ntriple_struct);
 }
 
-#[test]
-fn test_publish() {
-  use std::fs::File;
-  use std::io::Read;
+// #[test]
+// fn test_publish() {
+//   use std::fs::File;
+//   use std::io::Read;
 
-  let mut ntriple_struct = String::new();
-  let mut ntriple_file = File::open("tests/triples.nt").unwrap();
-  let _ = ntriple_file.read_to_string(&mut ntriple_struct).unwrap();
+//   let mut ntriple_struct = String::new();
+//   let mut ntriple_file = File::open("tests/triples.nt").unwrap();
+//   let _ = ntriple_file.read_to_string(&mut ntriple_struct).unwrap();
 
-  let pm_client_id = "5ab4ca78dd37d3000c64912e";
-  let pm_api_key = "mxzzM934dGxxojcjNYxi";
-  let pm_endpoint = "https://exchange-manager-api.platform.labs.pm";
-  publish_to_perfect_memory(666, pm_client_id, pm_api_key, pm_endpoint, &ntriple_struct).unwrap();
-}
+//   let pm_client_id = "5ab4ca78dd37d3000c64912e";
+//   let pm_api_key = "mxzzM934dGxxojcjNYxi";
+//   let pm_endpoint = "https://exchange-manager-api.platform.labs.pm";
+//   publish_to_perfect_memory(666, pm_client_id, pm_api_key, pm_endpoint, &ntriple_struct).unwrap();
+// }
