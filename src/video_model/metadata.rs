@@ -19,7 +19,7 @@ use video_model::people::People;
 use video_model::channel::Channel;
 use video_model::category::Category;
 
-use files_model::FtvSiFile;
+use resource_model::Resources;
 
 #[derive(Debug, Deserialize)]
 pub struct Metadata {
@@ -82,7 +82,7 @@ pub struct Metadata {
   kind: Kind,
 
   #[serde(skip)]
-  pub si_files: Vec<FtvSiFile>
+  pub resources: Resources
 }
 
 
@@ -103,8 +103,6 @@ impl ToRdf for Metadata {
     let p_duration_normal_play_time = EBUCORE_NAMESPACE.to_owned() + "durationNormalPlayTime";
     let p_episode_number = EBUCORE_NAMESPACE.to_owned() + "episodeNumber";
     let p_family_name = EBUCORE_NAMESPACE.to_owned() + "familyName";
-    let p_filename = EBUCORE_NAMESPACE.to_owned() + "filename";
-    let p_file_size = EBUCORE_NAMESPACE.to_owned() + "fileSize";
     let p_first_showing = EBUCORE_NAMESPACE.to_owned() + "firstShowing";
     let p_first_showing_this_service = EBUCORE_NAMESPACE.to_owned() + "firstShowingThisService";
     let p_free = EBUCORE_NAMESPACE.to_owned() + "free";
@@ -116,30 +114,21 @@ impl ToRdf for Metadata {
     let p_has_contributor = EBUCORE_NAMESPACE.to_owned() + "hasContributor";
     let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
     let p_has_editorial_object_type = EBUCORE_NAMESPACE.to_owned() + "hasEditorialObjectType";
-    let p_has_format = EBUCORE_NAMESPACE.to_owned() + "hasFormat";
     let p_has_genre = EBUCORE_NAMESPACE.to_owned() + "hasGenre";
-    let p_has_language = EBUCORE_NAMESPACE.to_owned() + "hasLanguage";
     let p_has_owner = EBUCORE_NAMESPACE.to_owned() + "hasOwner";
     let p_has_publication_event = EBUCORE_NAMESPACE.to_owned() + "hasPublicationEvent";
     let p_has_publication_event_type = EBUCORE_NAMESPACE.to_owned() + "hasPublicationEventType";
     let p_has_related_audio_programme = EBUCORE_NAMESPACE.to_owned() + "hasRelatedAudioProgramme";
-    let p_has_related_image = EBUCORE_NAMESPACE.to_owned() + "hasRelatedImage";
-    let p_has_related_resource = EBUCORE_NAMESPACE.to_owned() + "hasRelatedResource";
     let p_has_related_text_line = EBUCORE_NAMESPACE.to_owned() + "hasRelatedTextLine";
     let p_has_role = EBUCORE_NAMESPACE.to_owned() + "hasRole";
     let p_has_season = EBUCORE_NAMESPACE.to_owned() + "hasSeason";
     let p_has_target_audience = EBUCORE_NAMESPACE.to_owned() + "hasTargetAudience";
     let p_has_text_line_type = EBUCORE_NAMESPACE.to_owned() + "hasTextLineType";
     let p_has_topic = EBUCORE_NAMESPACE.to_owned() + "hasTopic";
-    let p_hash_value = EBUCORE_NAMESPACE.to_owned() + "hashValue";
-    let p_height = EBUCORE_NAMESPACE.to_owned() + "height";
-    let p_height_unit = EBUCORE_NAMESPACE.to_owned() + "heightUnit";
     let p_is_agent = EBUCORE_NAMESPACE.to_owned() + "isAgent";
     let p_is_character = EBUCORE_NAMESPACE.to_owned() + "isCharacter";
-    let p_is_issued_by = EBUCORE_NAMESPACE.to_owned() + "isIssuedby";
     let p_is_member_of = EBUCORE_NAMESPACE.to_owned() + "isMemberOf";
     let p_live = EBUCORE_NAMESPACE.to_owned() + "live";
-    let p_locator = EBUCORE_NAMESPACE.to_owned() + "locator";
     let p_mid_roll_ad_allowed = EBUCORE_NAMESPACE.to_owned() + "midRollAdAllowed";
     let p_organisation_name = EBUCORE_NAMESPACE.to_owned() + "organisationName";
     let p_original_title = EBUCORE_NAMESPACE.to_owned() + "originalTitle";
@@ -150,15 +139,11 @@ impl ToRdf for Metadata {
     let p_references = EBUCORE_NAMESPACE.to_owned() + "references";
     let p_resource_id = EBUCORE_NAMESPACE.to_owned() + "resourceId";
     let p_season_number = EBUCORE_NAMESPACE.to_owned() + "seasonNumber";
-    let p_storage_id = EBUCORE_NAMESPACE.to_owned() + "storageId";
     let p_synopsis = EBUCORE_NAMESPACE.to_owned() + "synopsis";
     let p_title = EBUCORE_NAMESPACE.to_owned() + "title";
-    let p_width = EBUCORE_NAMESPACE.to_owned() + "width";
-    let p_width_unit = EBUCORE_NAMESPACE.to_owned() + "widthUnit";
 
     let p_type = RDF_NAMESPACE.to_owned() + "type";
 
-    let p_label = SKOS_NAMESPACE.to_owned() + "label";
     let p_pref_label = SKOS_NAMESPACE.to_owned() + "prefLabel";
     let p_definition = SKOS_NAMESPACE.to_owned() + "definition";
 
@@ -168,9 +153,6 @@ impl ToRdf for Metadata {
     let o_editorial_object = EBUCORE_NAMESPACE.to_owned() + "EditorialObject";
     let o_group = EBUCORE_NAMESPACE.to_owned() + "Group";
     let o_identifier = EBUCORE_NAMESPACE.to_owned() + "Identifier";
-    let o_language = EBUCORE_NAMESPACE.to_owned() + "Language";
-    let o_media_resource = EBUCORE_NAMESPACE.to_owned() + "MediaResource";
-    let o_picture = EBUCORE_NAMESPACE.to_owned() + "Picture";
     let o_organisation = EBUCORE_NAMESPACE.to_owned() + "Organisation";
     let o_person = EBUCORE_NAMESPACE.to_owned() + "Person";
     let o_publication_channel = EBUCORE_NAMESPACE.to_owned() + "PublicationChannel";
@@ -352,79 +334,7 @@ impl ToRdf for Metadata {
       }
     }
 
-    // files
-    for file in &self.si_files {
-      let s_has_related_object =
-        match file.format.mime_type.as_str() {
-          "image/jpeg" => {
-            let node = self.add_related_node(graph, &subject, &p_has_related_image);
-            self.add_link(graph, &node, &p_type, &o_picture, None, None, true);
-
-            node
-          },
-          _ => {
-            let node = self.add_related_node(graph, &subject, &p_has_related_resource);
-            self.add_link(graph, &node, &p_type, &o_media_resource, None, None, true);
-            node
-          }
-        };
-
-      self.add_link(graph, &s_has_related_object, &p_resource_id, &("urn:uuid:".to_owned() + &file.id), None, None, false);
-      if let Some(ref url) = file.url {
-        self.add_link(graph, &s_has_related_object, &p_locator, &url, None, None, false);
-      }
-      self.add_link(graph, &s_has_related_object, &p_has_creator, &file.created_via, None, None, false);
-      
-      if let Some(ref created_at) = file.created_at {
-        self.add_link(graph, &s_has_related_object, &p_date_created, &created_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
-      }
-      if let Some(ref updated_at) = file.updated_at {
-        self.add_link(graph, &s_has_related_object, &p_date_modified, &updated_at, None, Some(XML_NAMESPACE.to_owned() + "dateTime"), false);
-      }
-      if let Some(ref filesize_bytes) = file.filesize_bytes {
-        self.add_link(graph, &s_has_related_object, &p_file_size, &format!("{}", filesize_bytes), None, Some(XML_NAMESPACE.to_owned() + "unsignedLong"), false);
-      }
-      self.add_link(graph, &s_has_related_object, &p_has_format, &format!("urn:mimetype:{}", file.format.mime_type), None, None, false);
-
-      if let Some(ref height) = file.height {
-        self.add_link(graph, &s_has_related_object, &p_height, &format!("{}", height), None, Some(XML_NAMESPACE.to_owned() + "integer"), false);
-        self.add_link(graph, &s_has_related_object, &p_height_unit, "pixel", None, None, false);
-      }
-      if let Some(ref width) = file.width {
-        self.add_link(graph, &s_has_related_object, &p_width, &format!("{}", width), None, Some(XML_NAMESPACE.to_owned() + "integer"), false);
-        self.add_link(graph, &s_has_related_object, &p_width_unit, "pixel", None, None, false);
-      }
-
-      if file.path.is_some() && file.filename.is_some() {
-        self.add_link(graph, &s_has_related_object, &p_filename, &format!("{}{}", file.path.clone().unwrap(), file.filename.clone().unwrap()), None, None, false);
-      }
-      self.add_link(graph, &s_has_related_object, &p_storage_id, &file.storage, None, None, false);
-
-      if let Some(ref md5_checksum) = file.md5_checksum {
-        self.add_link(graph, &s_has_related_object, &p_hash_value, &("urn:md5:".to_owned() + &md5_checksum), None, None, false);
-      }
-
-      if let Some(ref bitrate_kbps) = file.bitrate_kbps {
-        self.add_link(graph, &s_has_related_object, &p_hash_value, &format!("{}", bitrate_kbps * 1000), None, Some(XML_NAMESPACE.to_owned() + "nonNegativeInteger"), false);
-      }
-
-      if let Some(ref lang) = file.lang {
-        let s_has_language = self.add_related_node(graph, &s_has_related_object, &p_has_language);
-        self.add_link(graph, &s_has_language, &p_type, &o_language, None, None, true);
-        self.add_link(graph, &s_has_language, &p_label, &lang, None, None, false);
-      }
-
-      let s_is_issued_by = self.add_related_node(graph, &s_has_related_object, &p_is_issued_by);
-      self.add_link(graph, &s_is_issued_by, &p_type, &o_organisation, None, None, true);
-      self.add_link(graph, &s_is_issued_by, &p_organisation_name, &file.created_via, None, None, false);
-
-      for tag in &file.tags {
-        let s_has_topic = self.add_related_node(graph, &s_has_related_object, &p_has_topic);
-        self.add_link(graph, &s_has_topic, &p_type, &o_identifier, None, None, true);
-        self.add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, true);
-        self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
-      }
-    }
+    self.resources.to_rdf(graph);
   }
 }
 

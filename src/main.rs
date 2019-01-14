@@ -6,29 +6,31 @@ extern crate rdf;
 extern crate reqwest;
 #[macro_use]
 extern crate serde_derive;
-extern crate serde_json;
 extern crate simple_logger;
+extern crate uuid;
 
 use amqp_worker::*;
 use std::env;
 use log::Level;
 
 mod config;
-mod files_model;
 mod message;
 mod namespaces;
 mod resource_model;
 mod video_model;
 
 #[derive(Debug)]
-struct HttpEvent {
+struct RdfEvent {
 }
 
-impl MessageEvent for HttpEvent {
+impl MessageEvent for RdfEvent {
   fn process(&self, message: &str) -> Result<u64, MessageError> {
     message::process(message)
   }
 }
+
+static RDF_EVENT: RdfEvent = RdfEvent{};
+
 
 fn main() {
   if let Ok(_)= env::var("VERBOSE") {
@@ -37,6 +39,5 @@ fn main() {
     simple_logger::init_with_level(Level::Warn).unwrap();
   }
 
-  let http_event = HttpEvent{};
-  start_worker(&http_event);
+  start_worker(&RDF_EVENT);
 }

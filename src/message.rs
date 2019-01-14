@@ -1,5 +1,6 @@
 
 use amqp_worker::*;
+use amqp_worker::job::Job;
 use config;
 use rdf::graph::Graph;
 use rdf::namespace::Namespace;
@@ -10,45 +11,16 @@ use rdf::writer::rdf_writer::RdfWriter;
 use reqwest;
 use reqwest::StatusCode;
 use reqwest::header::*;
-use serde_json;
 use std::{thread, time};
+use uuid::Uuid;
 
 use namespaces::*;
 
-
-use files_model::FtvSiFile;
 use video_model::metadata::Metadata;
+use resource_model::{ExternalIds, Format, Resource, Resources};
 
 pub trait ToRdf {
   fn to_rdf(&self, graph: &mut Graph);
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-struct Parameter {
-  #[serde(rename="type")]
-  kind: String,
-  id: String,
-  default: Option<String>,
-  value: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Job {
-  job_id: u64,
-  parameters: Vec<Parameter>
-}
-
-fn get_parameter(params: &Vec<Parameter>, key: &str) -> Option<String> {
-  for param in params.iter() {
-    if param.id == key {
-      if let Some(ref value) = param.value {
-        return Some(value.clone())
-      } else {
-        return param.default.clone()
-      }
-    }
-  }
-  None
 }
 
 #[derive(Debug, Serialize)]
@@ -125,18 +97,18 @@ struct PmConfig {
   api_key: String,
 }
 
-fn get_perfect_memory_config(job_id: u64, parameters: &Vec<Parameter>) -> Result<PmConfig, MessageError> {
-  let endpoint_key = get_parameter(&parameters, "perfect_memory_endpoint").unwrap_or("PERFECT_MEMORY_ENDPOINT".to_string());
-  let username_key = get_parameter(&parameters, "perfect_memory_username").unwrap_or("PERFECT_MEMORY_USERNAME".to_string());
-  let password_key = get_parameter(&parameters, "perfect_memory_password").unwrap_or("PERFECT_MEMORY_PASSWORD".to_string());
+fn get_perfect_memory_config(job: &Job) -> Result<PmConfig, MessageError> {
+  let endpoint_key = job.get_string_parameter("perfect_memory_endpoint").unwrap_or("PERFECT_MEMORY_ENDPOINT".to_string());
+  let username_key = job.get_string_parameter("perfect_memory_username").unwrap_or("PERFECT_MEMORY_USERNAME".to_string());
+  let password_key = job.get_string_parameter("perfect_memory_password").unwrap_or("PERFECT_MEMORY_PASSWORD".to_string());
 
   let client = reqwest::Client::builder()
     .build()
     .unwrap();
 
-  let endpoint = get_value(&client, job_id, &endpoint_key)?;
-  let client_id = get_value(&client, job_id, &username_key)?;
-  let api_key = get_value(&client, job_id, &password_key)?;
+  let endpoint = get_value(&client, job.job_id, &endpoint_key)?;
+  let client_id = get_value(&client, job.job_id, &username_key)?;
+  let api_key = get_value(&client, job.job_id, &password_key)?;
 
   Ok(PmConfig {
     endpoint,
@@ -146,38 +118,139 @@ fn get_perfect_memory_config(job_id: u64, parameters: &Vec<Parameter>) -> Result
 }
 
 pub fn process(message: &str) -> Result<u64, MessageError> {
-  let parsed: Result<Job, _> = serde_json::from_str(message);
+  let job = Job::new(message)?;
 
-  match parsed {
-    Ok(content) => {
-      println!("{:?}", content);
-      let ntriples = false;
-      let reference = get_parameter(&content.parameters, "reference").unwrap();
+  println!("{:?}", job);
+  let ntriples = job.get_boolean_parameter("ntriples").unwrap_or(false);
+  let reference = job.get_string_parameter("reference");
+  if reference.is_none() {
+    return Err(MessageError::ProcessingError(job.job_id, "Missing reference parameter".to_string()));
+  }
+  let reference = reference.unwrap();
 
-      let rdf_triples = 
-        match get_parameter(&content.parameters, "order").unwrap_or("".to_string()).as_str() {
-          "publish_ttml" => {
-            println!("{:?}", content.parameters);
-            return Err(MessageError::ProcessingError(content.job_id, "Unimplemented".to_string()));
-          }
-          _ => {
-            let mut video_metadata = get_video_metadata(content.job_id.clone(), &reference)?;
-            video_metadata.si_files = get_files(content.job_id.clone(), &reference)?;
-            convert_into_rdf(content.job_id.clone(), &video_metadata, ntriples)?
-          }
+  let rdf_triples = 
+    match job.get_string_parameter("order").unwrap_or("publish_metadata".to_string()).as_str() {
+      "publish_dash_and_ttml" => {
+        let paths = job.get_paths_parameter("input_paths");
+        if paths.is_none() {
+          return Err(MessageError::ProcessingError(job.job_id, "Missing input_paths parameter".to_string()));
+        }
+        let paths = paths.unwrap();
+
+        let storage = job.get_string_parameter("storage").unwrap_or("akamai-video-prod".to_string());
+        let url_prefix = job.get_string_parameter("url_prefix").unwrap_or("http://videos-pmd.francetv.fr/innovation/SubTil/".to_string());
+
+        let mut references = vec![];
+
+        let mut ttml_paths : Vec<Resource> =
+          paths.iter()
+          .filter(|path| path.ends_with(".ttml"))
+          .map(|path| Resource {
+              id: Uuid::new_v4().to_urn().to_string(),
+              created_via: "Media-IO".to_string(),
+              format: Format {
+                id: "caption-ttml".to_string(),
+                label: "caption/ttml".to_string(),
+                kind: "caption".to_string(),
+                mime_type: "urn:mimetype:application/xml+ttml".to_string(),
+              },
+              storage: storage.clone(),
+              path: None,
+              filename: Some(path.to_string()),
+              audio_tracks: vec![],
+              text_tracks: vec![],
+              video_tracks: vec![],
+              created_at: None,
+              updated_at: None,
+              ratio: None,
+              width: None,
+              height: None,
+              index: None,
+              copyright: None,
+              filesize_bytes: None,
+              bitrate_kbps: None,
+              md5_checksum: None,
+              tags: vec![],
+              url: Some(format!("{}{}", url_prefix, path)),
+              version: None,
+              lang: None,
+              external_ids: ExternalIds {
+                video_id: Some(reference.clone()),
+                legacy_id: None,
+                group_id: None,
+                job_id: None,
+                remote_id: None,
+              }
+          })
+          .collect();
+
+        let mut dash_manifest_paths : Vec<Resource> =
+          paths.iter()
+          .filter(|path| path.ends_with(".mpd"))
+          .map(|path| Resource {
+              id: Uuid::new_v4().to_urn().to_string(),
+              created_via: "Media-IO".to_string(),
+              format: Format {
+                id: "playlist-hls".to_string(),
+                label: "playlist/hls".to_string(),
+                kind: "playlist".to_string(),
+                mime_type: "urn:mimetype:application/dash+xml".to_string(),
+              },
+              storage: storage.clone(),
+              path: None,
+              filename: Some(path.to_string()),
+              audio_tracks: vec![],
+              text_tracks: vec![],
+              video_tracks: vec![],
+              created_at: None,
+              updated_at: None,
+              ratio: None,
+              width: None,
+              height: None,
+              index: None,
+              copyright: None,
+              filesize_bytes: None,
+              bitrate_kbps: None,
+              md5_checksum: None,
+              tags: vec![],
+              url: Some(format!("{}{}", url_prefix, path)),
+              version: None,
+              lang: None,
+              external_ids: ExternalIds {
+                video_id: Some(reference.clone()),
+                legacy_id: None,
+                group_id: None,
+                job_id: None,
+                remote_id: None,
+              }
+          })
+          .collect();
+
+        references.append(&mut ttml_paths);
+        references.append(&mut dash_manifest_paths);
+
+        let resources = Resources {
+          items: references
         };
 
-      info!("{}", rdf_triples);
-      let config = get_perfect_memory_config(content.job_id.clone(), &content.parameters)?;
+        convert_into_rdf(job.job_id.clone(), &resources, ntriples)?
+      }
+      "publish_metadata" => {
+        let mut video_metadata = get_video_metadata(job.job_id.clone(), &reference)?;
+        video_metadata.resources = get_files(job.job_id.clone(), &reference)?;
+        convert_into_rdf(job.job_id.clone(), &video_metadata, ntriples)?
+      }
+      _ => {
+        error!("Unimplement job order: {:?}", job);
+        return Err(MessageError::ProcessingError(job.job_id, "Unimplemented".to_string()));
+      }
+    };
 
-      publish_to_perfect_memory(content.job_id.clone(), &config.client_id, &config.api_key, &config.endpoint, &rdf_triples)?;
-      Ok(content.job_id)
-    },
-    Err(msg) => {
-      println!("ERROR {:?}", msg);
-      return Err(MessageError::RuntimeError("bad input message".to_string()));
-    }
-  }
+  info!("{}", rdf_triples);
+  let config = get_perfect_memory_config(&job)?;
+
+  publish_to_perfect_memory(job.job_id.clone(), &config.client_id, &config.api_key, &config.endpoint, &rdf_triples)?;
+  Ok(job.job_id)
 }
 
 pub fn get_video_metadata(job_id: u64, reference: &str) -> Result<Metadata, MessageError> {
@@ -208,7 +281,7 @@ pub fn get_video_metadata(job_id: u64, reference: &str) -> Result<Metadata, Mess
   )
 }
 
-pub fn get_files(job_id: u64, reference: &str) -> Result<Vec<FtvSiFile>, MessageError> {
+pub fn get_files(job_id: u64, reference: &str) -> Result<Resources, MessageError> {
   let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/files?external_ids.video_id=".to_owned() + reference;
 
   let client = reqwest::Client::builder()
@@ -384,7 +457,7 @@ fn test_mapping_video() {
 
   let mut video_metadata : Metadata = serde_json::from_str(&video_struct).unwrap();
   let ftv_sifiles : Vec<FtvSiFile> = serde_json::from_str(&sifiles_struct).unwrap();
-  video_metadata.si_files = ftv_sifiles;
+  video_metadata.resources = ftv_sifiles;
 
   let rdf_triples = convert_into_rdf(666, &video_metadata, true).unwrap();
 
@@ -402,7 +475,7 @@ fn test_mapping_resource() {
   use resource_model::Resource;
 
   let resource = Resource {
-    id: "000000-1111-2222-3333-44444444".to_string(),
+    reference_id: "000000-1111-2222-3333-44444444".to_string(),
     mime_type: "application/xml+ttml".to_string(),
     creator: Some("Media-IO".to_string()),
     locators: vec![
