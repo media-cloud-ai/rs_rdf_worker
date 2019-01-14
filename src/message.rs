@@ -445,7 +445,6 @@ fn test_mapping_video() {
   use std::io::Read;
   use serde_json;
   use video_model::metadata::Metadata;
-  use files_model::FtvSiFile;
 
   let mut video_struct = String::new();
   let mut video_file = File::open("tests/video.json").unwrap();
@@ -456,8 +455,10 @@ fn test_mapping_video() {
   let _ = sifiles_file.read_to_string(&mut sifiles_struct).unwrap();
 
   let mut video_metadata : Metadata = serde_json::from_str(&video_struct).unwrap();
-  let ftv_sifiles : Vec<FtvSiFile> = serde_json::from_str(&sifiles_struct).unwrap();
-  video_metadata.resources = ftv_sifiles;
+  let ftv_resources: Vec<Resource> = serde_json::from_str(&sifiles_struct).unwrap();
+  video_metadata.resources = Resources {
+    items: ftv_resources
+  };
 
   let rdf_triples = convert_into_rdf(666, &video_metadata, true).unwrap();
 
@@ -475,16 +476,41 @@ fn test_mapping_resource() {
   use resource_model::Resource;
 
   let resource = Resource {
-    reference_id: "000000-1111-2222-3333-44444444".to_string(),
-    mime_type: "application/xml+ttml".to_string(),
-    creator: Some("Media-IO".to_string()),
-    locators: vec![
-      "some/path/to/file.ttml".to_string()
-    ],
-    filename: Some("file.ttml".to_string()),
-    path: Some("/serveur/path/".to_string()),
-    created_at: Some("2018-07-31T20:56:31+02:00".to_string()),
-    updated_at: Some("2018-07-31T20:56:31+02:00".to_string()),
+    id: "000000-1111-2222-3333-44444444".to_string(),
+    created_via: "Media-IO".to_string(),
+    format: Format {
+      id: "playlist-hls".to_string(),
+      label: "playlist/hls".to_string(),
+      kind: "playlist".to_string(),
+      mime_type: "urn:mimetype:application/dash+xml".to_string(),
+    },
+    storage: "akamai-video-prod".to_string(),
+    path: None,
+    filename: Some("/path/to/manifest.mpd".to_string()),
+    audio_tracks: vec![],
+    text_tracks: vec![],
+    video_tracks: vec![],
+    created_at: None,
+    updated_at: None,
+    ratio: None,
+    width: None,
+    height: None,
+    index: None,
+    copyright: None,
+    filesize_bytes: None,
+    bitrate_kbps: None,
+    md5_checksum: None,
+    tags: vec![],
+    url: Some(format!("{}{}", "http://videos-pmd.francetv.fr/innovation/SubTil/", "/path/to/manifest.mpd")),
+    version: None,
+    lang: None,
+    external_ids: ExternalIds {
+      video_id: Some("44444444-3333-2222-1111-000000".to_string()),
+      legacy_id: None,
+      group_id: None,
+      job_id: None,
+      remote_id: None,
+    }
   };
   
   let rdf_triples = convert_into_rdf(666, &resource, true).unwrap();

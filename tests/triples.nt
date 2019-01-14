@@ -89,7 +89,7 @@ _:auto17 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRole> <http:/
 _:auto18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Person> .
 _:auto18 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#givenName> "Victor" .
 _:auto18 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#familyName> "Moulin" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto19 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto19 .
 _:auto19 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto19 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:a1c0a58d-bf72-490d-a2d0-06445e8053de" .
 _:auto19 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasCreator> "factory" .
@@ -101,7 +101,7 @@ _:auto19 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "3550
 _:auto19 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto20 .
 _:auto20 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto20 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto21 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto21 .
 _:auto21 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto21 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:e6fa5e7d-354f-4821-bd70-3fde5b5a5a66" .
 _:auto21 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasCreator> "factory" .
@@ -113,7 +113,7 @@ _:auto21 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "1900
 _:auto21 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto22 .
 _:auto22 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto22 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto23 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto23 .
 _:auto23 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto23 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:40067a8c-fb27-4c9c-b455-894f2dbc60ca" .
 _:auto23 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasCreator> "factory" .
@@ -125,7 +125,7 @@ _:auto23 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "2200
 _:auto23 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto24 .
 _:auto24 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto24 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto25 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto25 .
 _:auto25 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto25 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:1748f784-8664-446c-99d5-ae57aef4be4c" .
 _:auto25 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasCreator> "factory" .
@@ -137,7 +137,7 @@ _:auto25 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "1900
 _:auto25 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto26 .
 _:auto26 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto26 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto27 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto27 .
 _:auto27 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto27 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:b17e70a2-55d0-4aac-ba28-e21b3213c982" .
 _:auto27 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasCreator> "factory" .
@@ -149,7 +149,7 @@ _:auto27 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "3550
 _:auto27 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto28 .
 _:auto28 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto28 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto29 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto29 .
 _:auto29 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto29 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:407cde36-32c3-4ee0-b2a4-5d4a6202dfd1" .
 _:auto29 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasCreator> "factory" .
@@ -161,7 +161,7 @@ _:auto29 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "1900
 _:auto29 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto30 .
 _:auto30 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto30 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto31 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto31 .
 _:auto31 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto31 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:be058fc8-c4ce-416a-863f-712230fb43ef" .
 _:auto31 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard5.mp4" .
@@ -176,7 +176,7 @@ _:auto31 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "1447
 _:auto31 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto32 .
 _:auto32 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto32 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto33 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto33 .
 _:auto33 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto33 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:9bc8b715-033d-449f-b3af-e86a4d155c57" .
 _:auto33 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard4.mp4" .
@@ -191,7 +191,7 @@ _:auto33 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "8240
 _:auto33 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto34 .
 _:auto34 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto34 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto35 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto35 .
 _:auto35 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto35 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:d60c8b81-1ac3-4f73-a875-2d765cc0cb9d" .
 _:auto35 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard3.mp4" .
@@ -206,7 +206,7 @@ _:auto35 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "5760
 _:auto35 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto36 .
 _:auto36 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto36 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto37 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto37 .
 _:auto37 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto37 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:aeb463f8-ffbd-498a-ad67-04035f973506" .
 _:auto37 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard1.mp4" .
@@ -221,7 +221,7 @@ _:auto37 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "1890
 _:auto37 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto38 .
 _:auto38 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto38 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto39 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto39 .
 _:auto39 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto39 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:dd02c054-38e2-44c7-9d81-092c683f9859" .
 _:auto39 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://replayftv-vh.akamaihd.net/z/streaming-adaptatif_france-dom-tom/2018/S31/J2/181575789-5b60b0ada5853-standard2.mp4" .
@@ -236,7 +236,7 @@ _:auto39 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hashValue> "3090
 _:auto39 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto40 .
 _:auto40 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto40 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto41 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto41 .
 _:auto41 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto41 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:547f12b0-e6d0-4101-81da-8cef6ddf9aff" .
 _:auto41 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "http://replayftv-pmd.francetv.fr/subtitles/2018/31/181575789-1533063388.m3u8" .
@@ -249,7 +249,7 @@ _:auto41 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#storageId> "akam
 _:auto41 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto42 .
 _:auto42 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto42 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto43 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto43 .
 _:auto43 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto43 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:21ea4029-a73b-41c5-9ab1-d24cba751d60" .
 _:auto43 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "http://replayftv-pmd.francetv.fr/subtitles/2018/31/181575789-1533063388.vtt" .
@@ -265,7 +265,7 @@ _:auto44 <http://www.w3.org/2004/02/skos/core#label> "fra" .
 _:auto43 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto45 .
 _:auto45 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto45 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto46 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto46 .
 _:auto46 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto46 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:956386ee-e3df-4324-bce7-49fbc286533d" .
 _:auto46 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://staticftv-a.akamaihd.net/sous-titres/france2/20180731/181575789-5b60b0ada5853-1533063388.vtt" .
@@ -281,7 +281,7 @@ _:auto47 <http://www.w3.org/2004/02/skos/core#label> "fra" .
 _:auto46 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto48 .
 _:auto48 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto48 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto49 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedResource> _:auto49 .
 _:auto49 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#MediaResource> .
 _:auto49 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:2a684b84-d0a8-424a-9cf7-b086658413d2" .
 _:auto49 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://staticftv-a.akamaihd.net/sous-titres/france2/20180731/181575789-5b60b0ada5853-1533063388.ttml" .
@@ -297,7 +297,7 @@ _:auto50 <http://www.w3.org/2004/02/skos/core#label> "fra" .
 _:auto49 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto51 .
 _:auto51 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto51 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedImage> _:auto52 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedImage> _:auto52 .
 _:auto52 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Picture> .
 _:auto52 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:d4b24eb4-53ff-4dcc-8c2f-0e6b1e110b1d" .
 _:auto52 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://staticftv-a.akamaihd.net/videospritesheets/201831/5b60b0ada5853/181575789-5b60b0ada58530.jpeg" .
@@ -318,7 +318,7 @@ _:auto52 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto
 _:auto54 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
 _:auto54 <http://www.w3.org/2004/02/skos/core#prefLabel> <thumbnail-sprite> .
 _:auto54 <http://www.w3.org/2004/02/skos/core#definition> <Tag> .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedImage> _:auto55 .
+<http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedImage> _:auto55 .
 _:auto55 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Picture> .
 _:auto55 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#resourceId> "urn:uuid:ec87c960-f52c-4208-8921-7d536d66e9ab" .
 _:auto55 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#locator> "https://assets.webservices.francetelevisions.fr/v1/assets/images/dd/62/64/6655ae6e-8f18-4187-a867-c44c7ac11982.jpeg" .

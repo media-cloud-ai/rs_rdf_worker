@@ -95,7 +95,12 @@ pub struct ExternalIds {
 
 impl ToRdf for Resource {
   fn to_rdf(&self, graph: &mut Graph) {
-    let s_root = "http://resources.idfrancetv.fr/medias/".to_string() + &self.id;
+    if self.external_ids.video_id.is_none() {
+      return;
+    }
+
+    let s_root = "http://resources.idfrancetv.fr/medias/".to_string() + &self.external_ids.video_id.clone().unwrap();
+    let root_node = graph.create_uri_node(&Uri::new(s_root));
 
     let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
     let p_date_created = EBUCORE_NAMESPACE.to_owned() + "dateCreated";
@@ -124,25 +129,22 @@ impl ToRdf for Resource {
     let p_pref_label = SKOS_NAMESPACE.to_owned() + "prefLabel";
     let p_definition = SKOS_NAMESPACE.to_owned() + "definition";
 
-    let o_editorial_object = EBUCORE_NAMESPACE.to_owned() + "EditorialObject";
     let o_identifier = EBUCORE_NAMESPACE.to_owned() + "Identifier";
     let o_language = EBUCORE_NAMESPACE.to_owned() + "Language";
     let o_organisation = EBUCORE_NAMESPACE.to_owned() + "Organisation";
     let o_media_resource = EBUCORE_NAMESPACE.to_owned() + "MediaResource";
     let o_picture = EBUCORE_NAMESPACE.to_owned() + "Picture";
 
-    let subject = self.add_triple(graph, &s_root, &p_type, &o_editorial_object);
-
     let s_has_related_object =
       match self.format.mime_type.as_str() {
         "image/jpeg" => {
-          let node = self.add_related_node(graph, &subject, &p_has_related_image);
+          let node = self.add_related_node(graph, &root_node, &p_has_related_image);
           self.add_link(graph, &node, &p_type, &o_picture, None, None, true);
 
           node
         },
         _ => {
-          let node = self.add_related_node(graph, &subject, &p_has_related_resource);
+          let node = self.add_related_node(graph, &root_node, &p_has_related_resource);
           self.add_link(graph, &node, &p_type, &o_media_resource, None, None, true);
           node
         }
@@ -211,16 +213,6 @@ impl ToRdf for Resource {
 }
 
 impl Resource {
-  fn add_triple(&self, graph: &mut Graph, subject: &str, predicate: &str, object: &str) -> Node {
-    let subject_node = graph.create_uri_node(&Uri::new(subject.to_string()));
-    let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
-    let object_node = graph.create_uri_node(&Uri::new(object.to_string()));
-
-    let triple = Triple::new(&subject_node, &predicate_node, &object_node);
-    graph.add_triple(&triple);
-    subject_node
-  }
-
   fn add_link(&self, graph: &mut Graph, subject_node: &Node, predicate: &str, object: &str, language: Option<&str>, datatype: Option<String>, uri: bool) {
     let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
     let object_node =
