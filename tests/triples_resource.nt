@@ -9,4 +9,3 @@ _:auto0 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#storageId> "akama
 _:auto0 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:auto1 .
 _:auto1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto1 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "Media-IO" .
-
