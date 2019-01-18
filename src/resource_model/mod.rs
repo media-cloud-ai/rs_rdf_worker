@@ -55,7 +55,7 @@ pub struct Resource {
 
 #[derive(Debug, Deserialize)]
 pub struct VideoTrack {
-  pub codec_rfc6381: String,
+  pub codec_rfc6381: Option<String>,
   pub bitrate_kbps: u64,
   pub width: u16,
   pub height: u16,
@@ -64,7 +64,7 @@ pub struct VideoTrack {
 
 #[derive(Debug, Deserialize)]
 pub struct AudioTrack {
-  pub codec_rfc6381: String,
+  pub codec_rfc6381: Option<String>,
   pub bitrate_kbps: u64,
   pub sample_rate_hz: u16,
   pub lang: String,

@@ -120,7 +120,7 @@ fn get_perfect_memory_config(job: &Job) -> Result<PmConfig, MessageError> {
 pub fn process(message: &str) -> Result<u64, MessageError> {
   let job = Job::new(message)?;
 
-  println!("{:?}", job);
+  warn!("{:?}", job);
   let ntriples = job.get_boolean_parameter("ntriples").unwrap_or(false);
   let reference = job.get_string_parameter("reference");
   if reference.is_none() {
@@ -236,8 +236,13 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
         convert_into_rdf(job.job_id.clone(), &resources, ntriples)?
       }
       "publish_metadata" => {
+        info!("Get video metadata");
         let mut video_metadata = get_video_metadata(job.job_id.clone(), &reference)?;
-        video_metadata.resources = get_files(job.job_id.clone(), &reference)?;
+        info!("Get files");
+        video_metadata.resources = Resources {
+          items: get_files(job.job_id.clone(), &reference)?
+        };
+        info!("Convert");
         convert_into_rdf(job.job_id.clone(), &video_metadata, ntriples)?
       }
       _ => {
@@ -246,10 +251,13 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
       }
     };
 
+
+  info!("Publish to PerfectMemory");
   info!("{}", rdf_triples);
   let config = get_perfect_memory_config(&job)?;
 
   publish_to_perfect_memory(job.job_id.clone(), &config.client_id, &config.api_key, &config.endpoint, &rdf_triples)?;
+  info!("Completed");
   Ok(job.job_id)
 }
 
@@ -281,7 +289,7 @@ pub fn get_video_metadata(job_id: u64, reference: &str) -> Result<Metadata, Mess
   )
 }
 
-pub fn get_files(job_id: u64, reference: &str) -> Result<Resources, MessageError> {
+pub fn get_files(job_id: u64, reference: &str) -> Result<Vec<Resource>, MessageError> {
   let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/files?external_ids.video_id=".to_owned() + reference;
 
   let client = reqwest::Client::builder()
