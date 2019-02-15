@@ -122,7 +122,7 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
 
   warn!("{:?}", job);
   let ntriples = job.get_boolean_parameter("ntriples").unwrap_or(false);
-  let pm_event_name = job.get_string_parameter("perfect_memory_event_name").unwrap_or("push_rdf_infos");
+  let pm_event_name = job.get_string_parameter("perfect_memory_event_name").unwrap_or("push_rdf_infos".to_string());
   let reference = job.get_string_parameter("reference");
   if reference.is_none() {
     return Err(MessageError::ProcessingError(job.job_id, "Missing reference parameter".to_string()));
