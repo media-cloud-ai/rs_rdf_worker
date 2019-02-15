@@ -310,7 +310,7 @@ impl ToRdf for Metadata {
     for tag in &self.tags {
       let s_has_topic = self.add_related_node(graph, &subject, &p_has_topic);
       self.add_link(graph, &s_has_topic, &p_type, &o_identifier, None, None, true);
-      self.add_link(graph, &s_has_topic, &p_pref_label, &tag.id, None, None, false);
+      self.add_link(graph, &s_has_topic, &p_pref_label, &tag.label, None, None, false);
       self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, false);
     }
 

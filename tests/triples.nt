@@ -72,15 +72,15 @@ _:auto12 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateBroadcast> "
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasGenre> <http://ressources.idfrancetv.fr/ontologies/genre#enfants> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto14 .
 _:auto14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
-_:auto14 <http://www.w3.org/2004/02/skos/core#prefLabel> "c1dd3bdb-da6a-4138-81d0-5355e5c4d6aa" .
+_:auto14 <http://www.w3.org/2004/02/skos/core#prefLabel> "série d'animation" .
 _:auto14 <http://www.w3.org/2004/02/skos/core#definition> "Tag" .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto15 .
 _:auto15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
-_:auto15 <http://www.w3.org/2004/02/skos/core#prefLabel> "a653c7dc-997a-4ae0-86db-d57a431e6322" .
+_:auto15 <http://www.w3.org/2004/02/skos/core#prefLabel> "6/11 ans" .
 _:auto15 <http://www.w3.org/2004/02/skos/core#definition> "Tag" .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto16 .
 _:auto16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
-_:auto16 <http://www.w3.org/2004/02/skos/core#prefLabel> "4f04820b-ffb6-4a4a-8dad-8952fd28bbc7" .
+_:auto16 <http://www.w3.org/2004/02/skos/core#prefLabel> "dessins animés" .
 _:auto16 <http://www.w3.org/2004/02/skos/core#definition> "Tag" .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasContributor> _:auto17 .
 _:auto17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Cast> .
