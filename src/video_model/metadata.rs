@@ -34,7 +34,7 @@ pub struct Metadata {
   audio_tracks: Vec<AudioTrack>,
   broadcasted_at: Option<String>,
   broadcasted_live: Option<bool>,
-  category: Category,
+  category: Option<Category>,
   channel: Option<Channel>,
   copyright: Option<String>,
   credits: Vec<People>,
@@ -304,7 +304,9 @@ impl ToRdf for Metadata {
     }
 
     // category
-    self.add_link(graph, &subject, &p_has_genre, &(FTV_GENRE_NAMESPACE.to_string() + &self.category.id), None, None, true);
+    if let Some(ref category) = self.category {
+      self.add_link(graph, &subject, &p_has_genre, &(FTV_GENRE_NAMESPACE.to_string() + &category.id), None, None, true);
+    }
 
     // topics
     for tag in &self.tags {
