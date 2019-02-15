@@ -122,6 +122,7 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
 
   warn!("{:?}", job);
   let ntriples = job.get_boolean_parameter("ntriples").unwrap_or(false);
+  let pm_event_name = job.get_string_parameter("perfect_memory_event_name").unwrap_or("push_rdf_infos");
   let reference = job.get_string_parameter("reference");
   if reference.is_none() {
     return Err(MessageError::ProcessingError(job.job_id, "Missing reference parameter".to_string()));
@@ -256,7 +257,7 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
   info!("{}", rdf_triples);
   let config = get_perfect_memory_config(&job)?;
 
-  publish_to_perfect_memory(job.job_id.clone(), &config.client_id, &config.api_key, &config.endpoint, &rdf_triples)?;
+  publish_to_perfect_memory(job.job_id.clone(), &config.client_id, &pm_event_name, &config.api_key, &config.endpoint, &rdf_triples)?;
   info!("Completed");
   Ok(job.job_id)
 }
@@ -365,7 +366,7 @@ struct PmResponseBody {
   updated_at: String,
 }
 
-pub fn publish_to_perfect_memory(job_id: u64, pm_client_id: &str, pm_api_key: &str, pm_endpoint: &str, triples: &str) -> Result<(), MessageError> {
+pub fn publish_to_perfect_memory(job_id: u64, pm_client_id: &str, pm_event_name: &str, pm_api_key: &str, pm_endpoint: &str, triples: &str) -> Result<(), MessageError> {
   let url = pm_endpoint.to_owned() + "/v1/requests";
 
   let client = reqwest::Client::builder()
@@ -374,7 +375,7 @@ pub fn publish_to_perfect_memory(job_id: u64, pm_client_id: &str, pm_api_key: &s
 
   let body = PmRequestBody {
     client_id: pm_client_id.to_owned(),
-    name: "push_rdf_infos".to_string(),
+    name: pm_event_name.to_owned(),
     inputs: Inputs {
       infos_graph: InfosGraph {
         value: base64::encode(triples),
