@@ -1,4 +1,3 @@
-
 pub const EBUCORE_NAMESPACE: &str = "http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#";
 pub const FRANCETV_NAMESPACE: &str = "http://ressources.idfrancetv.fr/ontologies#";
 pub const OWL_NAMESPACE: &str = "http://www.w3.org/2002/07/owl#";

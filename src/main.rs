@@ -11,18 +11,16 @@ extern crate simple_logger;
 extern crate uuid;
 
 use amqp_worker::*;
-use std::env;
 use log::Level;
+use std::env;
 
-mod config;
 mod message;
 mod namespaces;
 mod resource_model;
 mod video_model;
 
 #[derive(Debug)]
-struct RdfEvent {
-}
+struct RdfEvent {}
 
 impl MessageEvent for RdfEvent {
   fn process(&self, message: &str) -> Result<u64, MessageError> {
@@ -30,11 +28,10 @@ impl MessageEvent for RdfEvent {
   }
 }
 
-static RDF_EVENT: RdfEvent = RdfEvent{};
-
+static RDF_EVENT: RdfEvent = RdfEvent {};
 
 fn main() {
-  if let Ok(_)= env::var("VERBOSE") {
+  if env::var("VERBOSE").is_ok() {
     simple_logger::init_with_level(Level::Debug).unwrap();
   } else {
     simple_logger::init_with_level(Level::Warn).unwrap();
