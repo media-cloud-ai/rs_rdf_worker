@@ -126,11 +126,11 @@ impl ToRdf for Resource {
         let p_pref_label = SKOS_NAMESPACE.to_owned() + "prefLabel";
         let p_definition = SKOS_NAMESPACE.to_owned() + "definition";
 
-        let o_identifier = EBUCORE_NAMESPACE.to_owned() + "Identifier";
         let o_language = EBUCORE_NAMESPACE.to_owned() + "Language";
         let o_organisation = EBUCORE_NAMESPACE.to_owned() + "Organisation";
         let o_media_resource = EBUCORE_NAMESPACE.to_owned() + "MediaResource";
         let o_picture = EBUCORE_NAMESPACE.to_owned() + "Picture";
+        let o_tag = EBUCORE_NAMESPACE.to_owned() + "Tag";
 
         let s_has_related_object = match self.format.mime_type.as_str() {
             "image/jpeg" => {
@@ -362,12 +362,12 @@ impl ToRdf for Resource {
                 graph,
                 &s_has_topic,
                 &p_type,
-                &o_identifier,
+                &o_tag,
                 None,
                 None,
                 true,
             );
-            self.add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, true);
+            self.add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, false);
             self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
         }
     }

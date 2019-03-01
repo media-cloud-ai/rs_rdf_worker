@@ -71,17 +71,17 @@ _:auto12 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#midRollAdAllowed
 _:auto12 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#dateBroadcast> "2018-10-29T06:27:35+01:00"^^<http://www.w3.org/2001/XMLSchema#dateTime> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasGenre> <http://ressources.idfrancetv.fr/ontologies/genre#enfants> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto14 .
-_:auto14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
+_:auto14 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Tag> .
 _:auto14 <http://www.w3.org/2004/02/skos/core#prefLabel> "série d'animation" .
-_:auto14 <http://www.w3.org/2004/02/skos/core#definition> "Tag" .
+_:auto14 <http://www.w3.org/2004/02/skos/core#definition> <Tag> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto15 .
-_:auto15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
+_:auto15 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Tag> .
 _:auto15 <http://www.w3.org/2004/02/skos/core#prefLabel> "6/11 ans" .
-_:auto15 <http://www.w3.org/2004/02/skos/core#definition> "Tag" .
+_:auto15 <http://www.w3.org/2004/02/skos/core#definition> <Tag> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto16 .
-_:auto16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
+_:auto16 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Tag> .
 _:auto16 <http://www.w3.org/2004/02/skos/core#prefLabel> "dessins animés" .
-_:auto16 <http://www.w3.org/2004/02/skos/core#definition> "Tag" .
+_:auto16 <http://www.w3.org/2004/02/skos/core#definition> <Tag> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasContributor> _:auto17 .
 _:auto17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Cast> .
 _:auto17 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRole> <http://ressources.idfrancetv.fr/ontologies/role#realisateur> .
@@ -315,8 +315,8 @@ _:auto52 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isIssuedby> _:au
 _:auto53 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Organisation> .
 _:auto53 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#organisationName> "factory" .
 _:auto52 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasTopic> _:auto54 .
-_:auto54 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Identifier> .
-_:auto54 <http://www.w3.org/2004/02/skos/core#prefLabel> <thumbnail-sprite> .
+_:auto54 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Tag> .
+_:auto54 <http://www.w3.org/2004/02/skos/core#prefLabel> "thumbnail-sprite" .
 _:auto54 <http://www.w3.org/2004/02/skos/core#definition> <Tag> .
 <http://resources.idfrancetv.fr/medias/99787afd-ba2d-410f-b03e-66cf2efb3ed5> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRelatedImage> _:auto55 .
 _:auto55 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Picture> .
