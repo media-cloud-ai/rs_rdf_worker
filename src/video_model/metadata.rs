@@ -61,8 +61,8 @@ pub struct Metadata {
     #[serde(default)]
     plurimedia_collection_ids: Vec<u32>,
     plurimedia_program_id: Option<u32>,
-    previously_broadcasted: bool,
-    previously_broadcasted_on_this_channel: bool,
+    previously_broadcasted: Option<bool>,
+    previously_broadcasted_on_this_channel: Option<bool>,
     produced_at: Option<u32>, // integer ??? specification is string // MISSING
     #[serde(default)]
     production_countries: Vec<Country>, // MISSING
@@ -589,24 +589,28 @@ impl ToRdf for Metadata {
             Some(XML_NAMESPACE.to_owned() + "boolean"),
             false,
         );
-        self.add_link(
-            graph,
-            &s_publication_event,
-            &p_first_showing,
-            &self.previously_broadcasted.to_string(),
-            None,
-            Some(XML_NAMESPACE.to_owned() + "boolean"),
-            false,
-        );
-        self.add_link(
-            graph,
-            &s_publication_event,
-            &p_first_showing_this_service,
-            &self.previously_broadcasted_on_this_channel.to_string(),
-            None,
-            Some(XML_NAMESPACE.to_owned() + "boolean"),
-            false,
-        );
+        if let Some(previously_broadcasted) = self.previously_broadcasted {
+            self.add_link(
+                graph,
+                &s_publication_event,
+                &p_first_showing,
+                &previously_broadcasted.to_string(),
+                None,
+                Some(XML_NAMESPACE.to_owned() + "boolean"),
+                false,
+            );
+        }
+        if let Some(previously_broadcasted_on_this_channel) = self.previously_broadcasted_on_this_channel {
+            self.add_link(
+                graph,
+                &s_publication_event,
+                &p_first_showing,
+                &previously_broadcasted_on_this_channel.to_string(),
+                None,
+                Some(XML_NAMESPACE.to_owned() + "boolean"),
+                false,
+            );
+        }
         if let Some(ref rating) = self.rating {
             self.add_link(
                 graph,
@@ -698,7 +702,7 @@ impl ToRdf for Metadata {
                 true,
             );
 
-            let s_is_agent = self.add_related_node(graph, &subject, &p_is_agent);
+            let s_is_agent = self.add_related_node(s_has_contributor, &subject, &p_is_agent);
             self.add_link(graph, &s_is_agent, &p_type, &o_person, None, None, true);
             if let Some(ref first_name) = people.first_name {
                 self.add_link(
