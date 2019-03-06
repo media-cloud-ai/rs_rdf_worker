@@ -56,7 +56,7 @@ pub struct Metadata {
     parent_id: Option<String>,
     #[serde(default)]
     parts: Vec<Part>, // NOT YET ?
-    platforms: Platforms, // MISSING
+    platforms: Option<Platforms>, // MISSING
     plurimedia_broadcast_id: Option<u32>,
     #[serde(default)]
     plurimedia_collection_ids: Vec<u32>,
@@ -152,12 +152,12 @@ impl ToRdf for Metadata {
         let o_character = EBUCORE_NAMESPACE.to_owned() + "Character";
         let o_editorial_object = EBUCORE_NAMESPACE.to_owned() + "EditorialObject";
         let o_group = EBUCORE_NAMESPACE.to_owned() + "Group";
-        let o_identifier = EBUCORE_NAMESPACE.to_owned() + "Identifier";
         let o_organisation = EBUCORE_NAMESPACE.to_owned() + "Organisation";
         let o_person = EBUCORE_NAMESPACE.to_owned() + "Person";
         let o_publication_channel = EBUCORE_NAMESPACE.to_owned() + "PublicationChannel";
         let o_publication_event = EBUCORE_NAMESPACE.to_owned() + "PublicationEvent";
         let o_season = EBUCORE_NAMESPACE.to_owned() + "Season";
+        let o_tag = EBUCORE_NAMESPACE.to_owned() + "Tag";
         let o_text_line = EBUCORE_NAMESPACE.to_owned() + "TextLine";
 
         let subject = self.add_triple(graph, &s_root, &p_type, &o_editorial_object);
@@ -663,7 +663,7 @@ impl ToRdf for Metadata {
                 graph,
                 &s_has_topic,
                 &p_type,
-                &o_identifier,
+                &o_tag,
                 None,
                 None,
                 true,
@@ -677,7 +677,7 @@ impl ToRdf for Metadata {
                 None,
                 false,
             );
-            self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, false);
+            self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
         }
 
         // credits
