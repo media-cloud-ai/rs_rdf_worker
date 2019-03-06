@@ -702,7 +702,7 @@ impl ToRdf for Metadata {
                 true,
             );
 
-            let s_is_agent = self.add_related_node(s_has_contributor, &subject, &p_is_agent);
+            let s_is_agent = self.add_related_node(&s_has_contributor, &subject, &p_is_agent);
             self.add_link(graph, &s_is_agent, &p_type, &o_person, None, None, true);
             if let Some(ref first_name) = people.first_name {
                 self.add_link(
