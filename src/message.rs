@@ -239,7 +239,7 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
                     }
                 };
 
-                let url_prefix = "http://ftv.video.media-io.com/";
+                let url_prefix = "https://ftv.video.media-io.com/";
 
                 let mut tags = vec!["lts".to_string()];
 
