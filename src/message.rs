@@ -576,6 +576,11 @@ pub fn publish_to_perfect_memory(
                     }
                     _ => {}
                 }
+            } else {
+                return Err(MessageError::ProcessingError(
+                    job_id,
+                    "Unknown error: unable to get status from Perfect Memory platform".to_owned(),
+                ));
             }
 
             let ten_seconds = time::Duration::from_secs(10);
