@@ -604,7 +604,7 @@ impl ToRdf for Metadata {
             self.add_link(
                 graph,
                 &s_publication_event,
-                &p_first_showing,
+                &p_first_showing_this_service,
                 &previously_broadcasted_on_this_channel.to_string(),
                 None,
                 Some(XML_NAMESPACE.to_owned() + "boolean"),

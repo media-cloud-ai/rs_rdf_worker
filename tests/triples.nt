@@ -85,7 +85,7 @@ _:auto16 <http://www.w3.org/2004/02/skos/core#definition> <Tag> .
 <http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasContributor> _:auto17 .
 _:auto17 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Cast> .
 _:auto17 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasRole> <http://ressources.idfrancetv.fr/ontologies/role#realisateur> .
-<http://resources.idfrancetv.fr/medias/a570fa6f-d2c9-455d-bacf-f21b4957809f> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isAgent> _:auto18 .
+_:auto17 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#isAgent> _:auto18 .
 _:auto18 <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#Person> .
 _:auto18 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#givenName> "Victor" .
 _:auto18 <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#familyName> "Moulin" .
