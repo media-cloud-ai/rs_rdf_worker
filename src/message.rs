@@ -621,7 +621,7 @@ fn test_mapping_video() {
     let mut ntriple_file = File::open("tests/triples.nt").unwrap();
     let _ = ntriple_file.read_to_string(&mut ntriple_struct).unwrap();
     println!("{}", rdf_triples);
-    assert!(rdf_triples == ntriple_struct);
+    assert_eq!(rdf_triples, ntriple_struct);
 }
 
 #[test]
