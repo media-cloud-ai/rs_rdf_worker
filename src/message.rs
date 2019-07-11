@@ -88,7 +88,7 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
         .as_str()
     {
         "publish_dash_and_ttml" => {
-            let paths = job.get_paths_parameter("input_paths");
+            let paths = job.get_array_of_strings_parameter("input_paths");
             if paths.is_none() {
                 return Err(MessageError::ProcessingError(
                     job.job_id,
@@ -204,7 +204,7 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
 
             let mut si_video_files = get_files(job.job_id.clone(), &reference)?;
 
-            for path in job.get_paths_parameter("input_paths").unwrap_or(vec![]) {
+            for path in job.get_array_of_strings_parameter("input_paths").unwrap_or(vec![]) {
                 let format = if path.ends_with(".ttml") {
                     Format {
                         id: "caption-ttml".to_string(),
@@ -603,7 +603,7 @@ fn test_mapping_video() {
     let mut ntriple_file = File::open("tests/triples.nt").unwrap();
     let _ = ntriple_file.read_to_string(&mut ntriple_struct).unwrap();
     println!("{}", rdf_triples);
-    assert!(rdf_triples == ntriple_struct);
+    assert_eq!(rdf_triples, ntriple_struct);
 }
 
 #[test]

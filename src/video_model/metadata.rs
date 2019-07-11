@@ -102,7 +102,7 @@ impl ToRdf for Metadata {
         let p_episode_number = EBUCORE_NAMESPACE.to_owned() + "episodeNumber";
         let p_family_name = EBUCORE_NAMESPACE.to_owned() + "familyName";
         let p_first_showing = EBUCORE_NAMESPACE.to_owned() + "firstShowing";
-        // let p_first_showing_this_service = EBUCORE_NAMESPACE.to_owned() + "firstShowingThisService";
+        let p_first_showing_this_service = EBUCORE_NAMESPACE.to_owned() + "firstShowingThisService";
         let p_free = EBUCORE_NAMESPACE.to_owned() + "free";
         let p_given_name = EBUCORE_NAMESPACE.to_owned() + "givenName";
         let p_group_description = EBUCORE_NAMESPACE.to_owned() + "groupDescription";
@@ -604,7 +604,7 @@ impl ToRdf for Metadata {
             self.add_link(
                 graph,
                 &s_publication_event,
-                &p_first_showing,
+                &p_first_showing_this_service,
                 &previously_broadcasted_on_this_channel.to_string(),
                 None,
                 Some(XML_NAMESPACE.to_owned() + "boolean"),
