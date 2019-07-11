@@ -21,24 +21,6 @@ pub trait ToRdf {
     fn to_rdf(&self, graph: &mut Graph);
 }
 
-// #[derive(Debug, Deserialize)]
-// struct SessionResponseBody {
-//     access_token: String,
-// }
-
-// #[derive(Debug, Deserialize)]
-// struct DataResponseBody {
-//     id: u32,
-//     key: String,
-//     value: String,
-//     inserted_at: String,
-// }
-
-// #[derive(Debug, Deserialize)]
-// struct ValueResponseBody {
-//     data: DataResponseBody,
-// }
-
 #[derive(Debug)]
 struct PmConfig {
     endpoint: String,
