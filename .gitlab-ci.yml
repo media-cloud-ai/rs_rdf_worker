@@ -1,0 +1,47 @@
+image: docker
+services:
+  - docker:dind
+
+cache:
+  paths:
+    - target
+
+stages:
+  - compile
+  - tests
+  - quality
+  - docker
+
+before_script:
+  - apk add --no-cache git make jq
+
+lint:
+  image: ${RUSTTOOLS_DOCKER_IMG}
+  stage: compile
+  script:
+    - make ci-lint
+
+test:
+  image: ${RUSTTOOLS_DOCKER_IMG}
+  stage: tests
+  script:
+    - make test
+
+code-format:
+  image: ${RUSTTOOLS_DOCKER_IMG}
+  stage: quality
+  allow_failure: true
+  script:
+    - make ci-code-format
+
+code-coverage:
+  image: ${RUSTTOOLS_DOCKER_IMG}
+  stage: quality
+  script:
+    - make ci-code-coverage
+
+build:
+  stage: docker
+  script:
+    - make docker-build
+    - make docker-push-registry
