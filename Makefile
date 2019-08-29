@@ -1,3 +1,5 @@
+.PHONY: build ci-code-format ci-code-coverage ci-lint ci-tests docker-build docker-clean docker-push-registry run version
+
 ENVFILE?=.env
 ifeq ($(shell test -e $(ENVFILE) && echo -n yes),yes)
 	include ${ENVFILE}

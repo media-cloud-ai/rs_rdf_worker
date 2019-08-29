@@ -10,32 +10,32 @@ stages:
   - quality
   - docker
 
-lint:
-  stage: compile
-  script:
-    - make ci-lint
-
-tests:
-  stage: tests
-  script:
-    - make ci-tests
-
-code-format:
-  stage: quality
-  allow_failure: true
-  script:
-    - make ci-code-format
-
-code-coverage:
-  stage: quality
-  script:
-    - make ci-code-coverage
+#lint:
+#  stage: compile
+#  script:
+#    - make ci-lint
+#
+#tests:
+#  stage: tests
+#  script:
+#    - make ci-tests
+#
+#code-format:
+#  stage: quality
+#  allow_failure: true
+#  script:
+#    - make ci-code-format
+#
+#code-coverage:
+#  stage: quality
+#  script:
+#    - make ci-code-coverage
 
 build:
   stage: docker
   image: docker
   before_script:
-    - apk add --no-cache git make jq
+    - apk add --no-cache git make jq cargo
   services:
     - docker:dind
   script:
