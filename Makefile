@@ -35,6 +35,7 @@ docker-clean:
 	@docker rmi ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION}
 
 docker-push-registry:
+	@docker login ${DOCKER_REGISTRY} -u ${DOCKER_REGISTRY_LOGIN} -p ${DOCKER_REGISTRY_PWD}
 	@docker push ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION}
 
 run:
