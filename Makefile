@@ -34,8 +34,10 @@ docker-build:
 docker-clean:
 	@docker rmi ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION}
 
+docker-registry-login:
+	@docker login --username "${DOCKER_REGISTRY_LOGIN}" -p"${DOCKER_REGISTRY_PWD}" ${DOCKER_REGISTRY} 
+	
 docker-push-registry:
-	@docker login ${DOCKER_REGISTRY} --username "${DOCKER_REGISTRY_LOGIN}" --password "${DOCKER_REGISTRY_PWD}"
 	@docker push ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION}
 
 run:
