@@ -15,7 +15,7 @@ lint:
   script:
     - make ci-lint
 
-test:
+tests:
   stage: tests
   script:
     - make ci-tests

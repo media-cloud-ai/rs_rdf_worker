@@ -27,7 +27,7 @@ ci-tests:
 	@cargo test
 
 docker-build:
-	@docker build -t ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION} .
+	docker build -t ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION} .
 
 docker-clean:
 	@docker rmi ${DOCKER_REGISTRY}${DOCKER_IMG_NAME}:${VERSION}
