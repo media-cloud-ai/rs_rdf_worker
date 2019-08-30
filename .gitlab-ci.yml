@@ -42,3 +42,5 @@ build:
   script:
     - make docker-build
     - make docker-push-registry
+  only:
+    - master
