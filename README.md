@@ -5,7 +5,7 @@
 The following tool must be installed on your computer:
 
 * Rust development environment (see installation [here](https://www.rust-lang.org/learn/get-started))
-	* Rustc >= 1.36.0
+	* Rust >= 1.36.0
 	* Cargo  >= 1.36.0
 * Rust CI tools:
 	* Tarpaulin (Code coverage for unit tests) >= 0.8.4 / see installation [here](https://github.com/xd009642/tarpaulin)
@@ -13,21 +13,21 @@ The following tool must be installed on your computer:
 	* Clippy (Rust linter) >= 0.0.212 / see installation [here](https://github.com/rust-lang/rust-clippy)
 * JQ (see installation [here](https://stedolan.github.io/jq/download/))
 	
-## Launch worker locally
+## Launch worker locally
 
 Before to launch the worker you need to set these environment variables:
 
-| Variable name        | Default value              | Description                                 |
-|----------------------|----------------------------|---------------------------------------------|
-| AMQP_HOSTNAME        | 127.0.0.1                  | IP or host of AMQP server                   |
-| AMQP_PORT            | 5672                       | AMQP server port                            |
-| AMQP_USERNAME        | guest                      | User name used to connect to AMQP server    |
-| AMQP_PASSWORD        | guest                      | Password used to connect to AMQP server     |
-| AMQP_VHOST           | /                          | AMQP vhost                                  |
-| AMQP_QUEUE           | job_undefined              | AMQP queue                                  |
-| BACKEND_HOSTNAME     | http://127.0.0.1:4000/api  | URL used to connect to backend server       |
-| BACKEND_USERNAME     |                            | User name used to connect to backend server |
-| BACKEND_PASSWORD     |                            | Password used to connect to backend server  |
+| Variable name          | Default value                | Description                                 |
+|------------------------|------------------------------|---------------------------------------------|
+| `AMQP_HOSTNAME`        | `127.0.0.1`                  | IP or host of AMQP server                   |
+| `AMQP_PORT`            | `5672`                       | AMQP server port                            |
+| `AMQP_USERNAME`        | `guest`                      | User name used to connect to AMQP server    |
+| `AMQP_PASSWORD`        | `guest`                      | Password used to connect to AMQP server     |
+| `AMQP_VHOST`           | `/`                          | AMQP vhost                                  |
+| `AMQP_QUEUE`           | `job_undefined`              | AMQP queue                                  |
+| `BACKEND_HOSTNAME`     | `http://127.0.0.1:4000/api`  | URL used to connect to backend server       |
+| `BACKEND_USERNAME`     |                              | User name used to connect to backend server |
+| `BACKEND_PASSWORD`     |                              | Password used to connect to backend server  |
 
 Once these environment variables are set, you can start your worker:
 ```bash
@@ -75,16 +75,16 @@ This file will instantiate te following pipeline:
                                                +-------------+
 <!-- language: markdown -->
 
-### Docker
+### Docker
 
 The command `make docker-build` will build an image named `ftvsubtil/rdf_worker`.
 
 The command `make push-docker-registry` will logged in and push the built image in the official docker registry. The login must be set with the following environment variables:
 
-| Variable name         | Default value              | Description                                      |
-|-----------------------|----------------------------|--------------------------------------------------|
-| DOCKER_REGISTRY_LOGIN |                            | User name used to connect to the docker registry |
-| DOCKER_REGISTRY_PWD   |                            | Password used to connect to the docker registry  |
+| Variable name           | Default value              | Description                                      |
+|-------------------------|----------------------------|--------------------------------------------------|
+| `DOCKER_REGISTRY_LOGIN` |                            | User name used to connect to the docker registry |
+| `DOCKER_REGISTRY_PWD`   |                            | Password used to connect to the docker registry  |
 
 
 
