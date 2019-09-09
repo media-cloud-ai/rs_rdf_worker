@@ -7,7 +7,7 @@ ifeq ($(shell test -e $(ENVFILE) && echo -n yes),yes)
 endif
 
 DOCKER_REGISTRY?=
-DOCKER_IMG_NAME?=ftvsubtil/rdf_worker
+DOCKER_IMG_NAME?=mediacloudai/rdf_worker
 ifneq ($(DOCKER_REGISTRY), ) 
 	DOCKER_IMG_NAME := /${DOCKER_IMG_NAME}
 endif

@@ -12,7 +12,7 @@ The following tool must be installed on your computer:
 	* Rustfmt (code format) => 1.2.2-stable / see installation [here](https://github.com/rust-lang/rustfmt)
 	* Clippy (Rust linter) >= 0.0.212 / see installation [here](https://github.com/rust-lang/rust-clippy)
 * JQ (see installation [here](https://stedolan.github.io/jq/download/))
-	
+
 ## Launch worker locally
 
 Before to launch the worker you need to set these environment variables:
@@ -77,7 +77,7 @@ This file will instantiate te following pipeline:
 
 ### Docker
 
-The command `make docker-build` will build an image named `ftvsubtil/rdf_worker`.
+The command `make docker-build` will build an image named `mediacloudai/rdf_worker`.
 
 The command `make push-docker-registry` will logged in and push the built image in the official docker registry. The login must be set with the following environment variables:
 
