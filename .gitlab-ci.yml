@@ -1,3 +1,7 @@
+include:
+  - project: exploit/k8s/utils/k8s-deploy
+    file: /.k8s-ci.yml
+
 image: ${RUSTTOOLS_DOCKER_IMG}
 
 cache:
@@ -9,6 +13,7 @@ stages:
   - tests
   - quality
   - docker
+  - k8s-pipeline
 
 lint:
   stage: compile
@@ -42,5 +47,3 @@ build:
   script:
     - make docker-build
     - make docker-push-registry
-  only:
-    - master
