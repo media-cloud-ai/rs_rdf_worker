@@ -4,7 +4,7 @@ version = "0.1.3"
 authors = ["Marc-Antoine Arnaud <maarnaud@media-io.com>"]
 
 [dependencies]
-amqp_worker = "0.4.3"
+amqp_worker = "0.7.0"
 base64 = "0.10.0"
 clap = "2.33.0"
 futures = "0.1.14"
