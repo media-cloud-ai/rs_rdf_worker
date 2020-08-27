@@ -1,5 +1,5 @@
-use message::ToRdf;
-use namespaces::*;
+use crate::message::ToRdf;
+use crate::namespaces::*;
 use rdf::graph::Graph;
 use rdf::node::Node;
 use rdf::triple::Triple;
@@ -358,15 +358,7 @@ impl ToRdf for Resource {
 
         for tag in &self.tags {
             let s_has_topic = self.add_related_node(graph, &s_has_related_object, &p_has_topic);
-            self.add_link(
-                graph,
-                &s_has_topic,
-                &p_type,
-                &o_tag,
-                None,
-                None,
-                true,
-            );
+            self.add_link(graph, &s_has_topic, &p_type, &o_tag, None, None, true);
             self.add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, false);
             self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
         }

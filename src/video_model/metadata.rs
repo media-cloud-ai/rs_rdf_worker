@@ -1,24 +1,24 @@
-use message::ToRdf;
-use namespaces::*;
+use crate::message::ToRdf;
+use crate::namespaces::*;
+use crate::video_model::audio_track::AudioTrack;
+use crate::video_model::category::Category;
+use crate::video_model::channel::Channel;
+use crate::video_model::country::Country;
+use crate::video_model::group::Group;
+use crate::video_model::image::Image;
+use crate::video_model::kind::Kind;
+use crate::video_model::part::Part;
+use crate::video_model::people::People;
+use crate::video_model::platforms::Platforms;
+use crate::video_model::rating::Rating;
+use crate::video_model::tag::Tag;
+use crate::video_model::text_track::TextTrack;
 use rdf::graph::Graph;
 use rdf::node::Node;
 use rdf::triple::Triple;
 use rdf::uri::Uri;
-use video_model::audio_track::AudioTrack;
-use video_model::category::Category;
-use video_model::channel::Channel;
-use video_model::country::Country;
-use video_model::group::Group;
-use video_model::image::Image;
-use video_model::kind::Kind;
-use video_model::part::Part;
-use video_model::people::People;
-use video_model::platforms::Platforms;
-use video_model::rating::Rating;
-use video_model::tag::Tag;
-use video_model::text_track::TextTrack;
 
-use resource_model::Resources;
+use crate::resource_model::Resources;
 
 #[derive(Debug, Deserialize)]
 pub struct Metadata {
@@ -600,7 +600,9 @@ impl ToRdf for Metadata {
                 false,
             );
         }
-        if let Some(previously_broadcasted_on_this_channel) = self.previously_broadcasted_on_this_channel {
+        if let Some(previously_broadcasted_on_this_channel) =
+            self.previously_broadcasted_on_this_channel
+        {
             self.add_link(
                 graph,
                 &s_publication_event,
@@ -659,15 +661,7 @@ impl ToRdf for Metadata {
         // topics
         for tag in &self.tags {
             let s_has_topic = self.add_related_node(graph, &subject, &p_has_topic);
-            self.add_link(
-                graph,
-                &s_has_topic,
-                &p_type,
-                &o_tag,
-                None,
-                None,
-                true,
-            );
+            self.add_link(graph, &s_has_topic, &p_type, &o_tag, None, None, true);
             self.add_link(
                 graph,
                 &s_has_topic,

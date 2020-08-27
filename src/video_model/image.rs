@@ -1,4 +1,4 @@
-use video_model::format::Format;
+use crate::video_model::format::Format;
 
 #[derive(Debug, Deserialize)]
 pub struct Image {

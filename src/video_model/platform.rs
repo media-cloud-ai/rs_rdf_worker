@@ -1,4 +1,4 @@
-use video_model::window::Window;
+use crate::video_model::window::Window;
 
 #[derive(Debug, Deserialize)]
 pub struct Platform {

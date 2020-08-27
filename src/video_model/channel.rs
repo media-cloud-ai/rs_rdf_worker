@@ -1,4 +1,4 @@
-use video_model::region::Region;
+use crate::video_model::region::Region;
 
 #[derive(Debug, Deserialize)]
 pub struct Channel {

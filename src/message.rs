@@ -1,107 +1,53 @@
-use amqp_worker::job::Job;
-use amqp_worker::*;
 use rdf::graph::Graph;
 use rdf::namespace::Namespace;
 use rdf::uri::Uri;
 use rdf::writer::n_triples_writer::NTriplesWriter;
 use rdf::writer::rdf_writer::RdfWriter;
 use rdf::writer::turtle_writer::TurtleWriter;
-use reqwest;
 use reqwest::header::*;
 use reqwest::StatusCode;
 use std::{thread, time};
 use uuid::Uuid;
 
-use namespaces::*;
+use crate::namespaces::*;
 
-use resource_model::{ExternalIds, Format, Resource, Resources};
-use video_model::metadata::Metadata;
+use crate::resource_model::{ExternalIds, Format, Resource, Resources};
+use crate::video_model::metadata::Metadata;
+use crate::{Order, RdfWorkerParameters};
+use mcai_worker_sdk::job::{JobResult, JobStatus};
+use mcai_worker_sdk::{McaiChannel, MessageError, Result};
+
+use futures::executor::block_on;
 
 pub trait ToRdf {
     fn to_rdf(&self, graph: &mut Graph);
 }
 
-#[derive(Debug)]
-struct PmConfig {
-    endpoint: String,
-    client_id: String,
-    api_key: String,
-}
-
-fn get_perfect_memory_config(job: &Job) -> Result<PmConfig, MessageError> {
-    let endpoint = job
-        .get_credential_parameter("perfect_memory_endpoint")
-        .map(|credential| credential.request_value(job));
-    let client_id = job
-        .get_credential_parameter("perfect_memory_username")
-        .map(|credential| credential.request_value(job));
-    let api_key = job
-        .get_credential_parameter("perfect_memory_password")
-        .map(|credential| credential.request_value(job));
-
-    if endpoint.is_none() {
-      return Err(MessageError::ProcessingError(
-            job.job_id,
-            "Missing perfect_memory_endpoint parameter".to_string(),
-        ));
-    }
-    if client_id.is_none() {
-      return Err(MessageError::ProcessingError(
-            job.job_id,
-            "Missing perfect_memory_username parameter".to_string(),
-        ));
-    }
-    if api_key.is_none() {
-      return Err(MessageError::ProcessingError(
-            job.job_id,
-            "Missing perfect_memory_password parameter".to_string(),
-        ));
-    }
-
-    Ok(PmConfig {
-        endpoint: endpoint.unwrap()?,
-        client_id: client_id.unwrap()?,
-        api_key: api_key.unwrap()?,
-    })
-}
-
-pub fn process(message: &str) -> Result<u64, MessageError> {
-    let job = Job::new(message)?;
-
-    warn!("{:?}", job);
-    let ntriples = job.get_boolean_parameter("ntriples").unwrap_or(false);
-    let pm_event_name = job
-        .get_string_parameter("perfect_memory_event_name")
+pub fn process(
+    _channel: Option<McaiChannel>,
+    parameters: RdfWorkerParameters,
+    job_result: JobResult,
+) -> Result<JobResult> {
+    let config = parameters.get_perfect_memory_config();
+    let ntriples = parameters.ntriples.unwrap_or(false);
+    let pm_event_name = parameters
+        .perfect_memory_event_name
         .unwrap_or("push_rdf_infos".to_string());
-    let reference = job.get_string_parameter("reference");
-    if reference.is_none() {
-        return Err(MessageError::ProcessingError(
-            job.job_id,
-            "Missing reference parameter".to_string(),
-        ));
-    }
-    let reference = reference.unwrap();
+    let reference = parameters.reference;
+    let url_prefix = parameters.url_prefix;
+    let storage = parameters.storage;
+    let input_paths = parameters.input_paths;
+    let order = parameters.order;
 
-    let rdf_triples = match job
-        .get_string_parameter("order")
-        .unwrap_or("publish_metadata".to_string())
-        .as_str()
-    {
-        "publish_dash_and_ttml" => {
-            let paths = job.get_array_of_strings_parameter("input_paths");
-            if paths.is_none() {
-                return Err(MessageError::ProcessingError(
-                    job.job_id,
-                    "Missing input_paths parameter".to_string(),
-                ));
-            }
-            let paths = paths.unwrap();
+    let rdf_triples = match order.unwrap_or_default() {
+        Order::PublishDashAndTtml => {
+            let paths = input_paths.ok_or_else(|| {
+                MessageError::RuntimeError("Missing input_paths parameter".to_string())
+            })?;
 
-            let storage = job
-                .get_string_parameter("storage")
-                .unwrap_or("akamai-video-prod".to_string());
-            let url_prefix = job
-                .get_string_parameter("url_prefix")
+            let storage = storage.unwrap_or("akamai-video-prod".to_string());
+
+            let url_prefix = url_prefix
                 .unwrap_or("http://videos-pmd.francetv.fr/innovation/SubTil/".to_string());
 
             let mut references = vec![];
@@ -195,16 +141,16 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
 
             let resources = Resources { items: references };
 
-            convert_into_rdf(job.job_id.clone(), &resources, ntriples)?
+            convert_into_rdf(job_result.clone(), &resources, ntriples)?
         }
-        "publish_metadata" => {
+        Order::PublishMetadata => {
             info!("Get video metadata");
-            let mut video_metadata = get_video_metadata(job.job_id.clone(), &reference)?;
+            let mut video_metadata = block_on(get_video_metadata(job_result.clone(), &reference))?;
             info!("Get files");
 
-            let mut si_video_files = get_files(job.job_id.clone(), &reference)?;
+            let mut si_video_files = block_on(get_files(job_result.clone(), &reference))?;
 
-            for path in job.get_array_of_strings_parameter("input_paths").unwrap_or(vec![]) {
+            for path in input_paths.unwrap_or(vec![]) {
                 let format = if path.ends_with(".ttml") {
                     Format {
                         id: "caption-ttml".to_string(),
@@ -270,91 +216,103 @@ pub fn process(message: &str) -> Result<u64, MessageError> {
                 items: si_video_files,
             };
             info!("Convert");
-            convert_into_rdf(job.job_id.clone(), &video_metadata, ntriples)?
-        }
-        _ => {
-            error!("Unimplement job order: {:?}", job);
-            return Err(MessageError::ProcessingError(
-                job.job_id,
-                "Unimplemented".to_string(),
-            ));
+            convert_into_rdf(job_result.clone(), &video_metadata, ntriples)?
         }
     };
 
     info!("Publish to PerfectMemory");
-    info!("{}", rdf_triples);
-    let config = get_perfect_memory_config(&job)?;
+    info!("rdf_triples: {}", rdf_triples);
 
-    publish_to_perfect_memory(
-        job.job_id.clone(),
+    block_on(publish_to_perfect_memory(
+        job_result.clone(),
         &config.client_id,
         &pm_event_name,
         &config.api_key,
         &config.endpoint,
         &rdf_triples,
-    )?;
+    ))?;
     info!("Completed");
-    Ok(job.job_id)
+    let job_result = job_result.with_status(JobStatus::Completed);
+    Ok(job_result)
 }
 
-pub fn get_video_metadata(job_id: u64, reference: &str) -> Result<Metadata, MessageError> {
+pub async fn get_video_metadata(job_result: JobResult, reference: &str) -> Result<Metadata> {
     let url =
         "https://gatewayvf.webservices.francetelevisions.fr/v1/videos/".to_owned() + reference;
 
     let client = reqwest::Client::builder().build().unwrap();
 
-    let mut response = client
+    let response = client
         .get(url.as_str())
         .send()
-        .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))?;
+        .await
+        .map_err(|e| MessageError::ProcessingError(job_result.clone().with_error(e)))?;
 
     let status = response.status();
 
     if !(status == StatusCode::OK) {
         error!("{:?}", response);
         return Err(MessageError::ProcessingError(
-            job_id,
-            "bad response status".to_string(),
+            job_result
+                .clone()
+                .with_status(JobStatus::Error)
+                .with_message("bad response status"),
         ));
     }
 
-    response
-        .json()
-        .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))
+    response.json().await.map_err(|e| {
+        MessageError::ProcessingError(
+            job_result
+                .clone()
+                .with_status(JobStatus::Error)
+                .with_message(&e.to_string()),
+        )
+    })
 }
 
-pub fn get_files(job_id: u64, reference: &str) -> Result<Vec<Resource>, MessageError> {
+pub async fn get_files(job_result: JobResult, reference: &str) -> Result<Vec<Resource>> {
     let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/files?external_ids.video_id="
         .to_owned()
         + reference;
 
     let client = reqwest::Client::builder().build().unwrap();
 
-    let mut response = client
-        .get(url.as_str())
-        .send()
-        .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))?;
+    let response = client.get(url.as_str()).send().await.map_err(|e| {
+        MessageError::ProcessingError(
+            job_result
+                .clone()
+                .with_status(JobStatus::Error)
+                .with_error(e),
+        )
+    })?;
 
     let status = response.status();
 
     if !(status == StatusCode::OK) {
         error!("{:?}", response);
         return Err(MessageError::ProcessingError(
-            job_id,
-            "bad response status".to_string(),
+            job_result
+                .clone()
+                .with_status(JobStatus::Error)
+                .with_message("bad response status"),
         ));
     }
 
-    response
-        .json()
-        .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))
+    response.json().await.map_err(|e| {
+        MessageError::ProcessingError(
+            job_result
+                .clone()
+                .with_status(JobStatus::Error)
+                .with_message(&e.to_string()),
+        )
+    })
 }
 
 pub fn convert_into_rdf<T: ToRdf>(
-    job_id: u64,
+    job_result: JobResult,
     item: &T,
     ntriples: bool,
-) -> Result<String, MessageError> {
+) -> Result<String> {
     let mut graph = Graph::new(None);
     graph.add_namespace(&Namespace::new(
         "rdf".to_string(),
@@ -388,14 +346,22 @@ pub fn convert_into_rdf<T: ToRdf>(
     item.to_rdf(&mut graph);
     if ntriples {
         let writer = NTriplesWriter::new();
-        writer
-            .write_to_string(&graph)
-            .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))
+        writer.write_to_string(&graph).map_err(|e| {
+            MessageError::ProcessingError(
+                job_result
+                    .with_status(JobStatus::Error)
+                    .with_message(&e.to_string()),
+            )
+        })
     } else {
         let writer = TurtleWriter::new(graph.namespaces());
-        writer
-            .write_to_string(&graph)
-            .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))
+        writer.write_to_string(&graph).map_err(|e| {
+            MessageError::ProcessingError(
+                job_result
+                    .with_status(JobStatus::Error)
+                    .with_message(&e.to_string()),
+            )
+        })
     }
 }
 
@@ -427,14 +393,14 @@ struct PmResponseBody {
     updated_at: String,
 }
 
-pub fn publish_to_perfect_memory(
-    job_id: u64,
+pub async fn publish_to_perfect_memory(
+    job_result: JobResult,
     pm_client_id: &str,
     pm_event_name: &str,
     pm_api_key: &str,
     pm_endpoint: &str,
     triples: &str,
-) -> Result<(), MessageError> {
+) -> Result<()> {
     let url = pm_endpoint.to_owned() + "/v1/requests";
 
     let client = reqwest::Client::builder().build().unwrap();
@@ -450,31 +416,52 @@ pub fn publish_to_perfect_memory(
         },
     };
 
-    let mut response = client
+    let response = client
         .post(url.as_str())
         .header(CACHE_CONTROL, "no-cache")
         .header(CONTENT_TYPE, "application/json")
         .header("X-Api-Key", pm_api_key)
         .json(&body)
         .send()
-        .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))?;
+        .await
+        .map_err(|e| {
+            MessageError::ProcessingError(
+                job_result
+                    .clone()
+                    .with_status(JobStatus::Error)
+                    .with_message(&e.to_string()),
+            )
+        })?;
 
     if response.status() != 201 {
-        let text = response.text().unwrap_or("unknown reason.".to_owned());
-        error!("unable to push to Perfect Memory: {:?}\n{}", response, text);
+        let text = response
+            .text()
+            .await
+            .unwrap_or("unknown reason.".to_owned());
+        error!("Unable to push to Perfect Memory: {}", text);
         return Err(MessageError::ProcessingError(
-            job_id,
-            format!("Unable to push into Perfect Memory: {}", text),
+            job_result
+                .clone()
+                .with_status(JobStatus::Error)
+                .with_message(&format!("Unable to push into Perfect Memory: {}", text)),
         ));
     }
 
     if let Some(location) = response.headers().get(LOCATION) {
         loop {
-            let mut response = client
+            let response = client
                 .get(location.to_str().unwrap())
                 .header("X-Api-Key", pm_api_key)
                 .send()
-                .map_err(|e| MessageError::ProcessingError(job_id, e.to_string()))?;
+                .await
+                .map_err(|e| {
+                    MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message(&e.to_string()),
+                    )
+                })?;
 
             if response.status() != 200 {
                 let ten_seconds = time::Duration::from_secs(10);
@@ -482,87 +469,115 @@ pub fn publish_to_perfect_memory(
                 continue;
             }
 
-            let r: Result<PmResponseBody, _> = response.json();
-            error!("Perfect Memory response: {:?}", r);
-            if let Ok(resp_body) = r {
-                match resp_body.status {
-                    200 | 300 => {
-                        return Ok(());
-                    }
-                    100 | 110 | 120 => {}
-                    400 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Error: Request/Process has finished with an error".to_owned(),
-                        ));
-                    }
-                    401 => {
-                        return Err(MessageError::ProcessingError(job_id, "Error on child process: Process has finished with an error on one of its children".to_owned()));
-                    }
-                    408 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Error Service: Process has finished with a specific error".to_owned(),
-                        ));
-                    }
-                    410 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Item Disabled: The item is disabled".to_owned(),
-                        ));
-                    }
-                    414 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Item Not Found: The item is not found".to_owned(),
-                        ));
-                    }
-                    421 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Invalid Script: There was an error while running the script"
-                                .to_owned(),
-                        ));
-                    }
-                    422 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Invalid I/O: The input or the output is invalid".to_owned(),
-                        ));
-                    }
-                    423 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Invalid Status: The process has been stopped with an invalid status"
-                                .to_owned(),
-                        ));
-                    }
-                    428 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Process disrupted: Process has been manually disrupted".to_owned(),
-                        ));
-                    }
-                    500 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Unexpected error: Service process has finished with an unknow error"
-                                .to_owned(),
-                        ));
-                    }
-                    503 => {
-                        return Err(MessageError::ProcessingError(
-                            job_id,
-                            "Service unreachable: Service could not be reached".to_owned(),
-                        ));
-                    }
-                    _ => {}
+            let resp_body: PmResponseBody = response.json().await.map_err(|error| {
+                MessageError::ProcessingError(
+                    job_result
+                        .clone()
+                        .with_status(JobStatus::Error)
+                        .with_message(&format!(
+                        "Unknown error: unable to get status from Perfect Memory platform: {:?}",
+                        error
+                    )),
+                )
+            })?;
+            error!("Perfect Memory response: {:?}", resp_body);
+            match resp_body.status {
+                200 | 300 => {
+                    return Ok(());
                 }
-            } else {
-                return Err(MessageError::ProcessingError(
-                    job_id,
-                    "Unknown error: unable to get status from Perfect Memory platform".to_owned(),
-                ));
+                100 | 110 | 120 => {}
+                400 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message("Error: Request/Process has finished with an error"),
+                    ));
+                }
+                401 => {
+                    return Err(MessageError::ProcessingError(job_result.clone().with_status(JobStatus::Error).with_message("Error on child process: Process has finished with an error on one of its children")));
+                }
+                408 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message(
+                                "Error Service: Process has finished with a specific error",
+                            ),
+                    ));
+                }
+                410 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message("Item Disabled: The item is disabled"),
+                    ));
+                }
+                414 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message("Item Not Found: The item is not found"),
+                    ));
+                }
+                421 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message(
+                                "Invalid Script: There was an error while running the script",
+                            ),
+                    ));
+                }
+                422 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message("Invalid I/O: The input or the output is invalid"),
+                    ));
+                }
+                423 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message(
+                            "Invalid Status: The process has been stopped with an invalid status",
+                        ),
+                    ));
+                }
+                428 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message("Process disrupted: Process has been manually disrupted"),
+                    ));
+                }
+                500 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message(
+                            "Unexpected error: Service process has finished with an unknow error",
+                        ),
+                    ));
+                }
+                503 => {
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message("Service unreachable: Service could not be reached"),
+                    ));
+                }
+                _ => {}
             }
 
             let ten_seconds = time::Duration::from_secs(10);
@@ -570,18 +585,19 @@ pub fn publish_to_perfect_memory(
         }
     } else {
         return Err(MessageError::ProcessingError(
-            job_id,
-            format!("Unable get location to wait end of ingest"),
+            job_result
+                .with_status(JobStatus::Error)
+                .with_message(&format!("Unable get location to wait end of ingest")),
         ));
     }
 }
 
 #[test]
 fn test_mapping_video() {
+    use crate::video_model::metadata::Metadata;
     use serde_json;
     use std::fs::File;
     use std::io::Read;
-    use video_model::metadata::Metadata;
 
     let mut video_struct = String::new();
     let mut video_file = File::open("tests/video.json").unwrap();
@@ -597,7 +613,7 @@ fn test_mapping_video() {
         items: ftv_resources,
     };
 
-    let rdf_triples = convert_into_rdf(666, &video_metadata, true).unwrap();
+    let rdf_triples = convert_into_rdf(JobResult::new(666), &video_metadata, true).unwrap();
 
     let mut ntriple_struct = String::new();
     let mut ntriple_file = File::open("tests/triples.nt").unwrap();
@@ -608,7 +624,7 @@ fn test_mapping_video() {
 
 #[test]
 fn test_mapping_resource() {
-    use resource_model::Resource;
+    use crate::resource_model::Resource;
     use std::fs::File;
     use std::io::Read;
 
@@ -653,7 +669,7 @@ fn test_mapping_resource() {
         },
     };
 
-    let rdf_triples = convert_into_rdf(666, &resource, true).unwrap();
+    let rdf_triples = convert_into_rdf(JobResult::new(666), &resource, true).unwrap();
 
     let mut ntriple_struct = String::new();
     let mut ntriple_file = File::open("tests/triples_resource.nt").unwrap();
