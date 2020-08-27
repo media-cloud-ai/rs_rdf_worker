@@ -49,7 +49,7 @@ struct PmResponseBody {
     updated_at: String,
 }
 
-pub(crate) async fn publish_to_perfect_memory(
+pub(crate) fn publish_to_perfect_memory(
     job_result: JobResult,
     pm_client_id: &str,
     pm_event_name: &str,
@@ -59,7 +59,7 @@ pub(crate) async fn publish_to_perfect_memory(
 ) -> Result<()> {
     let url = pm_endpoint.to_owned() + "/v1/requests";
 
-    let client = reqwest::Client::builder().build().unwrap();
+    let client = reqwest::blocking::Client::builder().build().unwrap();
 
     let body = PmRequestBody {
         client_id: pm_client_id.to_owned(),
@@ -79,7 +79,6 @@ pub(crate) async fn publish_to_perfect_memory(
         .header("X-Api-Key", pm_api_key)
         .json(&body)
         .send()
-        .await
         .map_err(|e| {
             MessageError::ProcessingError(
                 job_result
@@ -90,10 +89,7 @@ pub(crate) async fn publish_to_perfect_memory(
         })?;
 
     if response.status() != 201 {
-        let text = response
-            .text()
-            .await
-            .unwrap_or("unknown reason.".to_owned());
+        let text = response.text().unwrap_or("unknown reason.".to_owned());
         error!("Unable to push to Perfect Memory: {}", text);
         return Err(MessageError::ProcessingError(
             job_result
@@ -109,7 +105,6 @@ pub(crate) async fn publish_to_perfect_memory(
                 .get(location.to_str().unwrap())
                 .header("X-Api-Key", pm_api_key)
                 .send()
-                .await
                 .map_err(|e| {
                     MessageError::ProcessingError(
                         job_result
@@ -125,7 +120,7 @@ pub(crate) async fn publish_to_perfect_memory(
                 continue;
             }
 
-            let resp_body: PmResponseBody = response.json().await.map_err(|error| {
+            let resp_body: PmResponseBody = response.json().map_err(|error| {
                 MessageError::ProcessingError(
                     job_result
                         .clone()

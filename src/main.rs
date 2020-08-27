@@ -5,7 +5,6 @@ extern crate serde_derive;
 
 use crate::convert::convert_into_rdf;
 use clap::{App, Arg, ArgMatches};
-use futures::executor::block_on;
 use mcai_worker_sdk::job::JobResult;
 use mcai_worker_sdk::MessageEvent;
 use mcai_worker_sdk::*;
@@ -92,9 +91,9 @@ fn execute_command_line(matches: ArgMatches) {
         .expect("missing reference parameter");
     let job_result = JobResult::new(666);
 
-    let mut video_metadata = block_on(message::get_video_metadata(job_result.clone(), &reference))
+    let mut video_metadata = message::get_video_metadata(job_result.clone(), &reference)
         .expect("unable to get video metadata");
-    let si_video_files = block_on(message::get_files(job_result.clone(), &reference))
+    let si_video_files = message::get_files(job_result.clone(), &reference)
         .expect("unable to get files for this video");
     video_metadata.resources = resource_model::Resources {
         items: si_video_files,

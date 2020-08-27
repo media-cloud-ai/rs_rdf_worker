@@ -9,7 +9,7 @@ use mcai_worker_sdk::{McaiChannel, MessageError, Result};
 
 use crate::convert::convert_into_rdf;
 use crate::perfect_memory::{publish_to_perfect_memory, PmConfig};
-use futures::executor::block_on;
+use reqwest::blocking::Client;
 
 pub fn process(
     _channel: Option<McaiChannel>,
@@ -134,10 +134,10 @@ pub fn process(
         }
         Order::PublishMetadata => {
             info!("Get video metadata");
-            let mut video_metadata = block_on(get_video_metadata(job_result.clone(), &reference))?;
+            let mut video_metadata = get_video_metadata(job_result.clone(), &reference)?;
             info!("Get files");
 
-            let mut si_video_files = block_on(get_files(job_result.clone(), &reference))?;
+            let mut si_video_files = get_files(job_result.clone(), &reference)?;
 
             for path in input_paths.unwrap_or(vec![]) {
                 let format = if path.ends_with(".ttml") {
@@ -212,29 +212,28 @@ pub fn process(
     info!("Publish to PerfectMemory");
     info!("rdf_triples: {}", rdf_triples);
 
-    block_on(publish_to_perfect_memory(
+    publish_to_perfect_memory(
         job_result.clone(),
         &config.client_id,
         &pm_event_name,
         &config.api_key,
         &config.endpoint,
         &rdf_triples,
-    ))?;
+    )?;
     info!("Completed");
     let job_result = job_result.with_status(JobStatus::Completed);
     Ok(job_result)
 }
 
-pub async fn get_video_metadata(job_result: JobResult, reference: &str) -> Result<Metadata> {
+pub fn get_video_metadata(job_result: JobResult, reference: &str) -> Result<Metadata> {
     let url =
         "https://gatewayvf.webservices.francetelevisions.fr/v1/videos/".to_owned() + reference;
 
-    let client = reqwest::Client::builder().build().unwrap();
+    let client = Client::builder().build().unwrap();
 
     let response = client
         .get(url.as_str())
         .send()
-        .await
         .map_err(|e| MessageError::ProcessingError(job_result.clone().with_error(e)))?;
 
     let status = response.status();
@@ -249,7 +248,7 @@ pub async fn get_video_metadata(job_result: JobResult, reference: &str) -> Resul
         ));
     }
 
-    response.json().await.map_err(|e| {
+    response.json().map_err(|e| {
         MessageError::ProcessingError(
             job_result
                 .clone()
@@ -259,14 +258,14 @@ pub async fn get_video_metadata(job_result: JobResult, reference: &str) -> Resul
     })
 }
 
-pub async fn get_files(job_result: JobResult, reference: &str) -> Result<Vec<Resource>> {
+pub fn get_files(job_result: JobResult, reference: &str) -> Result<Vec<Resource>> {
     let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/files?external_ids.video_id="
         .to_owned()
         + reference;
 
-    let client = reqwest::Client::builder().build().unwrap();
+    let client = Client::builder().build().unwrap();
 
-    let response = client.get(url.as_str()).send().await.map_err(|e| {
+    let response = client.get(url.as_str()).send().map_err(|e| {
         MessageError::ProcessingError(
             job_result
                 .clone()
@@ -287,7 +286,7 @@ pub async fn get_files(job_result: JobResult, reference: &str) -> Result<Vec<Res
         ));
     }
 
-    response.json().await.map_err(|e| {
+    response.json().map_err(|e| {
         MessageError::ProcessingError(
             job_result
                 .clone()
