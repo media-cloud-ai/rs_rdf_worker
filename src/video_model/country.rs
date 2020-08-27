@@ -1,6 +1,6 @@
 #[derive(Debug, Deserialize)]
 pub struct Country {
-    id: String,
-    label: String,
-    code: String,
+  id: String,
+  label: String,
+  code: String,
 }
