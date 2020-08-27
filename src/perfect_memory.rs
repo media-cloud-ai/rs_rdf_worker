@@ -146,7 +146,14 @@ pub(crate) fn publish_to_perfect_memory(
                     ));
                 }
                 401 => {
-                    return Err(MessageError::ProcessingError(job_result.clone().with_status(JobStatus::Error).with_message("Error on child process: Process has finished with an error on one of its children")));
+                    return Err(MessageError::ProcessingError(
+                        job_result
+                            .clone()
+                            .with_status(JobStatus::Error)
+                            .with_message(
+                                "Error on child process: Process has finished with an error on one of its children",
+                            ),
+                    ));
                 }
                 408 => {
                     return Err(MessageError::ProcessingError(

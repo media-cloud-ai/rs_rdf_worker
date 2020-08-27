@@ -89,18 +89,16 @@ fn execute_command_line(matches: ArgMatches) {
     let reference = matches
         .value_of("reference")
         .expect("missing reference parameter");
-    let job_result = JobResult::new(666);
 
-    let mut video_metadata = message::get_video_metadata(job_result.clone(), &reference)
-        .expect("unable to get video metadata");
-    let si_video_files = message::get_files(job_result.clone(), &reference)
-        .expect("unable to get files for this video");
+    let mut video_metadata =
+        message::get_video_metadata(&reference).expect("unable to get video metadata");
+    let si_video_files =
+        message::get_files(&reference).expect("unable to get files for this video");
     video_metadata.resources = resource_model::Resources {
         items: si_video_files,
     };
 
-    let rdf = convert_into_rdf(job_result.clone(), &video_metadata, ntriples)
-        .expect("unable to convert into rdf");
+    let rdf = convert_into_rdf(&video_metadata, ntriples).expect("unable to convert into rdf");
 
     let extension = if ntriples { ".nt" } else { ".turtle" };
 

@@ -16,11 +16,7 @@
 // }
 
 use crate::namespaces::*;
-use mcai_worker_sdk::MessageError;
-use mcai_worker_sdk::{
-    job::{JobResult, JobStatus},
-    Result,
-};
+use rdf::error::Error;
 use rdf::graph::Graph;
 use rdf::namespace::Namespace;
 use rdf::uri::Uri;
@@ -32,11 +28,7 @@ pub trait ToRdf {
     fn to_rdf(&self, graph: &mut Graph);
 }
 
-pub fn convert_into_rdf<T: ToRdf>(
-    job_result: JobResult,
-    item: &T,
-    ntriples: bool,
-) -> Result<String> {
+pub fn convert_into_rdf<T: ToRdf>(item: &T, n_triples: bool) -> Result<String, Error> {
     let mut graph = Graph::new(None);
     graph.add_namespace(&Namespace::new(
         "rdf".to_string(),
@@ -68,24 +60,12 @@ pub fn convert_into_rdf<T: ToRdf>(
     ));
 
     item.to_rdf(&mut graph);
-    if ntriples {
+    if n_triples {
         let writer = NTriplesWriter::new();
-        writer.write_to_string(&graph).map_err(|e| {
-            MessageError::ProcessingError(
-                job_result
-                    .with_status(JobStatus::Error)
-                    .with_message(&e.to_string()),
-            )
-        })
+        writer.write_to_string(&graph)
     } else {
         let writer = TurtleWriter::new(graph.namespaces());
-        writer.write_to_string(&graph).map_err(|e| {
-            MessageError::ProcessingError(
-                job_result
-                    .with_status(JobStatus::Error)
-                    .with_message(&e.to_string()),
-            )
-        })
+        writer.write_to_string(&graph)
     }
 }
 
@@ -113,7 +93,7 @@ fn test_mapping_video() {
         items: ftv_resources,
     };
 
-    let rdf_triples = convert_into_rdf(JobResult::new(666), &video_metadata, true).unwrap();
+    let rdf_triples = convert_into_rdf(&video_metadata, true).unwrap();
 
     let mut ntriple_struct = String::new();
     let mut ntriple_file = File::open("tests/triples.nt").unwrap();
@@ -169,7 +149,7 @@ fn test_mapping_resource() {
         },
     };
 
-    let rdf_triples = convert_into_rdf(JobResult::new(666), &resource, true).unwrap();
+    let rdf_triples = convert_into_rdf(&resource, true).unwrap();
 
     let mut ntriple_struct = String::new();
     let mut ntriple_file = File::open("tests/triples_resource.nt").unwrap();
