@@ -1,4 +1,4 @@
-use crate::message::ToRdf;
+use crate::convert::ToRdf;
 use crate::namespaces::*;
 use crate::video_model::audio_track::AudioTrack;
 use crate::video_model::category::Category;

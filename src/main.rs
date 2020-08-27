@@ -3,6 +3,7 @@ extern crate log;
 #[macro_use]
 extern crate serde_derive;
 
+use crate::convert::convert_into_rdf;
 use clap::{App, Arg, ArgMatches};
 use futures::executor::block_on;
 use mcai_worker_sdk::job::JobResult;
@@ -12,8 +13,10 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
+mod convert;
 mod message;
 mod namespaces;
+mod perfect_memory;
 mod resource_model;
 mod video_model;
 
@@ -23,13 +26,6 @@ pub mod built_info {
 
 #[derive(Debug, Default)]
 struct RdfEvent {}
-
-#[derive(Debug)]
-struct PmConfig {
-    endpoint: String,
-    client_id: String,
-    api_key: String,
-}
 
 #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 pub enum Order {
@@ -57,16 +53,6 @@ pub struct RdfWorkerParameters {
     perfect_memory_endpoint: String,
     perfect_memory_username: String,
     perfect_memory_password: String,
-}
-
-impl RdfWorkerParameters {
-    fn get_perfect_memory_config(&self) -> PmConfig {
-        PmConfig {
-            endpoint: self.perfect_memory_endpoint.clone(),
-            client_id: self.perfect_memory_username.clone(),
-            api_key: self.perfect_memory_password.clone(),
-        }
-    }
 }
 
 impl MessageEvent<RdfWorkerParameters> for RdfEvent {
@@ -114,7 +100,7 @@ fn execute_command_line(matches: ArgMatches) {
         items: si_video_files,
     };
 
-    let rdf = message::convert_into_rdf(job_result.clone(), &video_metadata, ntriples)
+    let rdf = convert_into_rdf(job_result.clone(), &video_metadata, ntriples)
         .expect("unable to convert into rdf");
 
     let extension = if ntriples { ".nt" } else { ".turtle" };

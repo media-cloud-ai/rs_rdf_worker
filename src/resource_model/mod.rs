@@ -1,4 +1,4 @@
-use crate::message::ToRdf;
+use crate::convert::ToRdf;
 use crate::namespaces::*;
 use rdf::graph::Graph;
 use rdf::node::Node;
