@@ -14,10 +14,8 @@ use crate::video_model::rating::Rating;
 use crate::video_model::tag::Tag;
 use crate::video_model::text_track::TextTrack;
 use rdf::graph::Graph;
-use rdf::node::Node;
-use rdf::triple::Triple;
-use rdf::uri::Uri;
 
+use crate::rdf_graph::{add_link, add_related_node, add_triple, insert_identifier};
 use crate::resource_model::Resources;
 
 #[derive(Debug, Deserialize)]
@@ -158,9 +156,9 @@ impl ToRdf for Metadata {
     let o_tag = EBUCORE_NAMESPACE.to_owned() + "Tag";
     let o_text_line = EBUCORE_NAMESPACE.to_owned() + "TextLine";
 
-    let subject = self.add_triple(graph, &s_root, &p_type, &o_editorial_object);
+    let subject = add_triple(graph, &s_root, &p_type, &o_editorial_object);
 
-    self.add_link(
+    add_link(
       graph,
       &subject,
       &p_title,
@@ -171,8 +169,8 @@ impl ToRdf for Metadata {
     );
 
     if let Some(ref parent_id) = self.parent_id {
-      let s_references = self.add_related_node(graph, &subject, &p_references);
-      self.add_link(
+      let s_references = add_related_node(graph, &subject, &p_references);
+      add_link(
         graph,
         &s_references,
         &p_type,
@@ -181,7 +179,7 @@ impl ToRdf for Metadata {
         None,
         true,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_references,
         &p_resource_id,
@@ -193,7 +191,7 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref original_title) = self.original_title {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_original_title,
@@ -205,7 +203,7 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref additional_title) = self.additional_title {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_alternative_title,
@@ -217,7 +215,7 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref description) = self.description {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_synopsis,
@@ -229,7 +227,7 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref short_description) = self.short_description {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_abstract,
@@ -241,7 +239,7 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref duration) = self.duration {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_duration,
@@ -252,7 +250,7 @@ impl ToRdf for Metadata {
       );
     }
 
-    self.add_link(
+    add_link(
       graph,
       &subject,
       &p_has_editorial_object_type,
@@ -263,7 +261,7 @@ impl ToRdf for Metadata {
       true,
     );
 
-    self.add_link(
+    add_link(
       graph,
       &subject,
       &p_date_created,
@@ -272,7 +270,7 @@ impl ToRdf for Metadata {
       Some(XML_NAMESPACE.to_owned() + "dateTime"),
       false,
     );
-    self.add_link(
+    add_link(
       graph,
       &subject,
       &p_date_modified,
@@ -284,7 +282,7 @@ impl ToRdf for Metadata {
 
     // broadcasted at
     if let Some(ref broadcasted_at) = self.broadcasted_at {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_date_broadcast,
@@ -297,7 +295,7 @@ impl ToRdf for Metadata {
 
     // created by
     if let Some(ref created_by) = self.created_by {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_has_creator,
@@ -310,7 +308,7 @@ impl ToRdf for Metadata {
 
     // live
     if let Some(broadcasted_live) = self.broadcasted_live {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_live,
@@ -323,8 +321,8 @@ impl ToRdf for Metadata {
 
     // copyright
     if let Some(ref copyright) = self.copyright {
-      let s_has_owner = self.add_related_node(graph, &subject, &p_has_owner);
-      self.add_link(
+      let s_has_owner = add_related_node(graph, &subject, &p_has_owner);
+      add_link(
         graph,
         &s_has_owner,
         &p_type,
@@ -333,7 +331,7 @@ impl ToRdf for Metadata {
         None,
         true,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_has_owner,
         &p_organisation_name,
@@ -345,18 +343,18 @@ impl ToRdf for Metadata {
     }
 
     // identifiers
-    self.insert_identifier(
+    insert_identifier(
       graph,
       &subject,
       "SIvideo",
       &("urn::uuid:".to_owned() + &self.id),
     );
     if let Some(ref oscar_id) = self.oscar_id {
-      self.insert_identifier(graph, &subject, "Oscar_ID", &oscar_id);
+      insert_identifier(graph, &subject, "Oscar_ID", &oscar_id);
     }
 
     if let Some(ref plurimedia_broadcast_id) = self.plurimedia_broadcast_id {
-      self.insert_identifier(
+      insert_identifier(
         graph,
         &subject,
         "Plurimedia_broadcast_id",
@@ -365,7 +363,7 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref plurimedia_program_id) = self.plurimedia_program_id {
-      self.insert_identifier(
+      insert_identifier(
         graph,
         &subject,
         "Plurimedia_programme_id",
@@ -374,7 +372,7 @@ impl ToRdf for Metadata {
     }
 
     for plurimedia_collection_id in &self.plurimedia_collection_ids {
-      self.insert_identifier(
+      insert_identifier(
         graph,
         &subject,
         "Plurimedia_collection_ids",
@@ -383,12 +381,12 @@ impl ToRdf for Metadata {
     }
 
     if let Some(ref ftvcut_id) = self.ftvcut_id {
-      self.insert_identifier(graph, &subject, "FTVCUT", &ftvcut_id);
+      insert_identifier(graph, &subject, "FTVCUT", &ftvcut_id);
     }
 
     // episode
     if let Some(ref episode_number) = self.episode_number {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_episode_number,
@@ -400,9 +398,9 @@ impl ToRdf for Metadata {
     }
 
     for group in &self.groups {
-      let s_group = self.add_related_node(graph, &subject, &p_is_member_of);
-      self.add_link(graph, &s_group, &p_type, &o_group, None, None, true);
-      self.add_link(
+      let s_group = add_related_node(graph, &subject, &p_is_member_of);
+      add_link(graph, &s_group, &p_type, &o_group, None, None, true);
+      add_link(
         graph,
         &s_group,
         &p_group_id,
@@ -411,7 +409,7 @@ impl ToRdf for Metadata {
         None,
         false,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_group,
         &p_group_name,
@@ -421,7 +419,7 @@ impl ToRdf for Metadata {
         false,
       );
       if let Some(ref description) = group.description {
-        self.add_link(
+        add_link(
           graph,
           &s_group,
           &p_group_description,
@@ -432,9 +430,9 @@ impl ToRdf for Metadata {
         );
       }
       if let Some(ref season_number) = group.season_number {
-        let s_has_season = self.add_related_node(graph, &s_group, &p_has_season);
-        self.add_link(graph, &s_has_season, &p_type, &o_season, None, None, true);
-        self.add_link(
+        let s_has_season = add_related_node(graph, &s_group, &p_has_season);
+        add_link(graph, &s_has_season, &p_type, &o_season, None, None, true);
+        add_link(
           graph,
           &s_has_season,
           &p_season_number,
@@ -449,8 +447,8 @@ impl ToRdf for Metadata {
     // audio_tracks
     for audio_track in &self.audio_tracks {
       let s_has_related_audio_programme =
-        self.add_related_node(graph, &subject, &p_has_related_audio_programme);
-      self.add_link(
+        add_related_node(graph, &subject, &p_has_related_audio_programme);
+      add_link(
         graph,
         &s_has_related_audio_programme,
         &p_type,
@@ -459,7 +457,7 @@ impl ToRdf for Metadata {
         None,
         true,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_audio_programme,
         &p_has_audio_programme_type,
@@ -472,9 +470,8 @@ impl ToRdf for Metadata {
 
     // text_tracks
     for text_track in &self.text_tracks {
-      let s_has_related_text_line =
-        self.add_related_node(graph, &subject, &p_has_related_text_line);
-      self.add_link(
+      let s_has_related_text_line = add_related_node(graph, &subject, &p_has_related_text_line);
+      add_link(
         graph,
         &s_has_related_text_line,
         &p_type,
@@ -483,7 +480,7 @@ impl ToRdf for Metadata {
         None,
         true,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_text_line,
         &p_has_text_line_type,
@@ -495,8 +492,8 @@ impl ToRdf for Metadata {
     }
 
     // publication event
-    let s_publication_event = self.add_related_node(graph, &subject, &p_has_publication_event);
-    self.add_link(
+    let s_publication_event = add_related_node(graph, &subject, &p_has_publication_event);
+    add_link(
       graph,
       &s_publication_event,
       &p_type,
@@ -505,7 +502,7 @@ impl ToRdf for Metadata {
       None,
       true,
     );
-    self.add_link(
+    add_link(
       graph,
       &s_publication_event,
       &p_has_publication_event_type,
@@ -516,8 +513,8 @@ impl ToRdf for Metadata {
     );
     if let Some(ref channel) = self.channel {
       let s_publication_channel =
-        self.add_related_node(graph, &s_publication_event, &p_publication_channel);
-      self.add_link(
+        add_related_node(graph, &s_publication_event, &p_publication_channel);
+      add_link(
         graph,
         &s_publication_channel,
         &p_type,
@@ -526,7 +523,7 @@ impl ToRdf for Metadata {
         None,
         false,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_publication_channel,
         &p_publication_channel_id,
@@ -535,7 +532,7 @@ impl ToRdf for Metadata {
         None,
         false,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_publication_channel,
         &p_publication_channel_name,
@@ -546,7 +543,7 @@ impl ToRdf for Metadata {
       );
     }
     if let Some(ref expected_at) = self.expected_at {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_publication_start_date_time,
@@ -557,7 +554,7 @@ impl ToRdf for Metadata {
       );
     }
     if let Some(ref duration) = self.duration {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_duration_normal_play_time,
@@ -568,7 +565,7 @@ impl ToRdf for Metadata {
       );
     }
     if let Some(broadcasted_live) = self.broadcasted_live {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_live,
@@ -578,7 +575,7 @@ impl ToRdf for Metadata {
         false,
       );
     }
-    self.add_link(
+    add_link(
       graph,
       &s_publication_event,
       &p_free,
@@ -588,7 +585,7 @@ impl ToRdf for Metadata {
       false,
     );
     if let Some(previously_broadcasted) = self.previously_broadcasted {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_first_showing,
@@ -601,7 +598,7 @@ impl ToRdf for Metadata {
     if let Some(previously_broadcasted_on_this_channel) =
       self.previously_broadcasted_on_this_channel
     {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_first_showing_this_service,
@@ -612,7 +609,7 @@ impl ToRdf for Metadata {
       );
     }
     if let Some(ref rating) = self.rating {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_has_target_audience,
@@ -622,7 +619,7 @@ impl ToRdf for Metadata {
         true,
       );
     }
-    self.add_link(
+    add_link(
       graph,
       &s_publication_event,
       &p_mid_roll_ad_allowed,
@@ -632,7 +629,7 @@ impl ToRdf for Metadata {
       false,
     );
     if let Some(ref broadcasted_at) = self.broadcasted_at {
-      self.add_link(
+      add_link(
         graph,
         &s_publication_event,
         &p_date_broadcast,
@@ -645,7 +642,7 @@ impl ToRdf for Metadata {
 
     // category
     if let Some(ref category) = self.category {
-      self.add_link(
+      add_link(
         graph,
         &subject,
         &p_has_genre,
@@ -658,9 +655,9 @@ impl ToRdf for Metadata {
 
     // topics
     for tag in &self.tags {
-      let s_has_topic = self.add_related_node(graph, &subject, &p_has_topic);
-      self.add_link(graph, &s_has_topic, &p_type, &o_tag, None, None, true);
-      self.add_link(
+      let s_has_topic = add_related_node(graph, &subject, &p_has_topic);
+      add_link(graph, &s_has_topic, &p_type, &o_tag, None, None, true);
+      add_link(
         graph,
         &s_has_topic,
         &p_pref_label,
@@ -669,13 +666,13 @@ impl ToRdf for Metadata {
         None,
         false,
       );
-      self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
+      add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
     }
 
     // credits
     for people in &self.credits {
-      let s_has_contributor = self.add_related_node(graph, &subject, &p_has_contributor);
-      self.add_link(
+      let s_has_contributor = add_related_node(graph, &subject, &p_has_contributor);
+      add_link(
         graph,
         &s_has_contributor,
         &p_type,
@@ -684,7 +681,7 @@ impl ToRdf for Metadata {
         None,
         true,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_has_contributor,
         &p_has_role,
@@ -694,10 +691,10 @@ impl ToRdf for Metadata {
         true,
       );
 
-      let s_is_agent = self.add_related_node(graph, &s_has_contributor, &p_is_agent);
-      self.add_link(graph, &s_is_agent, &p_type, &o_person, None, None, true);
+      let s_is_agent = add_related_node(graph, &s_has_contributor, &p_is_agent);
+      add_link(graph, &s_is_agent, &p_type, &o_person, None, None, true);
       if let Some(ref first_name) = people.first_name {
-        self.add_link(
+        add_link(
           graph,
           &s_is_agent,
           &p_given_name,
@@ -707,7 +704,7 @@ impl ToRdf for Metadata {
           false,
         );
       }
-      self.add_link(
+      add_link(
         graph,
         &s_is_agent,
         &p_family_name,
@@ -718,8 +715,8 @@ impl ToRdf for Metadata {
       );
 
       if let Some(ref character) = people.character {
-        let s_is_character = self.add_related_node(graph, &subject, &p_is_character);
-        self.add_link(
+        let s_is_character = add_related_node(graph, &subject, &p_is_character);
+        add_link(
           graph,
           &s_is_character,
           &p_type,
@@ -728,7 +725,7 @@ impl ToRdf for Metadata {
           None,
           true,
         );
-        self.add_link(
+        add_link(
           graph,
           &s_is_character,
           &p_character_name,
@@ -741,99 +738,5 @@ impl ToRdf for Metadata {
     }
 
     self.resources.to_rdf(graph);
-  }
-}
-
-impl Metadata {
-  fn insert_identifier(
-    &self,
-    graph: &mut Graph,
-    subject_node: &Node,
-    identifier_type: &str,
-    value: &str,
-  ) {
-    let p_has_idenfitier = EBUCORE_NAMESPACE.to_owned() + "hasIdentifier";
-    let p_has_identifier_type = EBUCORE_NAMESPACE.to_owned() + "hasIdentifierType";
-    let p_idenfitier_value = EBUCORE_NAMESPACE.to_owned() + "identifierValue";
-    let p_type = RDF_NAMESPACE.to_owned() + "type";
-
-    let o_identifier = EBUCORE_NAMESPACE.to_owned() + "Identifier";
-
-    let s_identifier = self.add_related_node(graph, &subject_node, &p_has_idenfitier);
-    self.add_link(
-      graph,
-      &s_identifier,
-      &p_type,
-      &o_identifier,
-      None,
-      None,
-      true,
-    );
-    self.add_link(
-      graph,
-      &s_identifier,
-      &p_idenfitier_value,
-      value,
-      None,
-      None,
-      false,
-    );
-    self.add_link(
-      graph,
-      &s_identifier,
-      &p_has_identifier_type,
-      &("http://resources.idfrancetv.fr/identifiers/".to_string() + &identifier_type),
-      None,
-      None,
-      true,
-    );
-  }
-
-  fn add_triple(&self, graph: &mut Graph, subject: &str, predicate: &str, object: &str) -> Node {
-    let subject_node = graph.create_uri_node(&Uri::new(subject.to_string()));
-    let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
-    let object_node = graph.create_uri_node(&Uri::new(object.to_string()));
-
-    let triple = Triple::new(&subject_node, &predicate_node, &object_node);
-    graph.add_triple(&triple);
-    subject_node
-  }
-
-  fn add_link(
-    &self,
-    graph: &mut Graph,
-    subject_node: &Node,
-    predicate: &str,
-    object: &str,
-    language: Option<&str>,
-    datatype: Option<String>,
-    uri: bool,
-  ) {
-    let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
-    let object_node = if let Some(l) = language {
-      graph.create_literal_node_with_language(object.to_string(), l.to_string())
-    } else {
-      if let Some(ref dt) = datatype {
-        graph.create_literal_node_with_data_type(object.to_string(), &Uri::new(dt.to_string()))
-      } else {
-        if uri {
-          graph.create_uri_node(&Uri::new(object.to_string()))
-        } else {
-          graph.create_literal_node(object.to_string())
-        }
-      }
-    };
-
-    let triple = Triple::new(&subject_node, &predicate_node, &object_node);
-    graph.add_triple(&triple);
-  }
-
-  fn add_related_node(&self, graph: &mut Graph, subject_node: &Node, predicate: &str) -> Node {
-    let blank = graph.create_blank_node();
-    let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
-
-    let triple = Triple::new(&subject_node, &predicate_node, &blank);
-    graph.add_triple(&triple);
-    blank
   }
 }

@@ -1,6 +1,6 @@
 use crate::RdfWorkerParameters;
 use mcai_worker_sdk::job::{JobResult, JobStatus};
-use mcai_worker_sdk::{MessageError, Result};
+use mcai_worker_sdk::{error, MessageError, Result};
 use reqwest::header::{CACHE_CONTROL, CONTENT_TYPE, LOCATION};
 use std::{thread, time};
 
@@ -28,7 +28,7 @@ impl From<RdfWorkerParameters> for PmConfig {
     PmConfig {
       endpoint: parameters.perfect_memory_endpoint.clone(),
       client_id: parameters.perfect_memory_username.clone(),
-      api_key: parameters.perfect_memory_password.clone(),
+      api_key: parameters.perfect_memory_password,
     }
   }
 }
@@ -89,11 +89,12 @@ pub(crate) fn publish_to_perfect_memory(
     })?;
 
   if response.status() != 201 {
-    let text = response.text().unwrap_or("unknown reason.".to_owned());
+    let text = response
+      .text()
+      .unwrap_or_else(|_| "unknown reason.".to_string());
     error!("Unable to push to Perfect Memory: {}", text);
     return Err(MessageError::ProcessingError(
       job_result
-        .clone()
         .with_status(JobStatus::Error)
         .with_message(&format!("Unable to push into Perfect Memory: {}", text)),
     ));
@@ -140,25 +141,20 @@ pub(crate) fn publish_to_perfect_memory(
         400 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Error: Request/Process has finished with an error"),
           ));
         }
         401 => {
           return Err(MessageError::ProcessingError(
-            job_result
-              .clone()
-              .with_status(JobStatus::Error)
-              .with_message(
-                "Error on child process: Process has finished with an error on one of its children",
-              ),
+            job_result.with_status(JobStatus::Error).with_message(
+              "Error on child process: Process has finished with an error on one of its children",
+            ),
           ));
         }
         408 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Error Service: Process has finished with a specific error"),
           ));
@@ -166,7 +162,6 @@ pub(crate) fn publish_to_perfect_memory(
         410 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Item Disabled: The item is disabled"),
           ));
@@ -174,7 +169,6 @@ pub(crate) fn publish_to_perfect_memory(
         414 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Item Not Found: The item is not found"),
           ));
@@ -182,7 +176,6 @@ pub(crate) fn publish_to_perfect_memory(
         421 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Invalid Script: There was an error while running the script"),
           ));
@@ -190,7 +183,6 @@ pub(crate) fn publish_to_perfect_memory(
         422 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Invalid I/O: The input or the output is invalid"),
           ));
@@ -198,7 +190,6 @@ pub(crate) fn publish_to_perfect_memory(
         423 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Invalid Status: The process has been stopped with an invalid status"),
           ));
@@ -206,7 +197,6 @@ pub(crate) fn publish_to_perfect_memory(
         428 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Process disrupted: Process has been manually disrupted"),
           ));
@@ -214,7 +204,6 @@ pub(crate) fn publish_to_perfect_memory(
         500 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Unexpected error: Service process has finished with an unknow error"),
           ));
@@ -222,7 +211,6 @@ pub(crate) fn publish_to_perfect_memory(
         503 => {
           return Err(MessageError::ProcessingError(
             job_result
-              .clone()
               .with_status(JobStatus::Error)
               .with_message("Service unreachable: Service could not be reached"),
           ));
@@ -234,11 +222,11 @@ pub(crate) fn publish_to_perfect_memory(
       thread::sleep(ten_seconds);
     }
   } else {
-    return Err(MessageError::ProcessingError(
+    Err(MessageError::ProcessingError(
       job_result
         .with_status(JobStatus::Error)
-        .with_message(&format!("Unable get location to wait end of ingest")),
-    ));
+        .with_message("Unable get location to wait end of ingest"),
+    ))
   }
 }
 

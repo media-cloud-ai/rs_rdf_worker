@@ -1,8 +1,7 @@
 use crate::convert::ToRdf;
 use crate::namespaces::*;
+use crate::rdf_graph::{add_link, add_related_node};
 use rdf::graph::Graph;
-use rdf::node::Node;
-use rdf::triple::Triple;
 use rdf::uri::Uri;
 
 #[derive(Debug, Default, Deserialize)]
@@ -134,19 +133,19 @@ impl ToRdf for Resource {
 
     let s_has_related_object = match self.format.mime_type.as_str() {
       "image/jpeg" => {
-        let node = self.add_related_node(graph, &root_node, &p_has_related_image);
-        self.add_link(graph, &node, &p_type, &o_picture, None, None, true);
+        let node = add_related_node(graph, &root_node, &p_has_related_image);
+        add_link(graph, &node, &p_type, &o_picture, None, None, true);
 
         node
       }
       _ => {
-        let node = self.add_related_node(graph, &root_node, &p_has_related_resource);
-        self.add_link(graph, &node, &p_type, &o_media_resource, None, None, true);
+        let node = add_related_node(graph, &root_node, &p_has_related_resource);
+        add_link(graph, &node, &p_type, &o_media_resource, None, None, true);
         node
       }
     };
 
-    self.add_link(
+    add_link(
       graph,
       &s_has_related_object,
       &p_resource_id,
@@ -156,7 +155,7 @@ impl ToRdf for Resource {
       false,
     );
     if let Some(ref url) = self.url {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_locator,
@@ -166,7 +165,7 @@ impl ToRdf for Resource {
         false,
       );
     }
-    self.add_link(
+    add_link(
       graph,
       &s_has_related_object,
       &p_has_creator,
@@ -177,7 +176,7 @@ impl ToRdf for Resource {
     );
 
     if let Some(ref created_at) = self.created_at {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_date_created,
@@ -188,7 +187,7 @@ impl ToRdf for Resource {
       );
     }
     if let Some(ref updated_at) = self.updated_at {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_date_modified,
@@ -199,7 +198,7 @@ impl ToRdf for Resource {
       );
     }
     if let Some(ref filesize_bytes) = self.filesize_bytes {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_file_size,
@@ -209,7 +208,7 @@ impl ToRdf for Resource {
         false,
       );
     }
-    self.add_link(
+    add_link(
       graph,
       &s_has_related_object,
       &p_has_format,
@@ -220,7 +219,7 @@ impl ToRdf for Resource {
     );
 
     if let Some(ref height) = self.height {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_height,
@@ -229,7 +228,7 @@ impl ToRdf for Resource {
         Some(XML_NAMESPACE.to_owned() + "integer"),
         false,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_height_unit,
@@ -240,7 +239,7 @@ impl ToRdf for Resource {
       );
     }
     if let Some(ref width) = self.width {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_width,
@@ -249,7 +248,7 @@ impl ToRdf for Resource {
         Some(XML_NAMESPACE.to_owned() + "integer"),
         false,
       );
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_width_unit,
@@ -262,7 +261,7 @@ impl ToRdf for Resource {
 
     if self.filename.is_some() {
       if self.path.is_some() {
-        self.add_link(
+        add_link(
           graph,
           &s_has_related_object,
           &p_filename,
@@ -276,7 +275,7 @@ impl ToRdf for Resource {
           false,
         );
       } else {
-        self.add_link(
+        add_link(
           graph,
           &s_has_related_object,
           &p_filename,
@@ -287,7 +286,7 @@ impl ToRdf for Resource {
         );
       }
     }
-    self.add_link(
+    add_link(
       graph,
       &s_has_related_object,
       &p_storage_id,
@@ -298,7 +297,7 @@ impl ToRdf for Resource {
     );
 
     if let Some(ref md5_checksum) = self.md5_checksum {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_hash_value,
@@ -310,7 +309,7 @@ impl ToRdf for Resource {
     }
 
     if let Some(ref bitrate_kbps) = self.bitrate_kbps {
-      self.add_link(
+      add_link(
         graph,
         &s_has_related_object,
         &p_hash_value,
@@ -322,8 +321,8 @@ impl ToRdf for Resource {
     }
 
     if let Some(ref lang) = self.lang {
-      let s_has_language = self.add_related_node(graph, &s_has_related_object, &p_has_language);
-      self.add_link(
+      let s_has_language = add_related_node(graph, &s_has_related_object, &p_has_language);
+      add_link(
         graph,
         &s_has_language,
         &p_type,
@@ -332,11 +331,11 @@ impl ToRdf for Resource {
         None,
         true,
       );
-      self.add_link(graph, &s_has_language, &p_label, &lang, None, None, false);
+      add_link(graph, &s_has_language, &p_label, &lang, None, None, false);
     }
 
-    let s_is_issued_by = self.add_related_node(graph, &s_has_related_object, &p_is_issued_by);
-    self.add_link(
+    let s_is_issued_by = add_related_node(graph, &s_has_related_object, &p_is_issued_by);
+    add_link(
       graph,
       &s_is_issued_by,
       &p_type,
@@ -345,7 +344,7 @@ impl ToRdf for Resource {
       None,
       true,
     );
-    self.add_link(
+    add_link(
       graph,
       &s_is_issued_by,
       &p_organisation_name,
@@ -356,50 +355,10 @@ impl ToRdf for Resource {
     );
 
     for tag in &self.tags {
-      let s_has_topic = self.add_related_node(graph, &s_has_related_object, &p_has_topic);
-      self.add_link(graph, &s_has_topic, &p_type, &o_tag, None, None, true);
-      self.add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, false);
-      self.add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
+      let s_has_topic = add_related_node(graph, &s_has_related_object, &p_has_topic);
+      add_link(graph, &s_has_topic, &p_type, &o_tag, None, None, true);
+      add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, false);
+      add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
     }
-  }
-}
-
-impl Resource {
-  fn add_link(
-    &self,
-    graph: &mut Graph,
-    subject_node: &Node,
-    predicate: &str,
-    object: &str,
-    language: Option<&str>,
-    datatype: Option<String>,
-    uri: bool,
-  ) {
-    let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
-    let object_node = if let Some(l) = language {
-      graph.create_literal_node_with_language(object.to_string(), l.to_string())
-    } else {
-      if let Some(ref dt) = datatype {
-        graph.create_literal_node_with_data_type(object.to_string(), &Uri::new(dt.to_string()))
-      } else {
-        if uri {
-          graph.create_uri_node(&Uri::new(object.to_string()))
-        } else {
-          graph.create_literal_node(object.to_string())
-        }
-      }
-    };
-
-    let triple = Triple::new(&subject_node, &predicate_node, &object_node);
-    graph.add_triple(&triple);
-  }
-
-  fn add_related_node(&self, graph: &mut Graph, subject_node: &Node, predicate: &str) -> Node {
-    let blank = graph.create_blank_node();
-    let predicate_node = graph.create_uri_node(&Uri::new(predicate.to_string()));
-
-    let triple = Triple::new(&subject_node, &predicate_node, &blank);
-    graph.add_triple(&triple);
-    blank
   }
 }

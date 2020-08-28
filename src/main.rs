@@ -1,6 +1,4 @@
 #[macro_use]
-extern crate log;
-#[macro_use]
 extern crate serde_derive;
 
 use crate::convert::convert_into_rdf;
@@ -16,6 +14,7 @@ mod convert;
 mod message;
 mod namespaces;
 mod perfect_memory;
+mod rdf_graph;
 mod resource_model;
 mod video_model;
 

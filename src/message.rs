@@ -5,7 +5,7 @@ use crate::resource_model::{ExternalIds, Format, Resource, Resources};
 use crate::video_model::metadata::Metadata;
 use crate::{Order, RdfWorkerParameters};
 use mcai_worker_sdk::job::{JobResult, JobStatus};
-use mcai_worker_sdk::{McaiChannel, MessageError, Result};
+use mcai_worker_sdk::{error, info, McaiChannel, MessageError, Result};
 
 use crate::convert::convert_into_rdf;
 use crate::perfect_memory::{publish_to_perfect_memory, PmConfig};
@@ -21,7 +21,7 @@ pub fn process(
   let n_triples = parameters.ntriples.unwrap_or(false);
   let pm_event_name = parameters
     .perfect_memory_event_name
-    .unwrap_or("push_rdf_infos".to_string());
+    .unwrap_or_else(|| "push_rdf_infos".to_string());
   let reference = parameters.reference;
   let url_prefix = parameters.url_prefix;
   let storage = parameters.storage;
@@ -33,10 +33,10 @@ pub fn process(
       let input_paths = input_paths
         .ok_or_else(|| MessageError::RuntimeError("Missing input_paths parameter".to_string()))?;
 
-      let storage = storage.unwrap_or("akamai-video-prod".to_string());
+      let storage = storage.unwrap_or_else(|| "akamai-video-prod".to_string());
 
-      let url_prefix =
-        url_prefix.unwrap_or("http://videos-pmd.francetv.fr/innovation/SubTil/".to_string());
+      let url_prefix = url_prefix
+        .unwrap_or_else(|| "http://videos-pmd.francetv.fr/innovation/SubTil/".to_string());
 
       get_dash_and_ttml_rdf(
         job_result.clone(),
@@ -48,7 +48,7 @@ pub fn process(
       )?
     }
     Order::PublishMetadata => {
-      let input_paths = input_paths.unwrap_or(vec![]);
+      let input_paths = input_paths.unwrap_or_default();
       get_metadata_rdf(job_result.clone(), input_paths, &reference, n_triples)?
     }
   };
@@ -289,7 +289,7 @@ pub fn get_video_metadata(reference: &str) -> std::result::Result<Metadata, Stri
 
   let status = response.status();
 
-  if !(status == StatusCode::OK) {
+  if status != StatusCode::OK {
     error!("{:?}", response);
     return Err(format!("Bad response status: {:?}", status));
   }
@@ -308,7 +308,7 @@ pub fn get_files(reference: &str) -> std::result::Result<Vec<Resource>, String> 
 
   let status = response.status();
 
-  if !(status == StatusCode::OK) {
+  if status != StatusCode::OK {
     error!("{:?}", response);
     return Err(format!("Bad response status: {:?}", status));
   }
