@@ -16,16 +16,16 @@
 // }
 
 use crate::namespaces::*;
-use rdf::error::Error;
-use rdf::graph::Graph;
-use rdf::namespace::Namespace;
-use rdf::uri::Uri;
-use rdf::writer::n_triples_writer::NTriplesWriter;
-use rdf::writer::rdf_writer::RdfWriter;
-use rdf::writer::turtle_writer::TurtleWriter;
+use rdf::{
+  error::Error,
+  graph::Graph,
+  namespace::Namespace,
+  uri::Uri,
+  writer::{n_triples_writer::NTriplesWriter, rdf_writer::RdfWriter, turtle_writer::TurtleWriter},
+};
 
 pub trait ToRdf {
-  fn to_rdf(&self, graph: &mut Graph);
+  fn to_rdf(&self, graph: &mut Graph) -> Result<(), Error>;
 }
 
 pub fn convert_into_rdf<T: ToRdf>(item: &T, n_triples: bool) -> Result<String, Error> {
@@ -59,7 +59,7 @@ pub fn convert_into_rdf<T: ToRdf>(item: &T, n_triples: bool) -> Result<String, E
     Uri::new(DEFAULT_NAMESPACE.to_owned()),
   ));
 
-  item.to_rdf(&mut graph);
+  item.to_rdf(&mut graph)?;
   if n_triples {
     let writer = NTriplesWriter::new();
     writer.write_to_string(&graph)

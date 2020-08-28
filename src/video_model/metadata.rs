@@ -1,19 +1,11 @@
 use crate::convert::ToRdf;
 use crate::namespaces::*;
-use crate::video_model::audio_track::AudioTrack;
-use crate::video_model::category::Category;
-use crate::video_model::channel::Channel;
-use crate::video_model::country::Country;
-use crate::video_model::group::Group;
-use crate::video_model::image::Image;
-use crate::video_model::kind::Kind;
-use crate::video_model::part::Part;
-use crate::video_model::people::People;
-use crate::video_model::platforms::Platforms;
-use crate::video_model::rating::Rating;
-use crate::video_model::tag::Tag;
-use crate::video_model::text_track::TextTrack;
-use rdf::graph::Graph;
+use crate::video_model::{
+  audio_track::AudioTrack, category::Category, channel::Channel, country::Country, group::Group,
+  image::Image, kind::Kind, part::Part, people::People, platforms::Platforms, rating::Rating,
+  tag::Tag, text_track::TextTrack,
+};
+use rdf::{error::Error, graph::Graph};
 
 use crate::rdf_graph::{add_link, add_related_node, add_triple, insert_identifier};
 use crate::resource_model::Resources;
@@ -83,78 +75,78 @@ pub struct Metadata {
 }
 
 impl ToRdf for Metadata {
-  fn to_rdf(&self, graph: &mut Graph) {
-    let s_root = "http://resources.idfrancetv.fr/medias/".to_string() + &self.id;
+  fn to_rdf(&self, graph: &mut Graph) -> Result<(), Error> {
+    let s_root = format!("http://resources.idfrancetv.fr/medias/{}", self.id);
     let p_ftv_audio = "http://resources.idfrancetv.fr/ontologies/audio#";
     let p_ftv_sous_titre = "http://resources.idfrancetv.fr/ontologies/sous-titre#";
     let p_ftv_csa = "http://resources.idfrancetv.fr/ontologies/csa#";
 
-    let p_alternative_title = EBUCORE_NAMESPACE.to_owned() + "alternativeTitle";
-    let p_abstract = EBUCORE_NAMESPACE.to_owned() + "abstract";
-    let p_character_name = EBUCORE_NAMESPACE.to_owned() + "characterName";
-    let p_date_created = EBUCORE_NAMESPACE.to_owned() + "dateCreated";
-    let p_date_modified = EBUCORE_NAMESPACE.to_owned() + "dateModified";
-    let p_date_broadcast = EBUCORE_NAMESPACE.to_owned() + "dateBroadcast";
-    let p_duration = EBUCORE_NAMESPACE.to_owned() + "durationNormalPlayTime";
-    let p_duration_normal_play_time = EBUCORE_NAMESPACE.to_owned() + "durationNormalPlayTime";
-    let p_episode_number = EBUCORE_NAMESPACE.to_owned() + "episodeNumber";
-    let p_family_name = EBUCORE_NAMESPACE.to_owned() + "familyName";
-    let p_first_showing = EBUCORE_NAMESPACE.to_owned() + "firstShowing";
-    let p_first_showing_this_service = EBUCORE_NAMESPACE.to_owned() + "firstShowingThisService";
-    let p_free = EBUCORE_NAMESPACE.to_owned() + "free";
-    let p_given_name = EBUCORE_NAMESPACE.to_owned() + "givenName";
-    let p_group_description = EBUCORE_NAMESPACE.to_owned() + "groupDescription";
-    let p_group_id = EBUCORE_NAMESPACE.to_owned() + "groupId";
-    let p_group_name = EBUCORE_NAMESPACE.to_owned() + "groupName";
-    let p_has_audio_programme_type = EBUCORE_NAMESPACE.to_owned() + "hasAudioProgrammeType";
-    let p_has_contributor = EBUCORE_NAMESPACE.to_owned() + "hasContributor";
-    let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
-    let p_has_editorial_object_type = EBUCORE_NAMESPACE.to_owned() + "hasEditorialObjectType";
-    let p_has_genre = EBUCORE_NAMESPACE.to_owned() + "hasGenre";
-    let p_has_owner = EBUCORE_NAMESPACE.to_owned() + "hasOwner";
-    let p_has_publication_event = EBUCORE_NAMESPACE.to_owned() + "hasPublicationEvent";
-    let p_has_publication_event_type = EBUCORE_NAMESPACE.to_owned() + "hasPublicationEventType";
-    let p_has_related_audio_programme = EBUCORE_NAMESPACE.to_owned() + "hasRelatedAudioProgramme";
-    let p_has_related_text_line = EBUCORE_NAMESPACE.to_owned() + "hasRelatedTextLine";
-    let p_has_role = EBUCORE_NAMESPACE.to_owned() + "hasRole";
-    let p_has_season = EBUCORE_NAMESPACE.to_owned() + "hasSeason";
-    let p_has_target_audience = EBUCORE_NAMESPACE.to_owned() + "hasTargetAudience";
-    let p_has_text_line_type = EBUCORE_NAMESPACE.to_owned() + "hasTextLineType";
-    let p_has_topic = EBUCORE_NAMESPACE.to_owned() + "hasTopic";
-    let p_is_agent = EBUCORE_NAMESPACE.to_owned() + "isAgent";
-    let p_is_character = EBUCORE_NAMESPACE.to_owned() + "isCharacter";
-    let p_is_member_of = EBUCORE_NAMESPACE.to_owned() + "isMemberOf";
-    let p_live = EBUCORE_NAMESPACE.to_owned() + "live";
-    let p_mid_roll_ad_allowed = EBUCORE_NAMESPACE.to_owned() + "midRollAdAllowed";
-    let p_organisation_name = EBUCORE_NAMESPACE.to_owned() + "organisationName";
-    let p_original_title = EBUCORE_NAMESPACE.to_owned() + "originalTitle";
-    let p_publication_channel = EBUCORE_NAMESPACE.to_owned() + "publicationChannel";
-    let p_publication_channel_id = EBUCORE_NAMESPACE.to_owned() + "publicationChannelId";
-    let p_publication_channel_name = EBUCORE_NAMESPACE.to_owned() + "publicationChannelName";
-    let p_publication_start_date_time = EBUCORE_NAMESPACE.to_owned() + "publicationStartDateTime";
-    let p_references = EBUCORE_NAMESPACE.to_owned() + "references";
-    let p_resource_id = EBUCORE_NAMESPACE.to_owned() + "resourceId";
-    let p_season_number = EBUCORE_NAMESPACE.to_owned() + "seasonNumber";
-    let p_synopsis = EBUCORE_NAMESPACE.to_owned() + "synopsis";
-    let p_title = EBUCORE_NAMESPACE.to_owned() + "title";
+    let p_alternative_title = format!("{}alternativeTitle", EBUCORE_NAMESPACE);
+    let p_abstract = format!("{}abstract", EBUCORE_NAMESPACE);
+    let p_character_name = format!("{}characterName", EBUCORE_NAMESPACE);
+    let p_date_created = format!("{}dateCreated", EBUCORE_NAMESPACE);
+    let p_date_modified = format!("{}dateModified", EBUCORE_NAMESPACE);
+    let p_date_broadcast = format!("{}dateBroadcast", EBUCORE_NAMESPACE);
+    let p_duration = format!("{}durationNormalPlayTime", EBUCORE_NAMESPACE);
+    let p_duration_normal_play_time = format!("{}durationNormalPlayTime", EBUCORE_NAMESPACE);
+    let p_episode_number = format!("{}episodeNumber", EBUCORE_NAMESPACE);
+    let p_family_name = format!("{}familyName", EBUCORE_NAMESPACE);
+    let p_first_showing = format!("{}firstShowing", EBUCORE_NAMESPACE);
+    let p_first_showing_this_service = format!("{}firstShowingThisService", EBUCORE_NAMESPACE);
+    let p_free = format!("{}free", EBUCORE_NAMESPACE);
+    let p_given_name = format!("{}givenName", EBUCORE_NAMESPACE);
+    let p_group_description = format!("{}groupDescription", EBUCORE_NAMESPACE);
+    let p_group_id = format!("{}groupId", EBUCORE_NAMESPACE);
+    let p_group_name = format!("{}groupName", EBUCORE_NAMESPACE);
+    let p_has_audio_programme_type = format!("{}hasAudioProgrammeType", EBUCORE_NAMESPACE);
+    let p_has_contributor = format!("{}hasContributor", EBUCORE_NAMESPACE);
+    let p_has_creator = format!("{}hasCreator", EBUCORE_NAMESPACE);
+    let p_has_editorial_object_type = format!("{}hasEditorialObjectType", EBUCORE_NAMESPACE);
+    let p_has_genre = format!("{}hasGenre", EBUCORE_NAMESPACE);
+    let p_has_owner = format!("{}hasOwner", EBUCORE_NAMESPACE);
+    let p_has_publication_event = format!("{}hasPublicationEvent", EBUCORE_NAMESPACE);
+    let p_has_publication_event_type = format!("{}hasPublicationEventType", EBUCORE_NAMESPACE);
+    let p_has_related_audio_programme = format!("{}hasRelatedAudioProgramme", EBUCORE_NAMESPACE);
+    let p_has_related_text_line = format!("{}hasRelatedTextLine", EBUCORE_NAMESPACE);
+    let p_has_role = format!("{}hasRole", EBUCORE_NAMESPACE);
+    let p_has_season = format!("{}hasSeason", EBUCORE_NAMESPACE);
+    let p_has_target_audience = format!("{}hasTargetAudience", EBUCORE_NAMESPACE);
+    let p_has_text_line_type = format!("{}hasTextLineType", EBUCORE_NAMESPACE);
+    let p_has_topic = format!("{}hasTopic", EBUCORE_NAMESPACE);
+    let p_is_agent = format!("{}isAgent", EBUCORE_NAMESPACE);
+    let p_is_character = format!("{}isCharacter", EBUCORE_NAMESPACE);
+    let p_is_member_of = format!("{}isMemberOf", EBUCORE_NAMESPACE);
+    let p_live = format!("{}live", EBUCORE_NAMESPACE);
+    let p_mid_roll_ad_allowed = format!("{}midRollAdAllowed", EBUCORE_NAMESPACE);
+    let p_organisation_name = format!("{}organisationName", EBUCORE_NAMESPACE);
+    let p_original_title = format!("{}originalTitle", EBUCORE_NAMESPACE);
+    let p_publication_channel = format!("{}publicationChannel", EBUCORE_NAMESPACE);
+    let p_publication_channel_id = format!("{}publicationChannelId", EBUCORE_NAMESPACE);
+    let p_publication_channel_name = format!("{}publicationChannelName", EBUCORE_NAMESPACE);
+    let p_publication_start_date_time = format!("{}publicationStartDateTime", EBUCORE_NAMESPACE);
+    let p_references = format!("{}references", EBUCORE_NAMESPACE);
+    let p_resource_id = format!("{}resourceId", EBUCORE_NAMESPACE);
+    let p_season_number = format!("{}seasonNumber", EBUCORE_NAMESPACE);
+    let p_synopsis = format!("{}synopsis", EBUCORE_NAMESPACE);
+    let p_title = format!("{}title", EBUCORE_NAMESPACE);
 
-    let p_type = RDF_NAMESPACE.to_owned() + "type";
+    let p_type = format!("{}type", RDF_NAMESPACE);
 
-    let p_pref_label = SKOS_NAMESPACE.to_owned() + "prefLabel";
-    let p_definition = SKOS_NAMESPACE.to_owned() + "definition";
+    let p_pref_label = format!("{}prefLabel", SKOS_NAMESPACE);
+    let p_definition = format!("{}definition", SKOS_NAMESPACE);
 
-    let o_audio_programme = EBUCORE_NAMESPACE.to_owned() + "AudioProgramme";
-    let o_cast = EBUCORE_NAMESPACE.to_owned() + "Cast";
-    let o_character = EBUCORE_NAMESPACE.to_owned() + "Character";
-    let o_editorial_object = EBUCORE_NAMESPACE.to_owned() + "EditorialObject";
-    let o_group = EBUCORE_NAMESPACE.to_owned() + "Group";
-    let o_organisation = EBUCORE_NAMESPACE.to_owned() + "Organisation";
-    let o_person = EBUCORE_NAMESPACE.to_owned() + "Person";
-    let o_publication_channel = EBUCORE_NAMESPACE.to_owned() + "PublicationChannel";
-    let o_publication_event = EBUCORE_NAMESPACE.to_owned() + "PublicationEvent";
-    let o_season = EBUCORE_NAMESPACE.to_owned() + "Season";
-    let o_tag = EBUCORE_NAMESPACE.to_owned() + "Tag";
-    let o_text_line = EBUCORE_NAMESPACE.to_owned() + "TextLine";
+    let o_audio_programme = format!("{}AudioProgramme", EBUCORE_NAMESPACE);
+    let o_cast = format!("{}Cast", EBUCORE_NAMESPACE);
+    let o_character = format!("{}Character", EBUCORE_NAMESPACE);
+    let o_editorial_object = format!("{}EditorialObject", EBUCORE_NAMESPACE);
+    let o_group = format!("{}Group", EBUCORE_NAMESPACE);
+    let o_organisation = format!("{}Organisation", EBUCORE_NAMESPACE);
+    let o_person = format!("{}Person", EBUCORE_NAMESPACE);
+    let o_publication_channel = format!("{}PublicationChannel", EBUCORE_NAMESPACE);
+    let o_publication_event = format!("{}PublicationEvent", EBUCORE_NAMESPACE);
+    let o_season = format!("{}Season", EBUCORE_NAMESPACE);
+    let o_tag = format!("{}Tag", EBUCORE_NAMESPACE);
+    let o_text_line = format!("{}TextLine", EBUCORE_NAMESPACE);
 
     let subject = add_triple(graph, &s_root, &p_type, &o_editorial_object);
 
@@ -183,7 +175,7 @@ impl ToRdf for Metadata {
         graph,
         &s_references,
         &p_resource_id,
-        &("http://resources.idfrancetv.fr/medias/".to_string() + &parent_id),
+        &format!("http://resources.idfrancetv.fr/medias/{}", parent_id),
         None,
         None,
         true,
@@ -245,7 +237,7 @@ impl ToRdf for Metadata {
         &p_duration,
         &duration,
         None,
-        Some(XML_NAMESPACE.to_owned() + "duration"),
+        Some(format!("{}duration", XML_NAMESPACE)),
         false,
       );
     }
@@ -254,8 +246,10 @@ impl ToRdf for Metadata {
       graph,
       &subject,
       &p_has_editorial_object_type,
-      &("http://resources.idfrancetv.fr/ontologies/editorial_object_type#".to_string()
-        + &self.kind.id),
+      &format!(
+        "http://resources.idfrancetv.fr/ontologies/editorial_object_type#{}",
+        self.kind.id
+      ),
       None,
       None,
       true,
@@ -267,7 +261,7 @@ impl ToRdf for Metadata {
       &p_date_created,
       &self.created_at,
       None,
-      Some(XML_NAMESPACE.to_owned() + "dateTime"),
+      Some(format!("{}dateTime", XML_NAMESPACE)),
       false,
     );
     add_link(
@@ -276,7 +270,7 @@ impl ToRdf for Metadata {
       &p_date_modified,
       &self.updated_at,
       None,
-      Some(XML_NAMESPACE.to_owned() + "dateTime"),
+      Some(format!("{}dateTime", XML_NAMESPACE)),
       false,
     );
 
@@ -288,7 +282,7 @@ impl ToRdf for Metadata {
         &p_date_broadcast,
         &broadcasted_at,
         None,
-        Some(XML_NAMESPACE.to_owned() + "dateTime"),
+        Some(format!("{}dateTime", XML_NAMESPACE)),
         false,
       );
     }
@@ -314,7 +308,7 @@ impl ToRdf for Metadata {
         &p_live,
         &broadcasted_live.to_string(),
         None,
-        Some(XML_NAMESPACE.to_owned() + "boolean"),
+        Some(format!("{}boolean", XML_NAMESPACE)),
         false,
       );
     }
@@ -347,7 +341,7 @@ impl ToRdf for Metadata {
       graph,
       &subject,
       "SIvideo",
-      &("urn::uuid:".to_owned() + &self.id),
+      &format!("urn::uuid:{}", self.id),
     );
     if let Some(ref oscar_id) = self.oscar_id {
       insert_identifier(graph, &subject, "Oscar_ID", &oscar_id);
@@ -461,7 +455,7 @@ impl ToRdf for Metadata {
         graph,
         &s_has_related_audio_programme,
         &p_has_audio_programme_type,
-        &(p_ftv_audio.to_owned() + "complet_2.0_" + &audio_track.id),
+        &format!("{}complet_2.0_{}", p_ftv_audio, audio_track.id),
         None,
         None,
         true,
@@ -484,7 +478,7 @@ impl ToRdf for Metadata {
         graph,
         &s_has_related_text_line,
         &p_has_text_line_type,
-        &(p_ftv_sous_titre.to_owned() + &text_track.id),
+        &format!("{}{}", p_ftv_sous_titre, text_track.id),
         None,
         None,
         true,
@@ -549,7 +543,7 @@ impl ToRdf for Metadata {
         &p_publication_start_date_time,
         &expected_at,
         None,
-        Some(XML_NAMESPACE.to_owned() + "dateTime"),
+        Some(format!("{}dateTime", XML_NAMESPACE)),
         false,
       );
     }
@@ -560,7 +554,7 @@ impl ToRdf for Metadata {
         &p_duration_normal_play_time,
         &duration,
         None,
-        Some(XML_NAMESPACE.to_owned() + "duration"),
+        Some(format!("{}duration", XML_NAMESPACE)),
         false,
       );
     }
@@ -571,7 +565,7 @@ impl ToRdf for Metadata {
         &p_live,
         &broadcasted_live.to_string(),
         None,
-        Some(XML_NAMESPACE.to_owned() + "boolean"),
+        Some(format!("{}boolean", XML_NAMESPACE)),
         false,
       );
     }
@@ -581,7 +575,7 @@ impl ToRdf for Metadata {
       &p_free,
       &self.drm.to_string(),
       None,
-      Some(XML_NAMESPACE.to_owned() + "boolean"),
+      Some(format!("{}boolean", XML_NAMESPACE)),
       false,
     );
     if let Some(previously_broadcasted) = self.previously_broadcasted {
@@ -591,7 +585,7 @@ impl ToRdf for Metadata {
         &p_first_showing,
         &previously_broadcasted.to_string(),
         None,
-        Some(XML_NAMESPACE.to_owned() + "boolean"),
+        Some(format!("{}boolean", XML_NAMESPACE)),
         false,
       );
     }
@@ -604,7 +598,7 @@ impl ToRdf for Metadata {
         &p_first_showing_this_service,
         &previously_broadcasted_on_this_channel.to_string(),
         None,
-        Some(XML_NAMESPACE.to_owned() + "boolean"),
+        Some(format!("{}boolean", XML_NAMESPACE)),
         false,
       );
     }
@@ -613,7 +607,7 @@ impl ToRdf for Metadata {
         graph,
         &s_publication_event,
         &p_has_target_audience,
-        &(p_ftv_csa.to_owned() + &rating.id),
+        &format!("{}{}", p_ftv_csa, rating.id),
         None,
         None,
         true,
@@ -625,7 +619,7 @@ impl ToRdf for Metadata {
       &p_mid_roll_ad_allowed,
       &format!("{}", self.midrollable),
       None,
-      Some(XML_NAMESPACE.to_owned() + "boolean"),
+      Some(format!("{}boolean", XML_NAMESPACE)),
       false,
     );
     if let Some(ref broadcasted_at) = self.broadcasted_at {
@@ -635,7 +629,7 @@ impl ToRdf for Metadata {
         &p_date_broadcast,
         &broadcasted_at,
         None,
-        Some(XML_NAMESPACE.to_owned() + "dateTime"),
+        Some(format!("{}dateTime", XML_NAMESPACE)),
         false,
       );
     }
@@ -646,7 +640,7 @@ impl ToRdf for Metadata {
         graph,
         &subject,
         &p_has_genre,
-        &(FTV_GENRE_NAMESPACE.to_string() + &category.id),
+        &(format!("{}{}", FTV_GENRE_NAMESPACE, category.id)),
         None,
         None,
         true,
@@ -685,7 +679,7 @@ impl ToRdf for Metadata {
         graph,
         &s_has_contributor,
         &p_has_role,
-        &(FTV_ROLE_NAMESPACE.to_string() + &people.role.id),
+        &(format!("{}{}", FTV_ROLE_NAMESPACE, people.role.id)),
         None,
         None,
         true,
@@ -737,6 +731,6 @@ impl ToRdf for Metadata {
       }
     }
 
-    self.resources.to_rdf(graph);
+    self.resources.to_rdf(graph)
   }
 }

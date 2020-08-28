@@ -3,9 +3,9 @@ extern crate serde_derive;
 
 use crate::convert::convert_into_rdf;
 use clap::{App, Arg, ArgMatches};
-use mcai_worker_sdk::job::JobResult;
-use mcai_worker_sdk::MessageEvent;
-use mcai_worker_sdk::*;
+use mcai_worker_sdk::{
+  job::JobResult, start_worker, JsonSchema, McaiChannel, MessageEvent, Result, Version,
+};
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
@@ -27,10 +27,10 @@ struct RdfEvent {}
 
 #[derive(Clone, Debug, Deserialize, JsonSchema, Serialize)]
 pub enum Order {
-  #[serde(rename = "publish_metadata")]
-  PublishMetadata,
   #[serde(rename = "publish_dash_and_ttml")]
   PublishDashAndTtml,
+  #[serde(rename = "publish_metadata")]
+  PublishMetadata,
 }
 
 impl Default for Order {
@@ -44,13 +44,13 @@ pub struct RdfWorkerParameters {
   input_paths: Option<Vec<String>>, // depends on the order?
   ntriples: Option<bool>,
   order: Option<Order>,
+  perfect_memory_endpoint: String,
   perfect_memory_event_name: Option<String>,
+  perfect_memory_username: String,
+  perfect_memory_password: String,
   reference: String,
   storage: Option<String>,    // depends on the order?
   url_prefix: Option<String>, // depends on the order?
-  perfect_memory_endpoint: String,
-  perfect_memory_username: String,
-  perfect_memory_password: String,
 }
 
 impl MessageEvent<RdfWorkerParameters> for RdfEvent {

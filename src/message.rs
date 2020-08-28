@@ -4,8 +4,11 @@ use uuid::Uuid;
 use crate::resource_model::{ExternalIds, Format, Resource, Resources};
 use crate::video_model::metadata::Metadata;
 use crate::{Order, RdfWorkerParameters};
-use mcai_worker_sdk::job::{JobResult, JobStatus};
-use mcai_worker_sdk::{error, info, McaiChannel, MessageError, Result};
+use mcai_worker_sdk::{
+  debug, error, info,
+  job::{JobResult, JobStatus},
+  McaiChannel, MessageError, Result,
+};
 
 use crate::convert::convert_into_rdf;
 use crate::perfect_memory::{publish_to_perfect_memory, PmConfig};
@@ -54,7 +57,7 @@ pub fn process(
   };
 
   info!("Publish to PerfectMemory");
-  info!("rdf_triples: {}", rdf_triples);
+  debug!("rdf_triples:\n{}", rdf_triples);
 
   publish_to_perfect_memory(
     job_result.clone(),
@@ -64,9 +67,8 @@ pub fn process(
     &config.endpoint,
     &rdf_triples,
   )?;
-  info!("Completed");
-  let job_result = job_result.with_status(JobStatus::Completed);
-  Ok(job_result)
+
+  Ok(job_result.with_status(JobStatus::Completed))
 }
 
 fn get_dash_and_ttml_rdf(
@@ -283,7 +285,9 @@ fn get_metadata_rdf(
 pub fn get_video_metadata(reference: &str) -> std::result::Result<Metadata, String> {
   let url = "https://gatewayvf.webservices.francetelevisions.fr/v1/videos/".to_owned() + reference;
 
-  let client = Client::builder().build().unwrap();
+  let client = Client::builder()
+    .build()
+    .map_err(|error| format!("Unable to create HTTP client: {}", error))?;
 
   let response = client.get(url.as_str()).send().map_err(|e| e.to_string())?;
 
@@ -302,7 +306,9 @@ pub fn get_files(reference: &str) -> std::result::Result<Vec<Resource>, String> 
     .to_owned()
     + reference;
 
-  let client = Client::builder().build().unwrap();
+  let client = Client::builder()
+    .build()
+    .map_err(|error| format!("Unable to create HTTP client: {}", error))?;
 
   let response = client.get(url.as_str()).send().map_err(|e| e.to_string())?;
 

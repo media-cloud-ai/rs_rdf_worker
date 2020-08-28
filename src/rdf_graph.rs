@@ -1,8 +1,5 @@
 use crate::namespaces::*;
-use rdf::graph::Graph;
-use rdf::node::Node;
-use rdf::triple::Triple;
-use rdf::uri::Uri;
+use rdf::{graph::Graph, node::Node, triple::Triple, uri::Uri};
 
 pub(crate) fn add_link(
   graph: &mut Graph,

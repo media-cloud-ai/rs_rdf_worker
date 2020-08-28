@@ -1,8 +1,13 @@
-use crate::RdfWorkerParameters;
-use mcai_worker_sdk::job::{JobResult, JobStatus};
-use mcai_worker_sdk::{error, MessageError, Result};
-use reqwest::header::{CACHE_CONTROL, CONTENT_TYPE, LOCATION};
 use std::{thread, time};
+
+use mcai_worker_sdk::{
+  error,
+  job::{JobResult, JobStatus},
+  MessageError, Result,
+};
+use reqwest::header::{CACHE_CONTROL, CONTENT_TYPE, LOCATION};
+
+use crate::RdfWorkerParameters;
 
 #[derive(Serialize)]
 struct InfosGraph {
@@ -59,7 +64,9 @@ pub(crate) fn publish_to_perfect_memory(
 ) -> Result<()> {
   let url = pm_endpoint.to_owned() + "/v1/requests";
 
-  let client = reqwest::blocking::Client::builder().build().unwrap();
+  let client = reqwest::blocking::Client::builder()
+    .build()
+    .map_err(|error| MessageError::ProcessingError(job_result.clone().with_error(error)))?;
 
   let body = PmRequestBody {
     client_id: pm_client_id.to_owned(),
@@ -100,133 +107,142 @@ pub(crate) fn publish_to_perfect_memory(
     ));
   }
 
-  if let Some(location) = response.headers().get(LOCATION) {
-    loop {
-      let response = client
-        .get(location.to_str().unwrap())
-        .header("X-Api-Key", pm_api_key)
-        .send()
-        .map_err(|e| {
-          MessageError::ProcessingError(
-            job_result
-              .clone()
-              .with_status(JobStatus::Error)
-              .with_message(&e.to_string()),
-          )
-        })?;
+  let location = response.headers().get(LOCATION).ok_or_else(|| {
+    MessageError::ProcessingError(
+      job_result
+        .clone()
+        .with_status(JobStatus::Error)
+        .with_message("Unable get location to wait end of ingest"),
+    )
+  })?;
+  let location_str = location.to_str().map_err(|e| {
+    MessageError::ProcessingError(
+      job_result
+        .clone()
+        .with_status(JobStatus::Error)
+        .with_message(&e.to_string()),
+    )
+  })?;
 
-      if response.status() != 200 {
-        let ten_seconds = time::Duration::from_secs(10);
-        thread::sleep(ten_seconds);
-        continue;
-      }
-
-      let resp_body: PmResponseBody = response.json().map_err(|error| {
+  loop {
+    let response = client
+      .get(location_str)
+      .header("X-Api-Key", pm_api_key)
+      .send()
+      .map_err(|e| {
         MessageError::ProcessingError(
           job_result
             .clone()
             .with_status(JobStatus::Error)
-            .with_message(&format!(
-              "Unknown error: unable to get status from Perfect Memory platform: {:?}",
-              error
-            )),
+            .with_message(&e.to_string()),
         )
       })?;
-      error!("Perfect Memory response: {:?}", resp_body);
-      match resp_body.status {
-        200 | 300 => {
-          return Ok(());
-        }
-        100 | 110 | 120 => {}
-        400 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Error: Request/Process has finished with an error"),
-          ));
-        }
-        401 => {
-          return Err(MessageError::ProcessingError(
-            job_result.with_status(JobStatus::Error).with_message(
-              "Error on child process: Process has finished with an error on one of its children",
-            ),
-          ));
-        }
-        408 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Error Service: Process has finished with a specific error"),
-          ));
-        }
-        410 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Item Disabled: The item is disabled"),
-          ));
-        }
-        414 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Item Not Found: The item is not found"),
-          ));
-        }
-        421 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Invalid Script: There was an error while running the script"),
-          ));
-        }
-        422 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Invalid I/O: The input or the output is invalid"),
-          ));
-        }
-        423 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Invalid Status: The process has been stopped with an invalid status"),
-          ));
-        }
-        428 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Process disrupted: Process has been manually disrupted"),
-          ));
-        }
-        500 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Unexpected error: Service process has finished with an unknow error"),
-          ));
-        }
-        503 => {
-          return Err(MessageError::ProcessingError(
-            job_result
-              .with_status(JobStatus::Error)
-              .with_message("Service unreachable: Service could not be reached"),
-          ));
-        }
-        _ => {}
-      }
 
+    if response.status() != 200 {
       let ten_seconds = time::Duration::from_secs(10);
       thread::sleep(ten_seconds);
+      continue;
     }
-  } else {
-    Err(MessageError::ProcessingError(
-      job_result
-        .with_status(JobStatus::Error)
-        .with_message("Unable get location to wait end of ingest"),
-    ))
+
+    let resp_body: PmResponseBody = response.json().map_err(|error| {
+      MessageError::ProcessingError(
+        job_result
+          .clone()
+          .with_status(JobStatus::Error)
+          .with_message(&format!(
+            "Unknown error: unable to get status from Perfect Memory platform: {:?}",
+            error
+          )),
+      )
+    })?;
+    error!("Perfect Memory response: {:?}", resp_body);
+    match resp_body.status {
+      200 | 300 => {
+        return Ok(());
+      }
+      100 | 110 | 120 => {}
+      400 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Error: Request/Process has finished with an error"),
+        ));
+      }
+      401 => {
+        return Err(MessageError::ProcessingError(
+          job_result.with_status(JobStatus::Error).with_message(
+            "Error on child process: Process has finished with an error on one of its children",
+          ),
+        ));
+      }
+      408 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Error Service: Process has finished with a specific error"),
+        ));
+      }
+      410 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Item Disabled: The item is disabled"),
+        ));
+      }
+      414 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Item Not Found: The item is not found"),
+        ));
+      }
+      421 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Invalid Script: There was an error while running the script"),
+        ));
+      }
+      422 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Invalid I/O: The input or the output is invalid"),
+        ));
+      }
+      423 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Invalid Status: The process has been stopped with an invalid status"),
+        ));
+      }
+      428 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Process disrupted: Process has been manually disrupted"),
+        ));
+      }
+      500 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Unexpected error: Service process has finished with an unknow error"),
+        ));
+      }
+      503 => {
+        return Err(MessageError::ProcessingError(
+          job_result
+            .with_status(JobStatus::Error)
+            .with_message("Service unreachable: Service could not be reached"),
+        ));
+      }
+      _ => {}
+    }
+
+    let ten_seconds = time::Duration::from_secs(10);
+    thread::sleep(ten_seconds);
   }
 }
 

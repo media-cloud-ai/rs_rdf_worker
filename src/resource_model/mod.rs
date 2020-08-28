@@ -1,8 +1,11 @@
 use crate::convert::ToRdf;
 use crate::namespaces::*;
 use crate::rdf_graph::{add_link, add_related_node};
-use rdf::graph::Graph;
-use rdf::uri::Uri;
+use rdf::{
+  error::{Error, ErrorType},
+  graph::Graph,
+  uri::Uri,
+};
 
 #[derive(Debug, Default, Deserialize)]
 pub struct Resources {
@@ -11,10 +14,11 @@ pub struct Resources {
 }
 
 impl ToRdf for Resources {
-  fn to_rdf(&self, graph: &mut Graph) {
+  fn to_rdf(&self, graph: &mut Graph) -> Result<(), Error> {
     for item in &self.items {
-      item.to_rdf(graph);
+      item.to_rdf(graph)?;
     }
+    Ok(())
   }
 }
 
@@ -89,47 +93,48 @@ pub struct ExternalIds {
 }
 
 impl ToRdf for Resource {
-  fn to_rdf(&self, graph: &mut Graph) {
-    if self.external_ids.video_id.is_none() {
-      return;
-    }
-
-    let s_root = "http://resources.idfrancetv.fr/medias/".to_string()
-      + &self.external_ids.video_id.clone().unwrap();
+  fn to_rdf(&self, graph: &mut Graph) -> Result<(), Error> {
+    let video_id = self.external_ids.video_id.clone().ok_or_else(|| {
+      Error::new(
+        ErrorType::InvalidWriterOutput,
+        "Expected a video id in external ids to convert resource to RDF".to_string(),
+      )
+    })?;
+    let s_root = format!("http://resources.idfrancetv.fr/medias/{}", video_id);
     let root_node = graph.create_uri_node(&Uri::new(s_root));
 
-    let p_has_creator = EBUCORE_NAMESPACE.to_owned() + "hasCreator";
-    let p_date_created = EBUCORE_NAMESPACE.to_owned() + "dateCreated";
-    let p_date_modified = EBUCORE_NAMESPACE.to_owned() + "dateModified";
-    let p_file_size = EBUCORE_NAMESPACE.to_owned() + "fileSize";
-    let p_filename = EBUCORE_NAMESPACE.to_owned() + "filename";
-    let p_has_format = EBUCORE_NAMESPACE.to_owned() + "hasFormat";
-    let p_has_language = EBUCORE_NAMESPACE.to_owned() + "hasLanguage";
-    let p_has_related_image = EBUCORE_NAMESPACE.to_owned() + "hasRelatedImage";
-    let p_has_related_resource = EBUCORE_NAMESPACE.to_owned() + "hasRelatedResource";
-    let p_has_topic = EBUCORE_NAMESPACE.to_owned() + "hasTopic";
-    let p_hash_value = EBUCORE_NAMESPACE.to_owned() + "hashValue";
-    let p_height = EBUCORE_NAMESPACE.to_owned() + "height";
-    let p_height_unit = EBUCORE_NAMESPACE.to_owned() + "heightUnit";
-    let p_is_issued_by = EBUCORE_NAMESPACE.to_owned() + "isIssuedby";
-    let p_locator = EBUCORE_NAMESPACE.to_owned() + "locator";
-    let p_organisation_name = EBUCORE_NAMESPACE.to_owned() + "organisationName";
-    let p_resource_id = EBUCORE_NAMESPACE.to_owned() + "resourceId";
-    let p_storage_id = EBUCORE_NAMESPACE.to_owned() + "storageId";
-    let p_width = EBUCORE_NAMESPACE.to_owned() + "width";
-    let p_width_unit = EBUCORE_NAMESPACE.to_owned() + "widthUnit";
+    let p_has_creator = format!("{}hasCreator", EBUCORE_NAMESPACE);
+    let p_date_created = format!("{}dateCreated", EBUCORE_NAMESPACE);
+    let p_date_modified = format!("{}dateModified", EBUCORE_NAMESPACE);
+    let p_file_size = format!("{}fileSize", EBUCORE_NAMESPACE);
+    let p_filename = format!("{}filename", EBUCORE_NAMESPACE);
+    let p_has_format = format!("{}hasFormat", EBUCORE_NAMESPACE);
+    let p_has_language = format!("{}hasLanguage", EBUCORE_NAMESPACE);
+    let p_has_related_image = format!("{}hasRelatedImage", EBUCORE_NAMESPACE);
+    let p_has_related_resource = format!("{}hasRelatedResource", EBUCORE_NAMESPACE);
+    let p_has_topic = format!("{}hasTopic", EBUCORE_NAMESPACE);
+    let p_hash_value = format!("{}hashValue", EBUCORE_NAMESPACE);
+    let p_height = format!("{}height", EBUCORE_NAMESPACE);
+    let p_height_unit = format!("{}heightUnit", EBUCORE_NAMESPACE);
+    let p_is_issued_by = format!("{}isIssuedby", EBUCORE_NAMESPACE);
+    let p_locator = format!("{}locator", EBUCORE_NAMESPACE);
+    let p_organisation_name = format!("{}organisationName", EBUCORE_NAMESPACE);
+    let p_resource_id = format!("{}resourceId", EBUCORE_NAMESPACE);
+    let p_storage_id = format!("{}storageId", EBUCORE_NAMESPACE);
+    let p_width = format!("{}width", EBUCORE_NAMESPACE);
+    let p_width_unit = format!("{}widthUnit", EBUCORE_NAMESPACE);
 
-    let p_type = RDF_NAMESPACE.to_owned() + "type";
+    let p_type = format!("{}type", RDF_NAMESPACE);
 
-    let p_label = SKOS_NAMESPACE.to_owned() + "label";
-    let p_pref_label = SKOS_NAMESPACE.to_owned() + "prefLabel";
-    let p_definition = SKOS_NAMESPACE.to_owned() + "definition";
+    let p_label = format!("{}label", SKOS_NAMESPACE);
+    let p_pref_label = format!("{}prefLabel", SKOS_NAMESPACE);
+    let p_definition = format!("{}definition", SKOS_NAMESPACE);
 
-    let o_language = EBUCORE_NAMESPACE.to_owned() + "Language";
-    let o_organisation = EBUCORE_NAMESPACE.to_owned() + "Organisation";
-    let o_media_resource = EBUCORE_NAMESPACE.to_owned() + "MediaResource";
-    let o_picture = EBUCORE_NAMESPACE.to_owned() + "Picture";
-    let o_tag = EBUCORE_NAMESPACE.to_owned() + "Tag";
+    let o_language = format!("{}Language", EBUCORE_NAMESPACE);
+    let o_organisation = format!("{}Organisation", EBUCORE_NAMESPACE);
+    let o_media_resource = format!("{}MediaResource", EBUCORE_NAMESPACE);
+    let o_picture = format!("{}Picture", EBUCORE_NAMESPACE);
+    let o_tag = format!("{}Tag", EBUCORE_NAMESPACE);
 
     let s_has_related_object = match self.format.mime_type.as_str() {
       "image/jpeg" => {
@@ -149,7 +154,7 @@ impl ToRdf for Resource {
       graph,
       &s_has_related_object,
       &p_resource_id,
-      &("urn:uuid:".to_owned() + &self.id),
+      &format!("urn:uuid:{}", self.id),
       None,
       None,
       false,
@@ -182,7 +187,7 @@ impl ToRdf for Resource {
         &p_date_created,
         &created_at,
         None,
-        Some(XML_NAMESPACE.to_owned() + "dateTime"),
+        Some(format!("{}dateTime", XML_NAMESPACE)),
         false,
       );
     }
@@ -193,7 +198,7 @@ impl ToRdf for Resource {
         &p_date_modified,
         &updated_at,
         None,
-        Some(XML_NAMESPACE.to_owned() + "dateTime"),
+        Some(format!("{}dateTime", XML_NAMESPACE)),
         false,
       );
     }
@@ -204,7 +209,7 @@ impl ToRdf for Resource {
         &p_file_size,
         &format!("{}", filesize_bytes),
         None,
-        Some(XML_NAMESPACE.to_owned() + "unsignedLong"),
+        Some(format!("{}unsignedLong", XML_NAMESPACE)),
         false,
       );
     }
@@ -225,7 +230,7 @@ impl ToRdf for Resource {
         &p_height,
         &format!("{}", height),
         None,
-        Some(XML_NAMESPACE.to_owned() + "integer"),
+        Some(format!("{}integer", XML_NAMESPACE)),
         false,
       );
       add_link(
@@ -245,7 +250,7 @@ impl ToRdf for Resource {
         &p_width,
         &format!("{}", width),
         None,
-        Some(XML_NAMESPACE.to_owned() + "integer"),
+        Some(format!("{}integer", XML_NAMESPACE)),
         false,
       );
       add_link(
@@ -301,7 +306,7 @@ impl ToRdf for Resource {
         graph,
         &s_has_related_object,
         &p_hash_value,
-        &("urn:md5:".to_owned() + &md5_checksum),
+        &format!("urn:md5:{}", md5_checksum),
         None,
         None,
         false,
@@ -315,7 +320,7 @@ impl ToRdf for Resource {
         &p_hash_value,
         &format!("{}", bitrate_kbps * 1000),
         None,
-        Some(XML_NAMESPACE.to_owned() + "nonNegativeInteger"),
+        Some(format!("{}nonNegativeInteger", XML_NAMESPACE)),
         false,
       );
     }
@@ -360,5 +365,6 @@ impl ToRdf for Resource {
       add_link(graph, &s_has_topic, &p_pref_label, &tag, None, None, false);
       add_link(graph, &s_has_topic, &p_definition, "Tag", None, None, true);
     }
+    Ok(())
   }
 }
