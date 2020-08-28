@@ -1,0 +1,25 @@
+{
+  "job_id": 12345,
+  "parameters": [
+    {
+      "id": "reference",
+      "type": "string",
+      "value": "ebe54409-5cfa-48ab-8c1d-3a28ab6a0739"
+    },
+    {
+      "id": "perfect_memory_endpoint",
+      "type": "string",
+      "value": "http://localhost:4321/pm"
+    },
+    {
+      "id": "perfect_memory_username",
+      "type": "string",
+      "value": "PERFECT_MEMORY_USER"
+    },
+    {
+      "id": "perfect_memory_password",
+      "type": "string",
+      "value": "PERFECT_MEMORY_PWD"
+    }
+  ]
+}
